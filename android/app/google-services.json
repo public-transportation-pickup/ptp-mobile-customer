@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1095658023043",
+    "project_id": "capstone-ptp",
+    "storage_bucket": "capstone-ptp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1095658023043:android:231d2dd77719a8aff093b6",
+        "android_client_info": {
+          "package_name": "com.fptu.ptp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpJJCtl8nv21z0YOqILlCdZAPKT9yiaYA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
