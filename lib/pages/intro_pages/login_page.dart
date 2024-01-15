@@ -1,300 +1,163 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import '../../services/firebase_authentication.dart';
 import '../main_pages/page_navigation.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  bool _isPasswordVisible = false;
+
+  final FirebaseAuthentication _firebaseAuth = FirebaseAuthentication();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      clipBehavior: Clip.antiAlias,
-      decoration: const BoxDecoration(color: Colors.white),
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: Container(
-              decoration: const BoxDecoration(color: Color(0xFFFFEFC8)),
+      backgroundColor: const Color(0xFFFFEFC8),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 3,
+              width: double.infinity,
+              // child: Container(
+              //   color: Colors.red, // Set the color to red
+              // ),
             ),
-          ),
-          Positioned(
-            left: 29,
-            top: 398,
-            child: Container(
-              width: 340,
-              height: 369,
-              decoration: ShapeDecoration(
-                color: const Color(0xFFFCCF59),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(32),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 8,
+            ),
+            Center(
+              child: Container(
+                width: 340,
+                height: 369,
+                decoration: ShapeDecoration(
+                  color: const Color(0xFFFCCF59),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(32),
+                  ),
                 ),
-              ),
-            ),
-          ),
-          Positioned(
-            left: 78,
-            top: 430,
-            child: SizedBox(
-              width: 184,
-              height: 26,
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: 105,
-                    top: 0,
-                    child: Text(
-                      'Sign up',
-                      style: TextStyle(
-                        color: Color(0xFFB1B1B1),
-                        fontSize: 20,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w600,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 0,
-                    top: 0,
-                    child: Text(
-                      'Sign in',
-                      style: TextStyle(
-                        color: Color(0xFF353434),
-                        fontSize: 20,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w600,
-                        height: 0,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 87,
-                    top: 4,
-                    child: Transform(
-                      transform: Matrix4.identity()
-                        ..translate(0.0, 0.0)
-                        ..rotateZ(1.57),
-                      child: Container(
-                        width: 22,
-                        decoration: const ShapeDecoration(
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                              width: 2,
-                              strokeAlign: BorderSide.strokeAlignCenter,
-                              color: Color(0xFF353434),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            left: 50,
-            top: 466,
-            child: SizedBox(
-              width: 292,
-              height: 50,
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: 0,
-                    top: 0,
-                    child: Container(
-                      width: 292,
-                      height: 50,
-                      decoration: ShapeDecoration(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(56),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const Positioned(
-                    left: 28,
-                    top: 13,
-                    child: SizedBox(
-                      width: 180,
-                      height: 26,
-                      child: Text(
-                        'Phone number/Email',
-                        style: TextStyle(
-                          color: Color(0xFFB1B1B1),
-                          fontSize: 16,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w300,
-                          height: 0,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            left: 50,
-            top: 526,
-            child: SizedBox(
-              width: 292,
-              height: 50,
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: 0,
-                    top: 0,
-                    child: Container(
-                      width: 292,
-                      height: 50,
-                      decoration: ShapeDecoration(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(56),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const Positioned(
-                    left: 28,
-                    top: 13,
-                    child: SizedBox(
-                      width: 180,
-                      height: 26,
-                      child: Text(
-                        'Password',
-                        style: TextStyle(
-                          color: Color(0xFFB1B1B1),
-                          fontSize: 16,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w300,
-                          height: 0,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            left: 620,
-            top: 139,
-            child: Container(
-              width: 385,
-              height: 385,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage("https://via.placeholder.com/385x385"),
-                  fit: BoxFit.fill,
-                ),
-              ),
-            ),
-          ),
-          const Positioned(
-            left: 670,
-            top: 211,
-            child: SizedBox(
-              width: 204,
-              child: Text(
-                'Welcome \nto ...',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 40,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w700,
-                  height: 0,
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            left: 50,
-            top: 691,
-            child: SizedBox(
-              width: 292,
-              height: 45,
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: 0,
-                    top: 0,
-                    child: Container(
-                      width: 292,
-                      height: 45,
-                      decoration: ShapeDecoration(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(56),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    left: 28,
-                    top: 10,
-                    child: SizedBox(
-                      width: 217,
-                      height: 28,
-                      child: Stack(
+                child: Column(
+                  children: [
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 32, vertical: 32),
+                      child: Row(
                         children: [
-                          const Positioned(
-                            left: 40,
-                            top: 1,
-                            child: SizedBox(
-                              width: 177,
-                              height: 27,
-                              child: Text(
-                                'Continue with Google',
-                                style: TextStyle(
-                                  color: Color(0xFF353434),
-                                  fontSize: 16,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w500,
-                                  height: 0,
-                                ),
-                              ),
+                          Text(
+                            'Sign in',
+                            style: TextStyle(
+                              color: Color(0xFF353434),
+                              fontSize: 20,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              height: 0,
                             ),
                           ),
-                          Positioned(
-                            left: 0,
-                            top: 0,
-                            child: Container(
-                              width: 24.52,
-                              height: 25,
-                              clipBehavior: Clip.antiAlias,
-                              decoration: const BoxDecoration(),
-                              child: const Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [],
-                              ),
+                          SizedBox(width: 8),
+                          Text(
+                            '|',
+                            style: TextStyle(
+                              color: Color(0xFF353434),
+                              fontSize: 20,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              height: 0,
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            'Sign up',
+                            style: TextStyle(
+                              color: Color(0xFFB1B1B1),
+                              fontSize: 20,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              height: 0,
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            left: 130,
-            top: 619,
-            child: SizedBox(
-              width: 133,
-              height: 45,
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: 0,
-                    top: 0,
-                    child: Container(
+                    // Username Input Field
+                    Container(
+                      width: 292,
+                      height: 50,
+                      decoration: ShapeDecoration(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(56),
+                        ),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: TextField(
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Phone/Email',
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    // Password Input Field
+                    Container(
+                      width: 292,
+                      height: 50,
+                      decoration: ShapeDecoration(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(56),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: TextField(
+                          obscureText: !_isPasswordVisible,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Password',
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _isPasswordVisible = !_isPasswordVisible;
+                                });
+                              },
+                              child: Icon(
+                                _isPasswordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const SizedBox(
+                      width: 280,
+                      height: 23,
+                      child: Text(
+                        'Forgotten password?',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w300,
+                          height: 0,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
                       width: 133,
                       height: 45,
                       decoration: ShapeDecoration(
@@ -303,51 +166,101 @@ class LoginPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(56),
                         ),
                       ),
-                    ),
-                  ),
-                  const Positioned(
-                    left: 23,
-                    top: 7,
-                    child: SizedBox(
-                      width: 86,
-                      height: 19,
-                      child: Text(
-                        'Sign in',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Color(0xFFFFEFC8),
-                          fontSize: 20,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w700,
-                          height: 0,
+                      child: const Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Sign in',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color(0xFFFFEFC8),
+                            fontSize: 20,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w700,
+                            height: 0,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const Positioned(
-            left: 78,
-            top: 586,
-            child: SizedBox(
-              width: 280,
-              height: 23,
-              child: Text(
-                'Forgotten password?',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w300,
-                  height: 0,
+                    const SizedBox(height: 16),
+                    Container(
+                      width: 292,
+                      height: 45,
+                      decoration: ShapeDecoration(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(56),
+                        ),
+                      ),
+                      child: TextButton(
+                        onPressed: () async {
+                          User? user = await _firebaseAuth.signInWithGoogle();
+
+                          if (user != null) {
+                            // Successfully signed in with Google
+                            print('User signed in: ${user.displayName}');
+                            print('User email: ${user.email}');
+                            // Redirect to the Home Page
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PageNavigation()),
+                            );
+                            // TODO: Add code to redirect to the home page
+                            // Example: Navigator.pushReplacementNamed(context, '/home');
+                          } else {
+                            // User canceled or an error occurred
+                            print('Google Sign In canceled or failed');
+
+                            // Show error dialog
+                            // ignore: use_build_context_synchronously
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text('Error'),
+                                  content: const Text(
+                                      'Google Sign In failed. Please try again.'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'lib/assets/icons/Google__G__logo.svg',
+                              height: 24,
+                              width: 24,
+                            ),
+                            const SizedBox(width: 8),
+                            const Text(
+                              'Login with Google',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ));
+    );
   }
 }

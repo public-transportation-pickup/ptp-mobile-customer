@@ -12,7 +12,20 @@
           "package_name": "com.fptu.ptp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1095658023043-h7tqckg8slp05lnjpmvc0p281fmjh8f8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fptu.ptp",
+            "certificate_hash": "e283c650e83c59f40a993a3e2c40756f36c464dd"
+          }
+        },
+        {
+          "client_id": "1095658023043-gq3sfr1d3p17ou6nb9659e3qo35btlj7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBpJJCtl8nv21z0YOqILlCdZAPKT9yiaYA"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1095658023043-gq3sfr1d3p17ou6nb9659e3qo35btlj7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
