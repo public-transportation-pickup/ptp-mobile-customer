@@ -1,4 +1,3 @@
-import 'package:capstone_ptp/services/api_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -26,19 +25,14 @@ class FirebaseAuthentication {
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
-  
+
       // Sign in with Google Auth Credential
       final UserCredential authResult =
           await _auth.signInWithCredential(googleAuthCredential);
       final String? authKey = await authResult.user?.getIdToken(false);
-      if(authKey == null) {
-        throw Exception('Auth Key is null');
-      } else {
-        final result =  await ApiService.login(authKey);
-      }
-        
 
       // Return the user details
+      print('Authkey: ${authKey}');
       return authResult.user;
     } catch (error) {
       print("Error during Google Sign In: $error");
