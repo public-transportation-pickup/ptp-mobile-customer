@@ -23,15 +23,6 @@ class _PageNavigation extends State<PageNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text(
-          "Fuking Metro",
-          style: TextStyle(color: Colors.white),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.orangeAccent,
-      ),
       body: WillPopScope(
         onWillPop: () async => false, // Disable the swipe back gesture
         child: PageView(

@@ -1,19 +1,523 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'This is Home page',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+          children: [
+            Stack(
+              children: [
+                Column(
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      height: 230,
+                      child: Stack(
+                        children: [
+                          // Background Container
+                          Container(
+                            width: double.infinity,
+                            height: 230,
+                            decoration: const ShapeDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment(0.00, -1.00),
+                                end: Alignment(0, 1),
+                                colors: [Color(0xFFFCCF59), Color(0xFFFBAB40)],
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(40),
+                                  bottomRight: Radius.circular(40),
+                                ),
+                              ),
+                              shadows: [
+                                BoxShadow(
+                                  color: Color(0x3F000000),
+                                  blurRadius: 7,
+                                  offset: Offset(0, 4),
+                                  spreadRadius: -1,
+                                ),
+                              ],
+                            ),
+                          ),
+                          // Centered Search Bar
+                          Center(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width *
+                                  0.85, // Adjust the width of the search bar as needed
+                              height:
+                                  40, // Adjust the height of the search bar as needed
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFEFC8),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  hintText: 'Đi đến...',
+                                  hintStyle: const TextStyle(
+                                    color: Color(0xFFB1B1B1),
+                                    fontSize: 16,
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.w300,
+                                    height: 0,
+                                  ),
+                                  border: InputBorder.none,
+                                  contentPadding: const EdgeInsets.only(
+                                      top: 8, bottom: 8, left: 20),
+                                  suffixIcon: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SvgPicture.asset(
+                                      'lib/assets/icons/tabler_search.svg',
+                                      height: 24,
+                                      width: 24,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: 80,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+                Positioned(
+                  top: 170,
+                  left: (MediaQuery.of(context).size.width - 100 * 3 - 16 * 2) /
+                      2,
+                  child: Row(
+                    children: [
+                      Column(
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 65.5, // 50% of 131 (total height)
+                            decoration: const ShapeDecoration(
+                              color: Colors.red,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                ),
+                              ),
+                              shadows: [
+                                BoxShadow(
+                                  color: Color(0xFF909090),
+                                  blurRadius: 10,
+                                  offset: Offset(0, 4),
+                                  spreadRadius: -3,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            width: 100,
+                            height: 65.5, // 50% of 131 (total height)
+                            decoration: const ShapeDecoration(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(20),
+                                  bottomRight: Radius.circular(20),
+                                ),
+                              ),
+                              shadows: [
+                                BoxShadow(
+                                  color: Color(0xFF909090),
+                                  blurRadius: 10,
+                                  offset: Offset(0, 4),
+                                  spreadRadius: -3,
+                                ),
+                              ],
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.fromLTRB(8, 4, 0,
+                                  4), // Left: 8, Top: 4, Right: 0, Bottom: 4
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'XE BUÝT',
+                                    style: TextStyle(
+                                      color: Color(0xFF353434),
+                                      fontSize: 14,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w700,
+                                      height: 0,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Tìm trạm xe gần bạn',
+                                    style: TextStyle(
+                                      color: Color(0xFF353434),
+                                      fontSize: 12,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w300,
+                                      height: 0,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 16), // Adjust the gap between boxes
+                      Column(
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 65.5, // 50% of 131 (total height)
+                            decoration: const ShapeDecoration(
+                              color: Colors.red,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                ),
+                              ),
+                              shadows: [
+                                BoxShadow(
+                                  color: Color(0xFF909090),
+                                  blurRadius: 10,
+                                  offset: Offset(0, 4),
+                                  spreadRadius: -3,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            width: 100,
+                            height: 65.5, // 50% of 131 (total height)
+                            decoration: const ShapeDecoration(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(20),
+                                  bottomRight: Radius.circular(20),
+                                ),
+                              ),
+                              shadows: [
+                                BoxShadow(
+                                  color: Color(0xFF909090),
+                                  blurRadius: 10,
+                                  offset: Offset(0, 4),
+                                  spreadRadius: -3,
+                                ),
+                              ],
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.fromLTRB(8, 4, 0,
+                                  4), // Left: 8, Top: 4, Right: 0, Bottom: 4
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'ĐỒ ĂN',
+                                    style: TextStyle(
+                                      color: Color(0xFF353434),
+                                      fontSize: 14,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w700,
+                                      height: 0,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Tìm món ăn gần bạn',
+                                    style: TextStyle(
+                                      color: Color(0xFF353434),
+                                      fontSize: 12,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w300,
+                                      height: 0,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 16),
+                      Column(
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 65.5, // 50% of 131 (total height)
+                            decoration: const ShapeDecoration(
+                              color: Colors.red,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                ),
+                              ),
+                              shadows: [
+                                BoxShadow(
+                                  color: Color(0xFF909090),
+                                  blurRadius: 10,
+                                  offset: Offset(0, 4),
+                                  spreadRadius: -3,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            width: 100,
+                            height: 65.5, // 50% of 131 (total height)
+                            decoration: const ShapeDecoration(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(20),
+                                  bottomRight: Radius.circular(20),
+                                ),
+                              ),
+                              shadows: [
+                                BoxShadow(
+                                  color: Color(0xFF909090),
+                                  blurRadius: 10,
+                                  offset: Offset(0, 4),
+                                  spreadRadius: -3,
+                                ),
+                              ],
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.fromLTRB(8, 4, 0,
+                                  4), // Left: 8, Top: 4, Right: 0, Bottom: 4
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'COFFEE',
+                                    style: TextStyle(
+                                      color: Color(0xFF353434),
+                                      fontSize: 14,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w700,
+                                      height: 0,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Tìm quán coffee gần bạn',
+                                    style: TextStyle(
+                                      color: Color(0xFF353434),
+                                      fontSize: 12,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w300,
+                                      height: 0,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Vị trí hiện tại',
+                    style: TextStyle(
+                      color: Color(0xFF353434),
+                      fontSize: 20,
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w700,
+                      height: 0,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Container(
+                    color: Colors.blue,
+                    height: 150,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+            // List of bus trip
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: Row(
+                      children: [
+                        // Left side with orange background
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.35,
+                          height: 104,
+                          decoration: const ShapeDecoration(
+                            color: Color(0xFFFCCF59),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                bottomLeft: Radius.circular(30),
+                              ),
+                            ),
+                            shadows: [
+                              BoxShadow(
+                                color: Color(0xFF909090),
+                                blurRadius: 10,
+                                offset: Offset(2, 4),
+                                spreadRadius: -3,
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Right side with white background and text
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.55,
+                          height: 104,
+                          padding: const EdgeInsets.all(16),
+                          decoration: const ShapeDecoration(
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(30),
+                                bottomRight: Radius.circular(30),
+                              ),
+                            ),
+                            shadows: [
+                              BoxShadow(
+                                color: Color(0xFF909090),
+                                blurRadius: 10,
+                                offset: Offset(2, 4),
+                                spreadRadius: -3,
+                              ),
+                            ],
+                          ),
+                          child: const Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'DANH SÁCH TUYẾN XE ',
+                                style: TextStyle(
+                                  color: Color(0xFF353434),
+                                  fontSize: 14,
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w700,
+                                  height: 0,
+                                ),
+                              ),
+                              Text(
+                                'Xem thông tin các tuyến xe buýt',
+                                style: TextStyle(
+                                  color: Color(0xFF353434),
+                                  fontSize: 12,
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w300,
+                                  height: 0,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Row(
+                      children: [
+                        // Left side with orange background
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.35,
+                          height: 104,
+                          decoration: const ShapeDecoration(
+                            color: Color(0xFFFCCF59),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                bottomLeft: Radius.circular(30),
+                              ),
+                            ),
+                            shadows: [
+                              BoxShadow(
+                                color: Color(0xFF909090),
+                                blurRadius: 10,
+                                offset: Offset(2, 4),
+                                spreadRadius: -3,
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Right side with white background and text
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.55,
+                          height: 104,
+                          padding: const EdgeInsets.all(16),
+                          decoration: const ShapeDecoration(
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(30),
+                                bottomRight: Radius.circular(30),
+                              ),
+                            ),
+                            shadows: [
+                              BoxShadow(
+                                color: Color(0xFF909090),
+                                blurRadius: 10,
+                                offset: Offset(2, 4),
+                                spreadRadius: -3,
+                              ),
+                            ],
+                          ),
+                          child: const Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'TÊN ĐƯỜNG',
+                                style: TextStyle(
+                                  color: Color(0xFF353434),
+                                  fontSize: 14,
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w700,
+                                  height: 0,
+                                ),
+                              ),
+                              Text(
+                                'Tìm tuyến xe phù hợp theo tên đường',
+                                style: TextStyle(
+                                  color: Color(0xFF353434),
+                                  fontSize: 12,
+                                  fontFamily: 'Montserrat',
+                                  fontWeight: FontWeight.w300,
+                                  height: 0,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
