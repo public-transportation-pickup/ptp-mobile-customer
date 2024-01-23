@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../services/map_view.dart';
+
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -347,8 +349,9 @@ class HomePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   Container(
-                    color: Colors.blue,
+                    color: Colors.blue, // This container is for map
                     height: 150,
+                    child: MapScreen(), // Embed the MapScreen widget here
                   ),
                 ],
               ),
