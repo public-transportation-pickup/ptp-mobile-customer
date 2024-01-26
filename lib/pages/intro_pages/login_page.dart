@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../services/firebase_authentication.dart';
 import '../main_pages/page_navigation.dart';
@@ -204,6 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             child: TextButton(
                               onPressed: () async {
+                                HapticFeedback.lightImpact();
                                 User? user =
                                     await _firebaseAuth.signInWithGoogle();
 

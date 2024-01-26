@@ -1,7 +1,14 @@
+import 'package:capstone_ptp/pages/main_pages/components/grouped_list_option.dart';
 import 'package:capstone_ptp/services/local_variables.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import '../../services/firebase_authentication.dart';
+import 'components/confirm_logout.dart';
 
 class ProfilePage extends StatelessWidget {
+  final FirebaseAuthentication _firebaseAuth = FirebaseAuthentication();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -9,13 +16,14 @@ class ProfilePage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            // BIG STACK
             Stack(
               children: [
                 Column(
                   children: [
                     SizedBox(
                       width: double.infinity,
-                      height: 360,
+                      height: 357,
                       child: Stack(
                         children: [
                           // Gradient container
@@ -64,7 +72,7 @@ class ProfilePage extends StatelessWidget {
                                         color: Color(0x3F000000),
                                         blurRadius: 10,
                                         offset: Offset(0, 4),
-                                        spreadRadius: -3,
+                                        spreadRadius: -5,
                                       )
                                     ],
                                   ),
@@ -240,14 +248,60 @@ class ProfilePage extends StatelessWidget {
                         ],
                       ),
                     ),
+                    Container(
+                      color: Colors.white,
+                      //height: MediaQuery.of(context).size.height,
+                      height: 680,
+                      child: GroupedListOption(),
+                    ),
                   ],
                 ),
               ],
             ),
-            Container(
-              height: 60,
-              color: Colors.red,
-            )
+            // LOGOUT button
+            GestureDetector(
+              onTap: () async {
+                HapticFeedback.lightImpact();
+                bool confirmLogout = await ConfirmLogoutDialog.show(context);
+
+                if (confirmLogout) {
+                  //logout firebase
+                  await _firebaseAuth.signOut();
+                  //clear local variable
+                  LocalVariables.authkeyGoogle = '';
+                  LocalVariables.displayName = '';
+                  LocalVariables.currentEmail = '';
+                  LocalVariables.photoURL = '';
+                  LocalVariables.uid = '';
+                  LocalVariables.jwtToken = '';
+                  LocalVariables.phoneNumber = '';
+                  // Redirect to the login page and clear the navigation stack
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/login',
+                    (Route<dynamic> route) => false,
+                  );
+                }
+              },
+              child: Container(
+                margin: const EdgeInsets.all(16.0),
+                width: 367,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Đăng xuất',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

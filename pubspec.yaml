@@ -59,6 +59,7 @@ dependencies:
   google_maps_flutter: ^2.0.10
   geolocator: ^10.1.0
   flutter_map_location_marker: ^8.0.4
+  grouped_list: ^5.1.2
 
 dev_dependencies:
   flutter_test:
