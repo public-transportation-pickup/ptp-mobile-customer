@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../services/firebase_authentication.dart';
 import '../main_pages/page_navigation.dart';
 
@@ -11,32 +12,41 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  //final TextEditingController _emailController = TextEditingController();
+  //final TextEditingController _passwordController = TextEditingController();
 
   bool _isPasswordVisible = false;
+  bool isLoading = false;
 
   final FirebaseAuthentication _firebaseAuth = FirebaseAuthentication();
+
+  void _showLoading() {
+    setState(() {
+      isLoading = true;
+    });
+  }
+
+  void _hideLoading() {
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment(-0.00, -1.00),
-            end: Alignment(0, 1),
-            colors: [Colors.white, Color(0xFFFCCF59)],
-          ),
-        ),
-        child: SingleChildScrollView(
-          child: Stack(
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height,
-                width: double.infinity,
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment(-0.00, -1.00),
+                end: Alignment(0, 1),
+                colors: [Colors.white, Color(0xFFFCCF59)],
               ),
-              Column(
+            ),
+            child: SingleChildScrollView(
+              child: Column(
                 children: [
                   SizedBox(
                     height: MediaQuery.of(context).size.height / 3,
@@ -96,7 +106,6 @@ class _LoginPageState extends State<LoginPage> {
                               ],
                             ),
                           ),
-                          // Username Input Field
                           Container(
                             width: 292,
                             height: 50,
@@ -117,7 +126,6 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          // Password Input Field
                           Container(
                             width: 292,
                             height: 50,
@@ -206,8 +214,12 @@ class _LoginPageState extends State<LoginPage> {
                             child: TextButton(
                               onPressed: () async {
                                 HapticFeedback.lightImpact();
+                                _showLoading(); // Show loading animation
+
                                 User? user =
                                     await _firebaseAuth.signInWithGoogle();
+
+                                _hideLoading(); // Hide loading animation
 
                                 if (user != null) {
                                   // Successfully signed in with Google
@@ -217,7 +229,8 @@ class _LoginPageState extends State<LoginPage> {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => PageNavigation()),
+                                      builder: (context) => PageNavigation(),
+                                    ),
                                   );
                                 } else {
                                   // Show error dialog
@@ -269,9 +282,19 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ],
               ),
-            ],
+            ),
           ),
-        ),
+          if (isLoading)
+            Container(
+              color: Colors.black.withOpacity(0.5),
+              child: Center(
+                child: LoadingAnimationWidget.discreteCircle(
+                  color: Colors.white,
+                  size: 100,
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

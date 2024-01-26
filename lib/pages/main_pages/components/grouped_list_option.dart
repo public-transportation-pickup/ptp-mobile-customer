@@ -1,17 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 
+import '../order_page.dart';
+import '../activity_page.dart';
+
 class GroupedListOption extends StatelessWidget {
-  // Initialize the elements list here
-  final List<Map<String, String>> elements = [
-    {'name': 'Cập nhật thông tin cá nhân', 'group': 'Tài khoản của tôi'},
-    {'name': 'Giỏ hàng của tôi', 'group': 'Tài khoản của tôi'},
-    {'name': 'Lịch sử giao dịch', 'group': 'Tài khoản của tôi'},
-    {'name': 'Liên kết ví', 'group': 'Tài khoản của tôi'},
-    {'name': 'Điểm tích lũy', 'group': 'Ưu đãi và tích điểm'},
-    {'name': 'Thẻ quà tặng', 'group': 'Ưu đãi và tích điểm'},
-    {'name': 'Trung tâm trợ giúp', 'group': 'Trợ giúp'},
-    {'name': 'Thông tin chung', 'group': 'Trợ giúp'},
+  final List<Map<String, dynamic>> elements = [
+    {
+      'name': 'Cập nhật thông tin cá nhân',
+      'group': 'Tài khoản của tôi',
+      'page': OrderPage()
+    },
+    {
+      'name': 'Giỏ hàng của tôi',
+      'group': 'Tài khoản của tôi',
+      'page': ActivityPage()
+    },
+    {
+      'name': 'Lịch sử giao dịch',
+      'group': 'Tài khoản của tôi',
+      'page': OrderPage()
+    },
+    {'name': 'Liên kết ví', 'group': 'Tài khoản của tôi', 'page': OrderPage()},
+    {
+      'name': 'Điểm tích lũy',
+      'group': 'Ưu đãi và tích điểm',
+      'page': OrderPage()
+    },
+    {
+      'name': 'Thẻ quà tặng',
+      'group': 'Ưu đãi và tích điểm',
+      'page': OrderPage()
+    },
+    {'name': 'Trung tâm trợ giúp', 'group': 'Trợ giúp', 'page': OrderPage()},
+    {'name': 'Thông tin chung', 'group': 'Trợ giúp', 'page': OrderPage()},
   ];
 
   GroupedListOption({Key? key}) : super(key: key);
@@ -24,10 +46,6 @@ class GroupedListOption extends StatelessWidget {
         elements: elements,
         groupBy: (element) => element['group'],
         groupComparator: (value1, value2) => value2.compareTo(value1),
-        // itemComparator: (item1, item2) =>
-        //     item1['name'].compareTo(item2['name']),
-        //order: GroupedListOrder.ASC,
-        //useStickyGroupSeparators: true,
         groupSeparatorBuilder: (String value) => Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
@@ -40,13 +58,23 @@ class GroupedListOption extends StatelessWidget {
           return Card(
             elevation: 2.0,
             margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
-            child: SizedBox(
-              child: ListTile(
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 2.0),
-                //leading: const Icon(Icons.account_circle),
-                title: Text(element['name']!),
-                trailing: const Icon(Icons.arrow_forward_ios),
+            child: GestureDetector(
+              onTap: () {
+                // Handle the click event by navigating to the specified page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => element['page'],
+                  ),
+                );
+              },
+              child: SizedBox(
+                child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 20.0, vertical: 2.0),
+                  title: Text(element['name']),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                ),
               ),
             ),
           );
