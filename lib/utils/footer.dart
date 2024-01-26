@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AppFooter extends StatelessWidget {
@@ -17,7 +18,6 @@ class AppFooter extends StatelessWidget {
     return BottomAppBar(
       shape: const CircularNotchedRectangle(),
       shadowColor: Colors.black,
-      //color: const Color.fromARGB(255, 255, 255, 255),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -61,6 +61,7 @@ class AppFooter extends StatelessWidget {
 
     return InkWell(
       onTap: () {
+        HapticFeedback.mediumImpact();
         onTap(index);
         pageController.animateToPage(
           index,

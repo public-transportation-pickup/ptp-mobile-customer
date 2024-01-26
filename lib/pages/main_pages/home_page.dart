@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../services/map_view.dart';
+import 'profile_page.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -17,13 +19,13 @@ class HomePage extends StatelessWidget {
                   children: [
                     SizedBox(
                       width: double.infinity,
-                      height: 230,
+                      height: 280,
                       child: Stack(
                         children: [
                           // Background Container
                           Container(
                             width: double.infinity,
-                            height: 230,
+                            height: 280,
                             decoration: const ShapeDecoration(
                               gradient: LinearGradient(
                                 begin: Alignment(0.00, -1.00),
@@ -46,13 +48,31 @@ class HomePage extends StatelessWidget {
                               ],
                             ),
                           ),
+                          // Profile Icon
+                          Positioned(
+                            top: 48,
+                            right: 32,
+                            child: GestureDetector(
+                              onTap: () {
+                                HapticFeedback.mediumImpact();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProfilePage()),
+                                );
+                              },
+                              child: SvgPicture.asset(
+                                'lib/assets/icons/account_icon.svg',
+                                height: 24,
+                                width: 24,
+                              ),
+                            ),
+                          ),
                           // Centered Search Bar
                           Center(
                             child: Container(
-                              width: MediaQuery.of(context).size.width *
-                                  0.85, // Adjust the width of the search bar as needed
-                              height:
-                                  40, // Adjust the height of the search bar as needed
+                              width: MediaQuery.of(context).size.width * 0.85,
+                              height: 40,
                               decoration: BoxDecoration(
                                 color: const Color(0xFFFFEFC8),
                                 borderRadius: BorderRadius.circular(20),
@@ -86,22 +106,24 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      height: 80,
+                      height: 20,
                       color: Colors.white,
                     ),
                   ],
                 ),
+                // Container for Bus / Food / Coffee
                 Positioned(
-                  top: 170,
+                  top: 180,
                   left: (MediaQuery.of(context).size.width - 100 * 3 - 16 * 2) /
                       2,
+                  // Container for Bus / Food / Coffee
                   child: Row(
                     children: [
                       Column(
                         children: [
                           Container(
                             width: 100,
-                            height: 65.5, // 50% of 131 (total height)
+                            height: 50, // 50% of 131 (total height)
                             decoration: const ShapeDecoration(
                               color: Colors.red,
                               shape: RoundedRectangleBorder(
@@ -122,7 +144,7 @@ class HomePage extends StatelessWidget {
                           ),
                           Container(
                             width: 100,
-                            height: 65.5, // 50% of 131 (total height)
+                            height: 65,
                             decoration: const ShapeDecoration(
                               color: Colors.white,
                               shape: RoundedRectangleBorder(
@@ -177,7 +199,7 @@ class HomePage extends StatelessWidget {
                         children: [
                           Container(
                             width: 100,
-                            height: 65.5, // 50% of 131 (total height)
+                            height: 50, // 50% of 131 (total height)
                             decoration: const ShapeDecoration(
                               color: Colors.red,
                               shape: RoundedRectangleBorder(
@@ -198,7 +220,7 @@ class HomePage extends StatelessWidget {
                           ),
                           Container(
                             width: 100,
-                            height: 65.5, // 50% of 131 (total height)
+                            height: 65, // 50% of 131 (total height)
                             decoration: const ShapeDecoration(
                               color: Colors.white,
                               shape: RoundedRectangleBorder(
@@ -253,7 +275,7 @@ class HomePage extends StatelessWidget {
                         children: [
                           Container(
                             width: 100,
-                            height: 65.5, // 50% of 131 (total height)
+                            height: 50, // 50% of 131 (total height)
                             decoration: const ShapeDecoration(
                               color: Colors.red,
                               shape: RoundedRectangleBorder(
@@ -274,7 +296,7 @@ class HomePage extends StatelessWidget {
                           ),
                           Container(
                             width: 100,
-                            height: 65.5, // 50% of 131 (total height)
+                            height: 65, // 50% of 131 (total height)
                             decoration: const ShapeDecoration(
                               color: Colors.white,
                               shape: RoundedRectangleBorder(
@@ -330,6 +352,8 @@ class HomePage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
+
+            // Current user location
             Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -348,15 +372,17 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 12),
+                  // This container is for map
                   Container(
-                    color: Colors.blue, // This container is for map
+                    color: Colors.blue,
                     height: 150,
-                    child: MapScreen(), // Embed the MapScreen widget here
+                    child: MapScreen(),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 24),
+
             // List of bus trip
             Container(
               alignment: Alignment.centerLeft,

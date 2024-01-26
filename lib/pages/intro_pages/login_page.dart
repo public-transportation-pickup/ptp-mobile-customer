@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                             child: Row(
                               children: [
                                 Text(
-                                  'Sign in',
+                                  'Đăng nhập',
                                   style: TextStyle(
                                     color: Color(0xFF353434),
                                     fontSize: 20,
@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 SizedBox(width: 8),
                                 Text(
-                                  'Sign up',
+                                  'Đăng ký',
                                   style: TextStyle(
                                     color: Color(0xFFB1B1B1),
                                     fontSize: 20,
@@ -110,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                               child: TextField(
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: 'Phone/Email',
+                                  hintText: 'Tên đăng nhập',
                                 ),
                               ),
                             ),
@@ -157,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                             width: 280,
                             height: 23,
                             child: Text(
-                              'Forgotten password?',
+                              'Quên mật khẩu?',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
@@ -180,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                             child: const Align(
                               alignment: Alignment.center,
                               child: Text(
-                                'Sign in',
+                                'Đăng nhập',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Color(0xFFFFEFC8),
@@ -209,7 +209,7 @@ class _LoginPageState extends State<LoginPage> {
 
                                 if (user != null) {
                                   // Successfully signed in with Google
-                                  print('Token:  ${user.providerData}');
+                                  print('User data:  ${user.providerData}');
                                   // Redirect to the Home Page
                                   // ignore: use_build_context_synchronously
                                   Navigator.pushReplacement(
