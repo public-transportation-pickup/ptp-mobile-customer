@@ -52,6 +52,20 @@ class ProfilePage extends StatelessWidget {
                               ],
                             ),
                           ),
+                          // Return button
+                          Positioned(
+                            top: 50,
+                            left: 10,
+                            child: IconButton(
+                              icon: const Icon(Icons.arrow_back_ios_new,
+                                  color: Colors.white),
+                              onPressed: () {
+                                HapticFeedback.mediumImpact();
+                                // Navigate back to the home page
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ),
                           // White container
                           Positioned(
                             top: 120,

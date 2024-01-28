@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../services/map_view.dart';
+import 'components/carousel_slider.dart';
+import 'components/notify_topic_component.dart';
 import 'profile_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -549,6 +551,60 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             ),
+            const SizedBox(height: 32),
+
+            // SLIDER "Gợi ý cho bạn"
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Gợi ý cho bạn',
+                    style: TextStyle(
+                      color: Color(0xFF353434),
+                      fontSize: 20,
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w700,
+                      height: 0,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: CustomCarouselSlider(),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            // Infomation Notifycation Topic
+            Container(
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Khám phá tin tức',
+                        style: TextStyle(
+                          color: Color(0xFF353434),
+                          fontSize: 20,
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.w700,
+                          height: 0,
+                        ),
+                      ),
+                      NotifyTopicComponent(),
+                    ])),
           ],
         ),
       ),
