@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../services/map_view.dart';
+import '../route_pages/list_routes_page.dart';
 import 'components/carousel_slider.dart';
 import 'components/notify_topic_component.dart';
 import 'profile_page.dart';
@@ -196,82 +197,6 @@ class HomePage extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(width: 16), // Adjust the gap between boxes
-                      Column(
-                        children: [
-                          Container(
-                            width: 100,
-                            height: 50, // 50% of 131 (total height)
-                            decoration: const ShapeDecoration(
-                              color: Colors.red,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                ),
-                              ),
-                              shadows: [
-                                BoxShadow(
-                                  color: Color(0xFF909090),
-                                  blurRadius: 10,
-                                  offset: Offset(0, 4),
-                                  spreadRadius: -3,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            width: 100,
-                            height: 65, // 50% of 131 (total height)
-                            decoration: const ShapeDecoration(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(20),
-                                  bottomRight: Radius.circular(20),
-                                ),
-                              ),
-                              shadows: [
-                                BoxShadow(
-                                  color: Color(0xFF909090),
-                                  blurRadius: 10,
-                                  offset: Offset(0, 4),
-                                  spreadRadius: -3,
-                                ),
-                              ],
-                            ),
-                            child: const Padding(
-                              padding: EdgeInsets.fromLTRB(8, 4, 0,
-                                  4), // Left: 8, Top: 4, Right: 0, Bottom: 4
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'ĐỒ ĂN',
-                                    style: TextStyle(
-                                      color: Color(0xFF353434),
-                                      fontSize: 14,
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w700,
-                                      height: 0,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Tìm món ăn gần bạn',
-                                    style: TextStyle(
-                                      color: Color(0xFF353434),
-                                      fontSize: 12,
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w300,
-                                      height: 0,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
                       const SizedBox(width: 16),
                       Column(
                         children: [
@@ -317,8 +242,82 @@ class HomePage extends StatelessWidget {
                               ],
                             ),
                             child: const Padding(
-                              padding: EdgeInsets.fromLTRB(8, 4, 0,
-                                  4), // Left: 8, Top: 4, Right: 0, Bottom: 4
+                              padding: EdgeInsets.fromLTRB(8, 4, 0, 4),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'ĐỒ ĂN',
+                                    style: TextStyle(
+                                      color: Color(0xFF353434),
+                                      fontSize: 14,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w700,
+                                      height: 0,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Tìm món ăn gần bạn',
+                                    style: TextStyle(
+                                      color: Color(0xFF353434),
+                                      fontSize: 12,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w300,
+                                      height: 0,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 16),
+                      Column(
+                        children: [
+                          Container(
+                            width: 100,
+                            height: 50,
+                            decoration: const ShapeDecoration(
+                              color: Colors.red,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                ),
+                              ),
+                              shadows: [
+                                BoxShadow(
+                                  color: Color(0xFF909090),
+                                  blurRadius: 10,
+                                  offset: Offset(0, 4),
+                                  spreadRadius: -3,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            width: 100,
+                            height: 65,
+                            decoration: const ShapeDecoration(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(20),
+                                  bottomRight: Radius.circular(20),
+                                ),
+                              ),
+                              shadows: [
+                                BoxShadow(
+                                  color: Color(0xFF909090),
+                                  blurRadius: 10,
+                                  offset: Offset(0, 4),
+                                  spreadRadius: -3,
+                                ),
+                              ],
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.fromLTRB(8, 4, 0, 4),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -393,81 +392,99 @@ class HomePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: Row(
-                      children: [
-                        // Left side with orange background
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.35,
-                          height: 104,
-                          decoration: const ShapeDecoration(
-                            color: Color(0xFFFCCF59),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30),
-                                bottomLeft: Radius.circular(30),
-                              ),
-                            ),
-                            shadows: [
-                              BoxShadow(
-                                color: Color(0xFF909090),
-                                blurRadius: 10,
-                                offset: Offset(2, 4),
-                                spreadRadius: -3,
-                              ),
-                            ],
-                          ),
-                        ),
-                        // Right side with white background and text
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.55,
-                          height: 104,
-                          padding: const EdgeInsets.all(16),
-                          decoration: const ShapeDecoration(
-                            color: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(30),
-                                bottomRight: Radius.circular(30),
-                              ),
-                            ),
-                            shadows: [
-                              BoxShadow(
-                                color: Color(0xFF909090),
-                                blurRadius: 10,
-                                offset: Offset(2, 4),
-                                spreadRadius: -3,
-                              ),
-                            ],
-                          ),
-                          child: const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'DANH SÁCH TUYẾN XE ',
-                                style: TextStyle(
-                                  color: Color(0xFF353434),
-                                  fontSize: 14,
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w700,
-                                  height: 0,
+                  GestureDetector(
+                    onTap: () {
+                      HapticFeedback.mediumImpact();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ListRoutePage()),
+                      );
+                    },
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Row(
+                        children: [
+                          // Left side with icon
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.35,
+                            height: 104,
+                            decoration: const ShapeDecoration(
+                              color: Color(0xFFFCCF59),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(30),
+                                  bottomLeft: Radius.circular(30),
                                 ),
                               ),
-                              Text(
-                                'Xem thông tin các tuyến xe buýt',
-                                style: TextStyle(
-                                  color: Color(0xFF353434),
-                                  fontSize: 12,
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w300,
-                                  height: 0,
+                              shadows: [
+                                BoxShadow(
+                                  color: Color(0xFF909090),
+                                  blurRadius: 10,
+                                  offset: Offset(2, 4),
+                                  spreadRadius: -3,
                                 ),
-                              )
-                            ],
+                              ],
+                            ),
+                            child: Center(
+                              child: SvgPicture.asset(
+                                'lib/assets/icons/bus_icon.svg',
+                                width: 64,
+                                height: 64,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
+                          // Right side with white background and text
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.55,
+                            height: 104,
+                            padding: const EdgeInsets.all(16),
+                            decoration: const ShapeDecoration(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(30),
+                                  bottomRight: Radius.circular(30),
+                                ),
+                              ),
+                              shadows: [
+                                BoxShadow(
+                                  color: Color(0xFF909090),
+                                  blurRadius: 10,
+                                  offset: Offset(2, 4),
+                                  spreadRadius: -3,
+                                ),
+                              ],
+                            ),
+                            child: const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'DANH SÁCH TUYẾN XE ',
+                                  style: TextStyle(
+                                    color: Color(0xFF353434),
+                                    fontSize: 14,
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.w700,
+                                    height: 0,
+                                  ),
+                                ),
+                                Text(
+                                  'Xem thông tin các tuyến xe buýt',
+                                  style: TextStyle(
+                                    color: Color(0xFF353434),
+                                    fontSize: 12,
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.w300,
+                                    height: 0,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -475,7 +492,7 @@ class HomePage extends StatelessWidget {
                     width: double.infinity,
                     child: Row(
                       children: [
-                        // Left side with orange background
+                        // Left side with icon
                         Container(
                           width: MediaQuery.of(context).size.width * 0.35,
                           height: 104,
@@ -495,6 +512,14 @@ class HomePage extends StatelessWidget {
                                 spreadRadius: -3,
                               ),
                             ],
+                          ),
+                          child: Center(
+                            child: SvgPicture.asset(
+                              'lib/assets/icons/route_spot_guide_map.svg',
+                              width: 64,
+                              height: 64,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                         // Right side with white background and text
