@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class RouteCardComponent extends StatelessWidget {
   final String startLocation;
   final String endLocation;
   final String nameRoute;
-  final int numberRoute;
-  final String startTime;
-  final String endTime;
+  final String numberRoute;
+  final String operationTime;
   final Function() onTap;
 
   RouteCardComponent({
@@ -14,8 +14,7 @@ class RouteCardComponent extends StatelessWidget {
     required this.endLocation,
     required this.nameRoute,
     required this.numberRoute,
-    required this.startTime,
-    required this.endTime,
+    required this.operationTime,
     required this.onTap,
   });
 
@@ -51,7 +50,7 @@ class RouteCardComponent extends StatelessWidget {
                     child: Text(
                       numberRoute.toString(),
                       style: const TextStyle(
-                        fontSize: 32,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
@@ -65,20 +64,19 @@ class RouteCardComponent extends StatelessWidget {
                         Text(
                           nameRoute,
                           style: const TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w700),
+                              fontSize: 16, fontWeight: FontWeight.w700),
                         ),
                         const SizedBox(height: 8),
                         Row(
                           children: [
-                            Text('Start: $startTime'),
-                            Text(' - End: $endTime'),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Text('From: $startLocation'),
-                            Text(' - To: $endLocation'),
+                            SvgPicture.asset(
+                              'lib/assets/icons/clock_icon.svg',
+                              width: 16,
+                              height: 16,
+                              color: Colors.black87,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(operationTime),
                           ],
                         ),
                       ],

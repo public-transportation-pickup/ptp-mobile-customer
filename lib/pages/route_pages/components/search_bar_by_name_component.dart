@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class SearchBarComponent extends StatelessWidget {
-  final TextEditingController startPointController;
-  final TextEditingController endPointController;
+class SearchBarByNameComponent extends StatelessWidget {
+  final TextEditingController routeName;
+  final TextEditingController routeNo;
   final Function() onFilter;
 
-  SearchBarComponent({
-    required this.startPointController,
-    required this.endPointController,
+  SearchBarByNameComponent({
+    required this.routeName,
+    required this.routeNo,
     required this.onFilter,
   });
 
@@ -19,7 +19,7 @@ class SearchBarComponent extends StatelessWidget {
           const EdgeInsets.only(top: 0, right: 8.0, bottom: 8.0, left: 8.0),
       child: Container(
         width: MediaQuery.of(context).size.width,
-        height: 160,
+        height: 80,
         decoration: const ShapeDecoration(
           color: Colors.white,
           shape: RoundedRectangleBorder(
@@ -47,9 +47,10 @@ class SearchBarComponent extends StatelessWidget {
                   height: 50,
                   child: Center(
                     child: SvgPicture.asset(
-                      'lib/assets/icons/start_search.svg',
+                      'lib/assets/icons/search_icon.svg',
                       width: 32,
                       height: 32,
+                      color: Colors.black,
                     ),
                   ),
                 ),
@@ -66,49 +67,11 @@ class SearchBarComponent extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: TextField(
-                      controller: startPointController,
+                      controller: routeName,
                       onChanged: (_) => onFilter(),
                       decoration: const InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'Đi từ...',
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.12,
-                  height: 50,
-                  child: Center(
-                    child: SvgPicture.asset(
-                      'lib/assets/icons/end_search.svg',
-                      width: 32,
-                      height: 32,
-                    ),
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.82,
-                  height: 50,
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(56),
-                      side: const BorderSide(color: Color(0xFFE7E7E7)),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: TextField(
-                      controller: endPointController,
-                      onChanged: (_) => onFilter(),
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Đến...',
+                        hintText: 'Tìm nhanh',
                       ),
                     ),
                   ),

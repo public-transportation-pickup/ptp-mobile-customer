@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../models/route_model.dart';
+import '../../services/api_services.dart';
 import 'components/card_component.dart';
-import 'components/search_bar_component.dart';
+import 'components/search_bar_by_name_component.dart';
 
 class ListRoutePage extends StatefulWidget {
   @override
@@ -8,68 +10,43 @@ class ListRoutePage extends StatefulWidget {
 }
 
 class _ListRoutePageState extends State<ListRoutePage> {
-  TextEditingController _startPointController = TextEditingController();
-  TextEditingController _endPointController = TextEditingController();
-  List<RouteItem> _allRoutes = [];
-  List<RouteItem> _displayedRoutes = [];
+  final TextEditingController _routeNameController = TextEditingController();
+  final TextEditingController _routeNoController = TextEditingController();
+  List<RouteModel> _allRoutes = [];
+  List<RouteModel> _displayedRoutes = [];
+
+  late Future<List<RouteModel>> _fetchRoutesFuture;
 
   @override
   void initState() {
-    _allRoutes = [
-      RouteItem(
-          startPoint: 'A',
-          endPoint: 'B',
-          nameRoute: 'Bến xe buýt Chợ Lớn - Đại học Giao thông Vận tải',
-          numberRoute: 56,
-          startTime: '5:00',
-          endTime: '21:00'),
-      RouteItem(
-          startPoint: 'B',
-          endPoint: 'C',
-          nameRoute: 'Bến xe Suối tiên',
-          numberRoute: 88,
-          startTime: '5:00',
-          endTime: '22:00'),
-      RouteItem(
-          startPoint: 'C',
-          endPoint: 'D',
-          nameRoute: 'Bến xe buýt Chợ Lớn - Đại học Nông Lâm',
-          numberRoute: 02,
-          startTime: '6:00',
-          endTime: '19:00'),
-      RouteItem(
-          startPoint: 'C',
-          endPoint: 'D',
-          nameRoute: 'Bến xe buýt Test',
-          numberRoute: 69,
-          startTime: '6:00',
-          endTime: '19:00'),
-      RouteItem(
-          startPoint: 'C',
-          endPoint: 'D',
-          nameRoute:
-              'Bến xe buýt một cái gì đó dài thiệt là dài mà cái box không chứa hết chữ ahihi ahuhu',
-          numberRoute: 25,
-          startTime: '6:00',
-          endTime: '19:00'),
-      // Add more routes as needed
-    ];
-
-    _displayedRoutes.addAll(_allRoutes);
-
+    _fetchRoutesFuture = _fetchRoutes();
     super.initState();
   }
 
+  Future<List<RouteModel>> _fetchRoutes() async {
+    try {
+      List<RouteModel> routes = await ApiService.getRoutes();
+      setState(() {
+        _allRoutes = routes;
+        _displayedRoutes.addAll(_allRoutes);
+      });
+      return routes;
+    } catch (e) {
+      print('Error fetching routes: $e');
+      rethrow;
+    }
+  }
+
   void _filterRoutes() {
-    String startQuery = _startPointController.text.toLowerCase();
-    String endQuery = _endPointController.text.toLowerCase();
+    String routeName = _routeNameController.text.toLowerCase();
+    String routeNo = _routeNoController.text.toLowerCase();
 
     setState(() {
       _displayedRoutes = _allRoutes.where((route) {
-        return (route.startPoint.toLowerCase().contains(startQuery) ||
-                startQuery.isEmpty) &&
-            (route.endPoint.toLowerCase().contains(endQuery) ||
-                endQuery.isEmpty);
+        return (route.routeNo.toLowerCase().contains(routeNo) ||
+                route.name.toLowerCase().contains(routeNo)) &&
+            (route.name.toLowerCase().contains(routeName) ||
+                route.routeNo.toLowerCase().contains(routeName));
       }).toList();
     });
   }
@@ -90,26 +67,40 @@ class _ListRoutePageState extends State<ListRoutePage> {
       ),
       body: Column(
         children: [
-          SearchBarComponent(
-            startPointController: _startPointController,
-            endPointController: _endPointController,
+          SearchBarByNameComponent(
+            routeName: _routeNameController,
+            routeNo: _routeNoController,
             onFilter: _filterRoutes,
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: _displayedRoutes.length,
-              itemBuilder: (context, index) {
-                return RouteCardComponent(
-                  startLocation: _displayedRoutes[index].startPoint,
-                  endLocation: _displayedRoutes[index].endPoint,
-                  nameRoute: _displayedRoutes[index].nameRoute,
-                  numberRoute: _displayedRoutes[index].numberRoute,
-                  startTime: _displayedRoutes[index].startTime,
-                  endTime: _displayedRoutes[index].endTime,
-                  onTap: () {
-                    // Handle card tap if needed
-                  },
-                );
+            child: FutureBuilder(
+              future: _fetchRoutesFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                } else {
+                  return ListView.builder(
+                    itemCount: _displayedRoutes.length,
+                    itemBuilder: (context, index) {
+                      return RouteCardComponent(
+                        startLocation: _displayedRoutes[index].inboundName,
+                        endLocation: _displayedRoutes[index].outBoundName,
+                        nameRoute: _displayedRoutes[index].name,
+                        numberRoute: _displayedRoutes[index].routeNo,
+                        operationTime: _displayedRoutes[index].operationTime,
+                        onTap: () {
+                          // Handle card tap if needed
+                        },
+                      );
+                    },
+                  );
+                }
               },
             ),
           ),
@@ -117,22 +108,4 @@ class _ListRoutePageState extends State<ListRoutePage> {
       ),
     );
   }
-}
-
-class RouteItem {
-  final String startPoint;
-  final String endPoint;
-
-  final String nameRoute;
-  final int numberRoute;
-  final String startTime;
-  final String endTime;
-
-  RouteItem(
-      {required this.startPoint,
-      required this.endPoint,
-      required this.startTime,
-      required this.endTime,
-      required this.nameRoute,
-      required this.numberRoute});
 }
