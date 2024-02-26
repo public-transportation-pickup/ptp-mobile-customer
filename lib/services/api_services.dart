@@ -1,36 +1,43 @@
 import 'dart:convert';
-//import 'package:capstone_ptp/services/local_variables.dart';
+import 'package:capstone_ptp/services/local_variables.dart';
 import 'package:http/http.dart' as http;
+import 'package:logger/logger.dart';
 
 import '../models/route_model.dart';
 
 class ApiService {
+  // CHECK LOG
+  static var checkLog = Logger(printer: PrettyPrinter());
+
+  // DOMAIN CALL API
   //static const String baseUrl = "http://localhost:5066/api";
-  static const String baseUrl = "http://183.80.125.249:5000/api";
+  //static const String baseUrl = "http://183.80.125.249:5000/api";
+  static const String baseUrl = 'http://ptp-srv.ddns.net:5000/api';
 
-  // static Future<Map<String, dynamic>> login(String token) async {
-  //   final Uri loginUrl = Uri.parse('$baseUrl/auth');
+  static Future<Map<String, dynamic>> login(String token) async {
+    final Uri loginUrl = Uri.parse('$baseUrl/auth');
 
-  //   final Map<String, String> body = {'token': token, 'role': 'customer'};
+    final Map<String, String> body = {'token': token, 'role': 'customer'};
 
-  //   final response = await http.post(
-  //     loginUrl,
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: jsonEncode(body),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     final Map<String, dynamic> responseBody = json.decode(response.body);
-
-  //     // Parse and store the token and user information
-  //     LocalVariables.jwtToken = responseBody['token'];
-
-  //     return responseBody;
-  //   } else {
-  //     throw Exception('Failed to login: ${response.statusCode}');
-  //   }
-  // }
+    final response = await http.post(
+      loginUrl,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(body),
+    );
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseBody = json.decode(response.body);
+      // Save token
+      LocalVariables.jwtToken = responseBody['token'];
+      checkLog.i('System JWT: ${LocalVariables.jwtToken}');
+      checkLog.t(responseBody);
+      return responseBody;
+    } else {
+      checkLog.e('Failed to login: ${response.statusCode}');
+      throw Exception('Failed to login: ${response.statusCode}');
+    }
+  }
 
   static Future<List<RouteModel>> getRoutes() async {
     final Uri routesUrl = Uri.parse('$baseUrl/routes');
@@ -47,6 +54,7 @@ class ApiService {
       List<dynamic> jsonResponse = json.decode(response.body);
       return jsonResponse.map((json) => RouteModel.fromJson(json)).toList();
     } else {
+      checkLog.e('Failed to load routes: ${response.statusCode}');
       throw Exception('Failed to load routes: ${response.statusCode}');
     }
   }

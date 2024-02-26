@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:logger/logger.dart';
 import '../../services/firebase_authentication.dart';
 import '../main_pages/page_navigation.dart';
 
@@ -12,6 +13,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  // CHECK LOG
+  var checkLog = Logger(printer: PrettyPrinter());
+
   bool _isPasswordVisible = false;
   bool isLoading = false;
 
@@ -220,7 +224,7 @@ class _LoginPageState extends State<LoginPage> {
 
                                 if (user != null) {
                                   // Successfully signed in with Google
-                                  print('User data:  ${user.providerData}');
+                                  checkLog.d(user.providerData);
                                   // Redirect to the Home Page
                                   // ignore: use_build_context_synchronously
                                   Navigator.pushReplacement(
@@ -236,9 +240,15 @@ class _LoginPageState extends State<LoginPage> {
                                     context: context,
                                     builder: (context) {
                                       return AlertDialog(
-                                        title: const Text('Error'),
+                                        title: const Text(
+                                          'Có lỗi xảy ra!',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                         content: const Text(
-                                            'Google Sign In failed. Please try again.'),
+                                            'Đăng nhập với Google thất bại.\nVui lòng thử lại.'),
                                         actions: [
                                           TextButton(
                                             onPressed: () {

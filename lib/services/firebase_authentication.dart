@@ -1,9 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:logger/logger.dart';
 
+import 'api_services.dart';
 import 'local_variables.dart';
 
 class FirebaseAuthentication {
+  // CHECK LOG
+  var checkLog = Logger(printer: PrettyPrinter());
+
+  // Initiation Firebase
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
@@ -31,10 +37,12 @@ class FirebaseAuthentication {
       // Sign in with Google Auth Credential
       final UserCredential authResult =
           await _auth.signInWithCredential(googleAuthCredential);
-      final String? authKey = await authResult.user?.getIdToken(false);
 
-      // Return the user details
-      //print('Authkey Token: ${authKey}');
+      final String? authKey = await authResult.user?.getIdToken(true);
+
+      // Print log Auth key token from Firebase
+      checkLog.i('Authkey Token: ${authKey?.substring(0, 800)}');
+      checkLog.i('Continue key: ${authKey?.substring(800)}');
 
       LocalVariables.authkeyGoogle = authKey;
       LocalVariables.displayName = authResult.user?.displayName;
@@ -42,9 +50,12 @@ class FirebaseAuthentication {
       LocalVariables.photoURL = authResult.user?.photoURL;
       LocalVariables.uid = authResult.user?.uid;
 
+      // Call login system api
+      await ApiService.login(authKey!);
+
       return authResult.user;
     } catch (error) {
-      print("Error during Google Sign In: $error");
+      checkLog.e("Error during Google Sign In: $error");
       return null;
     }
   }

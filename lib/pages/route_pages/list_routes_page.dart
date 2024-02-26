@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import '../../models/route_model.dart';
 import '../../services/api_services.dart';
 import 'components/card_component.dart';
@@ -10,6 +11,9 @@ class ListRoutePage extends StatefulWidget {
 }
 
 class _ListRoutePageState extends State<ListRoutePage> {
+  //CHECK LOG
+  var checkLog = Logger(printer: PrettyPrinter());
+  //CLASS VARIABLES
   final TextEditingController _routeNameController = TextEditingController();
   final TextEditingController _routeNoController = TextEditingController();
   List<RouteModel> _allRoutes = [];
@@ -32,7 +36,7 @@ class _ListRoutePageState extends State<ListRoutePage> {
       });
       return routes;
     } catch (e) {
-      print('Error fetching routes: $e');
+      checkLog.e('Error fetching routes: $e');
       rethrow;
     }
   }
@@ -56,7 +60,7 @@ class _ListRoutePageState extends State<ListRoutePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Chọn tuyến',
+          'Chọn tuyến xe buýt',
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
