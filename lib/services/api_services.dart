@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 
 import '../models/route_model.dart';
+import '../models/order_model.dart';
 
 class ApiService {
   // CHECK LOG
@@ -56,6 +57,29 @@ class ApiService {
     } else {
       checkLog.e('Failed to load routes: ${response.statusCode}');
       throw Exception('Failed to load routes: ${response.statusCode}');
+    }
+  }
+
+  static Future<List<OrderModel>> getOrdersOfUser(
+      {int pageNumber = 1, int pageSize = 100}) async {
+    final Uri ordersUrl = Uri.parse(
+        '$baseUrl/users/orders?pageNumber=$pageNumber&pageSize=$pageSize');
+
+    final response = await http.get(
+      ordersUrl,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${LocalVariables.jwtToken}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = json.decode(response.body);
+      //checkLog.t(jsonResponse);
+      return jsonResponse.map((json) => OrderModel.fromJson(json)).toList();
+    } else {
+      checkLog.e('Failed to load orders: ${response.statusCode}');
+      throw Exception('Failed to load orders: ${response.statusCode}');
     }
   }
 }

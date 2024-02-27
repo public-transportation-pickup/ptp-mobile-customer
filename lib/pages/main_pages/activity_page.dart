@@ -9,6 +9,7 @@ class ActivityPage extends StatefulWidget {
 
 class _ActivityPageState extends State<ActivityPage>
     with SingleTickerProviderStateMixin {
+  //CLASS VARIABLES
   late TabController _tabController;
 
   @override
@@ -80,9 +81,9 @@ class _ActivityPageState extends State<ActivityPage>
             child: TabBarView(
               controller: _tabController,
               children: [
-                OrderListTab(orderStatus: 'Waiting'),
-                OrderListTab(orderStatus: 'Confirm'),
-                OrderListTab(orderStatus: 'Ready'),
+                OrderListTab(orderStatus: 'Created'),
+                OrderListTab(orderStatus: 'Processing'),
+                OrderListTab(orderStatus: 'Completed'),
               ],
             ),
           ),
