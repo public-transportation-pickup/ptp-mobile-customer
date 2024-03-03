@@ -4,12 +4,12 @@ import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 
-class MapScreen extends StatefulWidget {
+class MapComponent extends StatefulWidget {
   @override
-  _MapScreenState createState() => _MapScreenState();
+  _MapComponentState createState() => _MapComponentState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _MapComponentState extends State<MapComponent> {
   final MapController _mapController = MapController();
   LocationData? _currentLocation;
   bool _isLoading = true;

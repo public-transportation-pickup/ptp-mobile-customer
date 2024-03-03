@@ -31,8 +31,7 @@ class OrderListTab extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return Center(
-              child: Text('Error fetching orders: ${snapshot.error}'));
+          return const Center(child: Text('Có lỗi xảy ra vui lòng thử lại!'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return Center(
             child: Text('You don\'t have any $orderStatus orders.'),
