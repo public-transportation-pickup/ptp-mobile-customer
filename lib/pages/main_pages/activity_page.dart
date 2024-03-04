@@ -74,6 +74,7 @@ class _ActivityPageState extends State<ActivityPage>
                   borderRadius: BorderRadius.circular(80.0),
                   color: const Color(0xFFFBAB40).withOpacity(0.2),
                 ),
+                indicatorSize: TabBarIndicatorSize.tab,
               ),
             ),
           ),

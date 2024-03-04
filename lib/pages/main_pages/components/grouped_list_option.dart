@@ -56,6 +56,7 @@ class GroupedListOption extends StatelessWidget {
         ),
         itemBuilder: (c, element) {
           return Card(
+            surfaceTintColor: Colors.white,
             elevation: 2.0,
             margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
             child: GestureDetector(

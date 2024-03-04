@@ -15,37 +15,34 @@ class AppFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomAppBar(
-      shape: const CircularNotchedRectangle(),
-      shadowColor: Colors.black,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 10,
-              offset: const Offset(0, -4),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildBottomNavItem(
-                  'lib/assets/icons/home_icon.svg', 'Trang chủ', 0, context),
-              _buildBottomNavItem(
-                  'lib/assets/icons/noti_icon.svg', 'Thông báo', 1, context),
-              _buildBottomNavItem(
-                  'lib/assets/icons/wallet_icon.svg', 'Thanh toán', 2, context),
-              _buildBottomNavItem('lib/assets/icons/activity_icon.svg',
-                  'Họat động', 3, context),
-              _buildBottomNavItem(
-                  'lib/assets/icons/order_icon.svg', 'Giỏ hàng', 4, context),
-            ],
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.rectangle,
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 10,
+            offset: const Offset(0, -4),
           ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildBottomNavItem(
+                'lib/assets/icons/home_icon.svg', 'Trang chủ', 0, context),
+            _buildBottomNavItem(
+                'lib/assets/icons/noti_icon.svg', 'Thông báo', 1, context),
+            _buildBottomNavItem(
+                'lib/assets/icons/wallet_icon.svg', 'Thanh toán', 2, context),
+            _buildBottomNavItem(
+                'lib/assets/icons/activity_icon.svg', 'Họat động', 3, context),
+            _buildBottomNavItem(
+                'lib/assets/icons/order_icon.svg', 'Giỏ hàng', 4, context),
+          ],
         ),
       ),
     );
