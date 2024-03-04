@@ -34,8 +34,8 @@ class OrderListTab extends StatelessWidget {
         } else if (snapshot.hasError) {
           return const Center(child: Text('Có lỗi xảy ra vui lòng thử lại!'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(
-            child: Text('You don\'t have any $orderStatus orders.'),
+          return const Center(
+            child: Text('Bạn không có bất kì đơn hàng nào.'),
           );
         } else {
           List<OrderModel> orders = snapshot.data!;

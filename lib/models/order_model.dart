@@ -1,27 +1,27 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:capstone_ptp/models/order_detail_model.dart';
+import 'order_detail_model.dart';
 
 part 'order_model.g.dart';
 
 @JsonSerializable()
 class OrderModel {
-  String id;
-  String name;
-  String phoneNumber;
-  DateTime pickUpTime;
-  double total;
-  String status;
-  String userId;
-  String stationId;
-  String stationName;
-  String stationAddress;
-  String storeId;
-  String storeName;
-  String storePhoneNumber;
-  String paymentId;
-  String? paymentType;
-  String? paymentStatus;
-  List<OrderDetailModel> orderDetails;
+  final String id;
+  final String name;
+  final String phoneNumber;
+  final DateTime pickUpTime;
+  final double total;
+  final String status;
+  final String userId;
+  final String stationId;
+  final String stationName;
+  final String stationAddress;
+  final String storeId;
+  final String storeName;
+  final String storePhoneNumber;
+  final String paymentId;
+  final String paymentType;
+  final String paymentStatus;
+  final List<OrderDetailModel> orderDetails;
 
   OrderModel({
     required this.id,
@@ -38,8 +38,8 @@ class OrderModel {
     required this.storeName,
     required this.storePhoneNumber,
     required this.paymentId,
-    this.paymentType,
-    this.paymentStatus,
+    required this.paymentType,
+    required this.paymentStatus,
     required this.orderDetails,
   });
 

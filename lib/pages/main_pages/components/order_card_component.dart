@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import '../../../models/order_model.dart';
 
 class OrderCardComponent extends StatelessWidget {
@@ -18,6 +19,12 @@ class OrderCardComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String iconPath = statusIconMap[order.status.toLowerCase()] ?? '';
+    int numberOfProducts = 0;
+    // Calculate the total number of products
+    for (var detail in order.orderDetails) {
+      numberOfProducts += detail.quantity;
+    }
+
     return Card(
       surfaceTintColor: Colors.white,
       elevation: 5,
@@ -32,8 +39,8 @@ class OrderCardComponent extends StatelessWidget {
               children: [
                 SvgPicture.asset(
                   iconPath,
-                  height: 74,
-                  width: 74,
+                  height: 64,
+                  width: 64,
                 ),
                 const SizedBox(width: 16),
                 Flexible(
@@ -57,12 +64,89 @@ class OrderCardComponent extends StatelessWidget {
             ),
             //================================================================
             const SizedBox(height: 8),
-            Text(
-              'Name: ${order.name}',
-              style: const TextStyle(fontWeight: FontWeight.bold),
+            const Text(
+              'Trạm đến:',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                fontFamily: 'Montserrat',
+              ),
             ),
             const SizedBox(height: 8),
-            Text('Pick Up Time: ${order.pickUpTime}'),
+            Text(
+              '${order.stationName} - ${order.stationAddress}',
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Montserrat',
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Thời gian có thể đến lấy hàng:',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                fontFamily: 'Montserrat',
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              DateFormat('HH:mm dd/MM/yyyy').format(order.pickUpTime),
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Montserrat',
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Divider(
+              height: 2,
+              color: Colors.black12,
+            ),
+            //================================================================
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    order.orderDetails.isNotEmpty
+                        ? order.orderDetails[0].productName
+                        : 'N/A',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text(
+                        order.orderDetails.isNotEmpty
+                            ? 'x${order.orderDetails[0].quantity.toString()}'
+                            : 'N/A',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: 'Montserrat',
+                          color: Color(0xFFFCCF59),
+                        ),
+                      ),
+                      Text(
+                        order.orderDetails.isNotEmpty
+                            ? order.orderDetails[0].actualPrice.toString()
+                            : 'N/A',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Montserrat',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 8),
             const Divider(
               height: 2,
@@ -90,8 +174,31 @@ class OrderCardComponent extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Payment Type: ${order.paymentType ?? 'N/A'}'),
-                Text('Total: \$${order.total.toStringAsFixed(2)}'),
+                Text('${numberOfProducts} sản phẩm'),
+                RichText(
+                  text: TextSpan(
+                    text:
+                        'Tổng cộng:    ${NumberFormat('#,###', 'vi_VN').format(order.total.toInt())}',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Montserrat',
+                      color: Colors.black,
+                    ),
+                    children: const <TextSpan>[
+                      TextSpan(
+                        text: 'đ',
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Montserrat',
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
             const SizedBox(height: 8),

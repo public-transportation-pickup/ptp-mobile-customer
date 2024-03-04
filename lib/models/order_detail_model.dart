@@ -4,18 +4,18 @@ part 'order_detail_model.g.dart';
 
 @JsonSerializable()
 class OrderDetailModel {
-  String id;
-  double actualPrice;
-  int quantity;
-  String note;
-  String productMenuId;
-  String orderId;
-  String menuId;
-  String productId;
-  String? productName;
-  double productPrice;
-  String? description;
-  String? imageURL;
+  final String id;
+  final double actualPrice;
+  final int quantity;
+  final String note;
+  final String productMenuId;
+  final String orderId;
+  final String menuId;
+  final String productId;
+  final String productName;
+  final double productPrice;
+  final String description;
+  final String imageURL;
 
   OrderDetailModel({
     required this.id,
@@ -26,10 +26,10 @@ class OrderDetailModel {
     required this.orderId,
     required this.menuId,
     required this.productId,
-    this.productName,
+    required this.productName,
     required this.productPrice,
-    this.description,
-    this.imageURL,
+    required this.description,
+    required this.imageURL,
   });
 
   factory OrderDetailModel.fromJson(Map<String, dynamic> json) =>
