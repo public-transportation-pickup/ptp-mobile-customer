@@ -41,7 +41,7 @@ class AppFooter extends StatelessWidget {
             _buildBottomNavItem(
                 'lib/assets/icons/activity_icon.svg', 'Họat động', 3, context),
             _buildBottomNavItem(
-                'lib/assets/icons/order_icon.svg', 'Giỏ hàng', 4, context),
+                'lib/assets/icons/order_icon.svg', 'Đơn hàng', 4, context),
           ],
         ),
       ),

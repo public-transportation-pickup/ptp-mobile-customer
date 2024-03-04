@@ -1,10 +1,10 @@
-import 'package:capstone_ptp/pages/main_pages/activity_page.dart';
+import 'package:capstone_ptp/pages/main_pages/order_page.dart';
 import 'package:capstone_ptp/utils/footer.dart';
 import 'package:flutter/material.dart';
 
 import 'notification_page.dart';
 import 'wallet_page.dart';
-import 'order_page.dart';
+import 'order_sample_page.dart';
 import 'home_page.dart';
 
 class PageNavigation extends StatefulWidget {
@@ -37,7 +37,7 @@ class _PageNavigation extends State<PageNavigation> {
             HomePage(),
             NotificationPage(),
             WalletPage(),
-            ActivityPage(),
+            OrderSamplePage(),
             OrderPage(),
           ],
         ),

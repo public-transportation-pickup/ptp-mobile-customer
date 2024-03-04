@@ -1,39 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 
+import '../order_sample_page.dart';
 import '../order_page.dart';
-import '../activity_page.dart';
 
 class GroupedListOption extends StatelessWidget {
   final List<Map<String, dynamic>> elements = [
     {
       'name': 'Cập nhật thông tin cá nhân',
       'group': 'Tài khoản của tôi',
-      'page': OrderPage()
+      'page': OrderSamplePage()
     },
     {
       'name': 'Giỏ hàng của tôi',
       'group': 'Tài khoản của tôi',
-      'page': ActivityPage()
+      'page': OrderPage()
     },
     {
       'name': 'Lịch sử giao dịch',
       'group': 'Tài khoản của tôi',
-      'page': OrderPage()
+      'page': OrderSamplePage()
     },
-    {'name': 'Liên kết ví', 'group': 'Tài khoản của tôi', 'page': OrderPage()},
+    {
+      'name': 'Liên kết ví',
+      'group': 'Tài khoản của tôi',
+      'page': OrderSamplePage()
+    },
     {
       'name': 'Điểm tích lũy',
       'group': 'Ưu đãi và tích điểm',
-      'page': OrderPage()
+      'page': OrderSamplePage()
     },
     {
       'name': 'Thẻ quà tặng',
       'group': 'Ưu đãi và tích điểm',
-      'page': OrderPage()
+      'page': OrderSamplePage()
     },
-    {'name': 'Trung tâm trợ giúp', 'group': 'Trợ giúp', 'page': OrderPage()},
-    {'name': 'Thông tin chung', 'group': 'Trợ giúp', 'page': OrderPage()},
+    {
+      'name': 'Trung tâm trợ giúp',
+      'group': 'Trợ giúp',
+      'page': OrderSamplePage()
+    },
+    {'name': 'Thông tin chung', 'group': 'Trợ giúp', 'page': OrderSamplePage()},
   ];
 
   GroupedListOption({Key? key}) : super(key: key);
