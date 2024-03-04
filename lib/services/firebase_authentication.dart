@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
 
-import 'api_services.dart';
+import 'api_services/authentication_api.dart';
 import 'local_variables.dart';
 
 class FirebaseAuthentication {
@@ -51,7 +51,7 @@ class FirebaseAuthentication {
       LocalVariables.uid = authResult.user?.uid;
 
       // Call login system api
-      await ApiService.login(authKey!);
+      await AuthenticationApi.login(authKey!);
 
       return authResult.user;
     } catch (error) {

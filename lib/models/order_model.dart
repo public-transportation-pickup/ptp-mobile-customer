@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:capstone_ptp/models/order_detail_model.dart';
 
 part 'order_model.g.dart';
 
@@ -20,7 +21,7 @@ class OrderModel {
   String paymentId;
   String? paymentType;
   String? paymentStatus;
-  //List<OrderDetail> orderDetails;
+  List<OrderDetailModel> orderDetails;
 
   OrderModel({
     required this.id,
@@ -39,7 +40,7 @@ class OrderModel {
     required this.paymentId,
     this.paymentType,
     this.paymentStatus,
-    //this.orderDetails = const [],
+    required this.orderDetails,
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) =>

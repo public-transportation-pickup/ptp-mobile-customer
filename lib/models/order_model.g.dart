@@ -23,6 +23,9 @@ OrderModel _$OrderModelFromJson(Map<String, dynamic> json) => OrderModel(
       paymentId: json['paymentId'] as String,
       paymentType: json['paymentType'] as String?,
       paymentStatus: json['paymentStatus'] as String?,
+      orderDetails: (json['orderDetails'] as List<dynamic>)
+          .map((e) => OrderDetailModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$OrderModelToJson(OrderModel instance) =>
@@ -43,4 +46,5 @@ Map<String, dynamic> _$OrderModelToJson(OrderModel instance) =>
       'paymentId': instance.paymentId,
       'paymentType': instance.paymentType,
       'paymentStatus': instance.paymentStatus,
+      'orderDetails': instance.orderDetails,
     };

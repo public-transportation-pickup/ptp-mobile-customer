@@ -1,7 +1,7 @@
+import 'package:capstone_ptp/services/api_services/route_api.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import '../../models/route_model.dart';
-import '../../services/api_services.dart';
 import 'components/card_component.dart';
 import 'components/search_bar_by_name_component.dart';
 
@@ -29,7 +29,7 @@ class _ListRoutePageState extends State<ListRoutePage> {
 
   Future<List<RouteModel>> _fetchRoutes() async {
     try {
-      List<RouteModel> routes = await ApiService.getRoutes();
+      List<RouteModel> routes = await RouteApi.getRoutes();
       setState(() {
         _allRoutes = routes;
         _displayedRoutes.addAll(_allRoutes);

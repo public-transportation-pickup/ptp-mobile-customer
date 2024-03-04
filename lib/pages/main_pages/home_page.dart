@@ -2,9 +2,9 @@ import 'package:capstone_ptp/services/map_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
+//import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-import '../../services/map_component.dart';
+//import '../../services/map_component.dart';
 import '../route_pages/list_routes_page.dart';
 import 'components/carousel_slider.dart';
 import 'components/notify_topic_component.dart';
