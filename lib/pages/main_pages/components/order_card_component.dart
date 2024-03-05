@@ -16,6 +16,20 @@ class OrderCardComponent extends StatelessWidget {
     'completed': 'lib/assets/icons/order_ready_icon.svg',
   };
 
+  // Function to get the appropriate status text based on order status
+  String getOrderStatusText(String status) {
+    switch (status.toLowerCase()) {
+      case 'created':
+        return 'Chờ xác nhận';
+      case 'processing':
+        return 'Đang xử lý';
+      case 'completed':
+        return 'Có thể đến lấy';
+      default:
+        return status; // Default to the original status if not recognized
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final String iconPath = statusIconMap[order.status.toLowerCase()] ?? '';
@@ -64,13 +78,23 @@ class OrderCardComponent extends StatelessWidget {
             ),
             //================================================================
             const SizedBox(height: 8),
-            const Text(
-              'Trạm đến:',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'Montserrat',
-              ),
+            Row(
+              children: [
+                SvgPicture.asset(
+                  'lib/assets/icons/bus_stop_icon.svg',
+                  height: 24,
+                  width: 24,
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  'Trạm đến:',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Montserrat',
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 8),
             Text(
@@ -82,13 +106,23 @@ class OrderCardComponent extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Thời gian có thể đến lấy hàng:',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'Montserrat',
-              ),
+            Row(
+              children: [
+                SvgPicture.asset(
+                  'lib/assets/icons/clock_get_product_icon.svg',
+                  height: 24,
+                  width: 24,
+                ),
+                const SizedBox(width: 8),
+                const Text(
+                  'Thời gian có thể đến lấy hàng:',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Montserrat',
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 8),
             Text(
@@ -132,9 +166,12 @@ class OrderCardComponent extends StatelessWidget {
                           color: Color(0xFFFCCF59),
                         ),
                       ),
+                      //NumberFormat('#,###', 'vi_VN').format(order.orderDetails[0].actualPrice.toInt())
                       Text(
                         order.orderDetails.isNotEmpty
-                            ? order.orderDetails[0].actualPrice.toString()
+                            ? NumberFormat('#,###', 'vi_VN').format(order
+                                .orderDetails[0].actualPrice
+                                .toInt()) //order.orderDetails[0].actualPrice.toString()
                             : 'N/A',
                         style: const TextStyle(
                           fontSize: 14,
@@ -202,28 +239,32 @@ class OrderCardComponent extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
+            //===================================
+            //Handle logic for button
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Handle View More button tap
-                    },
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
-                    ),
-                    child: const Text(
-                      'Xem thêm',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: 'Montserrat',
-                          color: Colors.black),
+                // Check if the order status is 'created' to show the second button
+                if (order.status.toLowerCase() == 'created')
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Handle View More button tap
+                      },
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.red),
+                      ),
+                      child: const Text(
+                        'Hủy đơn',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Montserrat',
+                            color: Colors.white),
+                      ),
                     ),
                   ),
-                ),
                 const SizedBox(width: 16),
                 Expanded(
                   child: ElevatedButton(
@@ -235,7 +276,7 @@ class OrderCardComponent extends StatelessWidget {
                           const Color(0xFFFBAB40)),
                     ),
                     child: Text(
-                      order.status,
+                      getOrderStatusText(order.status),
                       style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
