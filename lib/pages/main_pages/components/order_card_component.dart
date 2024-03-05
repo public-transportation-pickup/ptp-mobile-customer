@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import '../../../models/order_model.dart';
+import '../../order_pages/order_detail_page.dart';
 
 class OrderCardComponent extends StatelessWidget {
   final OrderModel order;
@@ -26,7 +28,7 @@ class OrderCardComponent extends StatelessWidget {
       case 'completed':
         return 'Có thể đến lấy';
       default:
-        return status; // Default to the original status if not recognized
+        return status;
     }
   }
 
@@ -191,14 +193,26 @@ class OrderCardComponent extends StatelessWidget {
             ),
             //================================================================
             const SizedBox(height: 8),
-            const Center(
-                child: Text(
-              'Xem thêm',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'Montserrat',
-                color: Color(0xFFFCCF59),
+            Center(
+                child: GestureDetector(
+              onTap: () {
+                // Navigate to OrderDetailPage and pass the order uuid
+                HapticFeedback.mediumImpact();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OrderDetailPage(orderUuid: order.id),
+                  ),
+                );
+              },
+              child: const Text(
+                'Xem thêm',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'Montserrat',
+                  color: Color(0xFFFCCF59),
+                ),
               ),
             )),
             const SizedBox(height: 8),
@@ -211,7 +225,7 @@ class OrderCardComponent extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('${numberOfProducts} sản phẩm'),
+                Text('$numberOfProducts sản phẩm'),
                 RichText(
                   text: TextSpan(
                     text:
@@ -249,7 +263,7 @@ class OrderCardComponent extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        // Handle View More button tap
+                        // Handle cancel button tap
                       },
                       style: ButtonStyle(
                         backgroundColor:
@@ -269,7 +283,7 @@ class OrderCardComponent extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
-                      // Handle View More button tap
+                      // do nothing
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(

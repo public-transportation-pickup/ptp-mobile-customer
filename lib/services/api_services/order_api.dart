@@ -31,4 +31,25 @@ class OrderApi extends ApiService {
       throw Exception('Failed to load orders: ${response.statusCode}');
     }
   }
+
+  static Future<OrderModel> getOrderDetails(String orderUuid) async {
+    final Uri orderDetailsUrl =
+        Uri.parse('${ApiService.baseUrl}/order/$orderUuid');
+
+    final response = await http.get(
+      orderDetailsUrl,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${LocalVariables.jwtToken}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonResponse = json.decode(response.body);
+      return OrderModel.fromJson(jsonResponse);
+    } else {
+      checkLog.e('Failed to load order details: ${response.statusCode}');
+      throw Exception('Failed to load order details: ${response.statusCode}');
+    }
+  }
 }
