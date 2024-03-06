@@ -1,10 +1,8 @@
-import 'package:capstone_ptp/services/map_box.dart';
+import 'package:capstone_ptp/services/map_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-//import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
-//import '../../services/map_component.dart';
 import '../route_pages/list_routes_page.dart';
 import 'components/carousel_slider.dart';
 import 'components/notify_topic_component.dart';
@@ -376,17 +374,33 @@ class HomePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   // This container is for map
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const MapPage()),
-                      );
-                    },
-                    child: Container(
-                      color: Colors.blue,
-                      height: 150,
+                  Container(
+                    height: 150,
+                    color: Colors.blue,
+                    child: Stack(
+                      children: [
+                        MapComponent(),
+                        Positioned(
+                          top: 4,
+                          left: 4,
+                          child: FloatingActionButton(
+                            shape: const CircleBorder(),
+                            backgroundColor: Colors.green,
+                            mini: true,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MapComponent()),
+                              );
+                            },
+                            child: const Icon(
+                              Icons.zoom_out_map_rounded,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   )
                 ],

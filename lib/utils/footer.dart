@@ -52,7 +52,7 @@ class AppFooter extends StatelessWidget {
       String iconPath, String label, int index, BuildContext context) {
     final color = currentIndex == index
         ? const Color(0xffFCCF59)
-        : const Color(0xffFEEBBB);
+        : Colors.black54; //Color(0xffFEEBBB);
     final themeData = Theme.of(context);
     final labelStyle = themeData.textTheme.bodySmall?.copyWith(color: color);
 
