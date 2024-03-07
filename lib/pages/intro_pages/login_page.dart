@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:logger/logger.dart';
+import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../services/firebase_authentication.dart';
 import '../main_pages/page_navigation.dart';
@@ -39,15 +40,17 @@ class _LoginPageState extends State<LoginPage> {
       Permission.location,
       Permission.storage,
       Permission.mediaLibrary,
+      Permission.notification,
     ].request();
-    checkLog.d(statuses);
+    checkLog.d('Check permission:  $statuses');
     // Check if permissions are granted
     if (statuses[Permission.location] == PermissionStatus.granted &&
         statuses[Permission.storage] == PermissionStatus.granted &&
+        statuses[Permission.notification] == PermissionStatus.granted &&
         statuses[Permission.mediaLibrary] == PermissionStatus.granted) {
-      // All required permissions are granted, continue with your app logic
     } else {
       // Handle the case when permissions are not granted
+      OpenSettings.openAppSetting();
     }
   }
 

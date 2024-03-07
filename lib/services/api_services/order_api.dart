@@ -10,7 +10,7 @@ class OrderApi extends ApiService {
   static var checkLog = Logger(printer: PrettyPrinter());
 
   static Future<List<OrderModel>> getOrdersOfUser(
-      {int pageNumber = 1, int pageSize = 100}) async {
+      {int pageNumber = -1, int pageSize = 100}) async {
     final Uri ordersUrl = Uri.parse(
         '${ApiService.baseUrl}/users/orders?pageNumber=$pageNumber&pageSize=$pageSize');
 

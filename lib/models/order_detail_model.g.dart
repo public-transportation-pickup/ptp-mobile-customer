@@ -16,7 +16,7 @@ OrderDetailModel _$OrderDetailModelFromJson(Map<String, dynamic> json) =>
       orderId: json['orderId'] as String? ?? '',
       menuId: json['menuId'] as String? ?? '',
       productId: json['productId'] as String? ?? '',
-      productName: json['productName'] as String? ?? 'Cơm sườn',
+      productName: json['productName'] as String? ?? '',
       productPrice: (json['productPrice'] as num?)?.toDouble() ?? 0.0,
       description: json['description'] as String? ?? '',
       imageURL: json['imageURL'] as String? ?? '',

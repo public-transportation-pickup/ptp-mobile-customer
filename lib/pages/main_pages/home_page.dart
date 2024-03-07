@@ -1,4 +1,5 @@
 import 'package:capstone_ptp/services/map_component.dart';
+import 'package:capstone_ptp/services/mini_map_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -379,13 +380,13 @@ class HomePage extends StatelessWidget {
                     color: Colors.blue,
                     child: Stack(
                       children: [
-                        MapComponent(),
+                        MiniMapComponent(),
                         Positioned(
                           top: 4,
-                          left: 4,
+                          right: 4,
                           child: FloatingActionButton(
                             shape: const CircleBorder(),
-                            backgroundColor: Colors.green,
+                            backgroundColor: const Color(0xFFFBAB40),
                             mini: true,
                             onPressed: () {
                               Navigator.push(
