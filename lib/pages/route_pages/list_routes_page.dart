@@ -1,3 +1,4 @@
+import 'package:capstone_ptp/pages/route_pages/route_detail_page.dart';
 import 'package:capstone_ptp/services/api_services/route_api.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
@@ -99,7 +100,13 @@ class _ListRoutePageState extends State<ListRoutePage> {
                         numberRoute: _displayedRoutes[index].routeNo,
                         operationTime: _displayedRoutes[index].operationTime,
                         onTap: () {
-                          // Handle card tap if needed
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RouteDetailPage(
+                                  routeId: _displayedRoutes[index].id),
+                            ),
+                          );
                         },
                       );
                     },

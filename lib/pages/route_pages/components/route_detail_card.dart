@@ -1,23 +1,12 @@
+import 'package:capstone_ptp/models/route_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 
 class RouteCardDetailComponent extends StatelessWidget {
-  final String startLocation = "Suoi Tien";
-  final String endLocation = "Thu Duc";
-  final String nameRoute = "Bến xe buýt Chợ Lớn - Đại học Giao thông Vận tải";
-  final String numberRoute = "51";
-  final String operationTime = "7:00 - 21:00";
-  //final Function() onTap;
+  final RouteModel routeDetail;
 
-  // RouteCardDetailComponent({
-  //   required this.startLocation,
-  //   required this.endLocation,
-  //   required this.nameRoute,
-  //   required this.numberRoute,
-  //   required this.operationTime,
-  //   required this.onTap,
-  // });
+  RouteCardDetailComponent({required this.routeDetail});
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +46,7 @@ class RouteCardDetailComponent extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      numberRoute.toString(),
+                      routeDetail.routeNo.toString(),
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -71,7 +60,7 @@ class RouteCardDetailComponent extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          nameRoute,
+                          routeDetail.name,
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w700),
                         ),
@@ -86,7 +75,7 @@ class RouteCardDetailComponent extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              operationTime,
+                              routeDetail.operationTime,
                               style: const TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.w700),
                             ),

@@ -1,6 +1,13 @@
+import 'package:capstone_ptp/models/route_model.dart';
 import 'package:flutter/material.dart';
 
+import 'sub_components/route_info_tab.dart';
+
 class RouteDetailTab extends StatefulWidget {
+  final RouteModel routeDetail;
+
+  RouteDetailTab({required this.routeDetail});
+
   @override
   _RouteDetailTabState createState() => _RouteDetailTabState();
 }
@@ -48,9 +55,9 @@ class _RouteDetailTabState extends State<RouteDetailTab>
         Expanded(
           child: TabBarView(
             controller: _tabController,
-            children: const [
+            children: [
               // Tab 1: Timetable
-              SingleChildScrollView(
+              const SingleChildScrollView(
                 child: SizedBox(
                   height: 300, // Adjust the height as needed
                   child: Center(
@@ -63,7 +70,7 @@ class _RouteDetailTabState extends State<RouteDetailTab>
                 ),
               ),
               // Tab 2: Trips
-              SingleChildScrollView(
+              const SingleChildScrollView(
                 child: SizedBox(
                   height: 300, // Adjust the height as needed
                   child: Center(
@@ -77,16 +84,7 @@ class _RouteDetailTabState extends State<RouteDetailTab>
               ),
               // Tab 3: Info
               SingleChildScrollView(
-                child: SizedBox(
-                  height: 300, // Adjust the height as needed
-                  child: Center(
-                    child: Text(
-                      'Info Content',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
+                child: RouteInfoTab(routeDetail: widget.routeDetail),
               ),
             ],
           ),

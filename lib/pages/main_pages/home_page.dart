@@ -517,11 +517,11 @@ class HomePage extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       HapticFeedback.mediumImpact();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => RouteDetailPage()),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //       builder: (context) => RouteDetailPage()),
+                      // );
                     },
                     child: SizedBox(
                       width: double.infinity,

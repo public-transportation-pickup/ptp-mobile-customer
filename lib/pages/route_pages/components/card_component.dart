@@ -71,13 +71,17 @@ class RouteCardComponent extends StatelessWidget {
                         Row(
                           children: [
                             SvgPicture.asset(
-                              'lib/assets/icons/clock_icon.svg',
-                              width: 16,
-                              height: 16,
-                              color: Colors.black87,
+                              'lib/assets/icons/yellow_clock_icon.svg',
+                              width: 20,
+                              height: 20,
+                              //color: Colors.black87,
                             ),
                             const SizedBox(width: 4),
-                            Text(operationTime),
+                            Text(
+                              operationTime,
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w400),
+                            ),
                           ],
                         ),
                       ],
@@ -96,7 +100,7 @@ class RouteCardComponent extends StatelessWidget {
                     'Xem chi tiết >',
                     style: TextStyle(
                       color: Color(0xFFFCCF59),
-                      fontSize: 12,
+                      fontSize: 14,
                       fontWeight: FontWeight.w700,
                       //decoration: TextDecoration.underline,
                     ),

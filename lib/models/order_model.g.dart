@@ -10,9 +10,7 @@ OrderModel _$OrderModelFromJson(Map<String, dynamic> json) => OrderModel(
       id: json['id'] as String? ?? '',
       name: json['name'] as String? ?? '',
       phoneNumber: json['phoneNumber'] as String? ?? '',
-      pickUpTime: json['pickUpTime'] != null
-          ? DateTime.parse(json['pickUpTime'] as String)
-          : DateTime.now(),
+      pickUpTime: DateTime.parse(json['pickUpTime'] as String),
       total: (json['total'] as num?)?.toDouble() ?? 0.0,
       status: json['status'] as String? ?? '',
       userId: json['userId'] as String? ?? '',
