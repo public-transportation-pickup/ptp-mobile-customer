@@ -14,17 +14,21 @@ class RouteInfoTab extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildRow(context, 'Đơn vị đảm nhận:', routeDetail.orgs),
+            _buildRow(context, 'Tuyến số:', routeDetail.routeNo),
             _buildDivider(),
-            _buildRow(context, 'Cự ly:', '${routeDetail.distance} m'),
+            _buildRow(context, 'Tên tuyến:', routeDetail.name),
             _buildDivider(),
-            _buildRow(context, 'Số chuyến:', routeDetail.totalTrip),
-            _buildDivider(),
-            _buildRow(context, 'Thời gian chuyến:', routeDetail.operationTime),
+            _buildRow(
+                context, 'Thời gian hoạt động:', routeDetail.operationTime),
             _buildDivider(),
             _buildRow(
                 context, 'Giãn cách chuyến:', '${routeDetail.headWay} phút'),
-            // Add more rows and dividers as needed
+            _buildDivider(),
+            _buildRow(context, 'Số chuyến:', routeDetail.totalTrip),
+            _buildDivider(),
+            _buildRow(context, 'Cự ly:', '${routeDetail.distance} m'),
+            _buildDivider(),
+            _buildRow(context, 'Đơn vị đảm nhận:', routeDetail.orgs),
           ],
         ),
       ),
@@ -40,13 +44,11 @@ class RouteInfoTab extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Flexible(
-          flex: 2,
-          child: Text(
-            label,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
+        Text(
+          label,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
+        const Spacer(),
         Flexible(
           flex: 2,
           child: Text(

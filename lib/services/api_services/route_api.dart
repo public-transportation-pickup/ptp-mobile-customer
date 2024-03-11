@@ -47,7 +47,8 @@ class RouteApi extends ApiService {
 
   // GET ALL ROUTE VARS (TURN GO & TURN BACK) BY ROUTE ID
   static Future<List<RouteVarModel>> getRouteVarsByRouteId(
-      String routeId) async {
+    String routeId,
+  ) async {
     final Uri routeVarsUrl =
         Uri.parse('${ApiService.baseUrl}/routes/$routeId/route-vars');
     final response = await http.get(
@@ -57,7 +58,19 @@ class RouteApi extends ApiService {
 
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = json.decode(response.body);
-      return jsonResponse.map((json) => RouteVarModel.fromJson(json)).toList();
+      try {
+        return jsonResponse.map((json) {
+          try {
+            return RouteVarModel.fromJson(json);
+          } catch (e) {
+            checkLog.e('Error parsing RouteVarModel: $e, JSON: $json');
+            rethrow;
+          }
+        }).toList();
+      } catch (e) {
+        checkLog.e('Error mapping JSON response to RouteVarModel list: $e');
+        rethrow;
+      }
     } else {
       checkLog.e('Failed to load route vars: ${response.statusCode}');
       throw Exception('Failed to load route vars: ${response.statusCode}');
@@ -76,6 +89,7 @@ class RouteApi extends ApiService {
 
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = json.decode(response.body);
+      //checkLog.t(jsonResponse);
       return jsonResponse.map((json) => TripModel.fromJson(json)).toList();
     } else {
       checkLog.e('Failed to load trips: ${response.statusCode}');

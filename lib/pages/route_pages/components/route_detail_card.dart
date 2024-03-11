@@ -80,19 +80,19 @@ class RouteCardDetailComponent extends StatelessWidget {
                                   fontSize: 14, fontWeight: FontWeight.w700),
                             ),
                             const Spacer(),
-                            GestureDetector(
-                              onTap: () {
-                                // Handle tap, navigate to another page, etc.
-                              },
-                              child: const Text(
-                                'Lượt đi ^',
-                                style: TextStyle(
-                                  color: Color(0xFFFCCF59),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
+                            // GestureDetector(
+                            //   onTap: () {
+                            //     // Handle tap, navigate to another page, etc.
+                            //   },
+                            //   child: const Text(
+                            //     'Lượt đi ^',
+                            //     style: TextStyle(
+                            //       color: Color(0xFFFCCF59),
+                            //       fontSize: 14,
+                            //       fontWeight: FontWeight.w700,
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                       ],

@@ -16,8 +16,8 @@ class RouteVarModel {
   @JsonKey(name: 'outBound')
   final bool outBound;
   @JsonKey(name: 'runningTime')
-  final int runningTime;
-  final int distance;
+  final num runningTime;
+  final num distance;
 
   RouteVarModel({
     required this.id,

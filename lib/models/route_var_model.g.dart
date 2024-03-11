@@ -15,8 +15,8 @@ RouteVarModel _$RouteVarModelFromJson(Map<String, dynamic> json) =>
       startStop: json['startStop'] as String,
       endStop: json['endStop'] as String,
       outBound: json['outBound'] as bool,
-      runningTime: json['runningTime'] as int,
-      distance: json['distance'] as int,
+      runningTime: json['runningTime'] as num,
+      distance: json['distance'] as num,
     );
 
 Map<String, dynamic> _$RouteVarModelToJson(RouteVarModel instance) =>

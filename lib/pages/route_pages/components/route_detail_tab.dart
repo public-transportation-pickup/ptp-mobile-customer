@@ -2,11 +2,20 @@ import 'package:capstone_ptp/models/route_model.dart';
 import 'package:flutter/material.dart';
 
 import 'sub_components/route_info_tab.dart';
+import 'sub_components/route_schedule_tab.dart';
+import 'sub_components/route_trips_tab.dart';
 
 class RouteDetailTab extends StatefulWidget {
   final RouteModel routeDetail;
+  final String currentRouteVar;
 
-  RouteDetailTab({required this.routeDetail});
+  final Key key;
+
+  RouteDetailTab({
+    required this.routeDetail,
+    required this.currentRouteVar,
+    required this.key,
+  }) : super(key: key);
 
   @override
   _RouteDetailTabState createState() => _RouteDetailTabState();
@@ -15,11 +24,17 @@ class RouteDetailTab extends StatefulWidget {
 class _RouteDetailTabState extends State<RouteDetailTab>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  //late Future<List<RouteVarModel>> _routeVars;
+  late String routeVarId;
+  //late Future<List<TripModel>> _trips;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    routeVarId = widget.currentRouteVar;
+    //_routeVars = RouteApi.getRouteVarsByRouteId(widget.routeDetail.id);
+    //_trips = RouteApi.getTrips(widget.routeDetail.id, 'yourRouteVarId');
   }
 
   @override
@@ -57,30 +72,14 @@ class _RouteDetailTabState extends State<RouteDetailTab>
             controller: _tabController,
             children: [
               // Tab 1: Timetable
-              const SingleChildScrollView(
-                child: SizedBox(
-                  height: 300, // Adjust the height as needed
-                  child: Center(
-                    child: Text(
-                      'Timetable Content',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
+              SingleChildScrollView(
+                child: RouteScheduleTab(
+                    routeId: widget.routeDetail.id, routeVarId: routeVarId),
               ),
               // Tab 2: Trips
-              const SingleChildScrollView(
-                child: SizedBox(
-                  height: 300, // Adjust the height as needed
-                  child: Center(
-                    child: Text(
-                      'Trips Content',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
+              SingleChildScrollView(
+                child: RouteTripsTab(
+                    routeId: widget.routeDetail.id, routeVarId: routeVarId),
               ),
               // Tab 3: Info
               SingleChildScrollView(
