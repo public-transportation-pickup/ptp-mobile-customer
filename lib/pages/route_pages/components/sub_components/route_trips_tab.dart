@@ -1,74 +1,82 @@
 import 'package:flutter/material.dart';
-import 'package:capstone_ptp/models/route_var_model.dart';
 import 'package:capstone_ptp/models/trip_model.dart';
 import 'package:capstone_ptp/services/api_services/route_api.dart';
 
 class RouteTripsTab extends StatefulWidget {
-  final String routeId;
-  final String routeVarId;
+  final String currentTripId;
 
-  RouteTripsTab({required this.routeId, required this.routeVarId});
+  RouteTripsTab({required this.currentTripId});
 
   @override
   _RouteTripsTabState createState() => _RouteTripsTabState();
 }
 
 class _RouteTripsTabState extends State<RouteTripsTab> {
-  late Future<List<TripModel>> _tripsTurnGo = Future.value([]);
-  late Future<List<TripModel>> _tripsTurnBack = Future.value([]);
+  Future<TripModel>? _trip;
 
   @override
   void initState() {
     super.initState();
+    _trip = fetchTripsAndProcess();
+  }
+
+  Future<TripModel> fetchTripsAndProcess() async {
+    try {
+      // Replace the parameters with actual values
+      return await RouteApi.getTripById(widget.currentTripId);
+    } catch (e) {
+      // Handle errors
+      print("Error fetching and processing trips: $e");
+      rethrow;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+    return FutureBuilder<TripModel>(
+      future: _trip,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text("Error: ${snapshot.error}"),
+          );
+        } else {
+          TripModel trip = snapshot.data!;
+          List<String> stationNames = trip.schedules
+                  ?.map((schedule) => schedule.stationName)
+                  .toList() ??
+              [];
 
-  Widget buildTripList(AsyncSnapshot<List<TripModel>> snapshot, String title) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return const Center(child: CircularProgressIndicator());
-    } else if (snapshot.hasError) {
-      return Center(child: Text('Error loading $title'));
-    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-      return Center(child: Text('No $title available'));
-    } else {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              TripModel trip = snapshot.data![index];
-              return ListTile(
-                title: Text('Trip ${index + 1}'),
-                // Add more details or customize the ListTile as needed
-              );
-            },
-          ),
-        ],
-      );
-    }
+          return SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: ListView.builder(
+              itemCount: stationNames.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  dense: true,
+                  leading: const Icon(
+                    size: 16,
+                    Icons.circle,
+                    color: Colors.grey,
+                  ),
+                  title: Text(
+                    stationNames[index],
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.grey,
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        }
+      },
+    );
   }
 }

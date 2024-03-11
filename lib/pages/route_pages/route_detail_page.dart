@@ -10,6 +10,7 @@ import 'components/route_detail_tab.dart';
 
 class RouteDetailPage extends StatefulWidget {
   final String routeId;
+  static String currentTripId = '';
 
   RouteDetailPage({required this.routeId});
 

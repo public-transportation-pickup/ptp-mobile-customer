@@ -1,4 +1,5 @@
 import 'package:capstone_ptp/models/route_model.dart';
+import 'package:capstone_ptp/pages/route_pages/route_detail_page.dart';
 import 'package:flutter/material.dart';
 
 import 'sub_components/route_info_tab.dart';
@@ -79,7 +80,8 @@ class _RouteDetailTabState extends State<RouteDetailTab>
               // Tab 2: Trips
               SingleChildScrollView(
                 child: RouteTripsTab(
-                    routeId: widget.routeDetail.id, routeVarId: routeVarId),
+                  currentTripId: RouteDetailPage.currentTripId,
+                ),
               ),
               // Tab 3: Info
               SingleChildScrollView(

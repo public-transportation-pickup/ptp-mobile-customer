@@ -108,6 +108,7 @@ class RouteApi extends ApiService {
 
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonResponse = json.decode(response.body);
+      //checkLog.t(jsonResponse);
       return TripModel.fromJson(jsonResponse);
     } else {
       checkLog.e('Failed to load trip: ${response.statusCode}');

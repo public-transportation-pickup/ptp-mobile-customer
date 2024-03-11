@@ -1,4 +1,6 @@
+import 'package:capstone_ptp/pages/route_pages/route_detail_page.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../models/trip_model.dart';
 import '../../../../services/api_services/route_api.dart';
@@ -15,15 +17,43 @@ class RouteScheduleTab extends StatefulWidget {
 
 class _RouteScheduleTabState extends State<RouteScheduleTab> {
   late Future<List<TripModel>> _trips;
+  int tappedTripIndex = -1;
+  String nextTripId = '';
 
   @override
   void initState() {
     super.initState();
     _trips = RouteApi.getTrips(widget.routeId, widget.routeVarId);
+    setNextTripId(_trips);
+  }
+
+  void setNextTripId(Future<List<TripModel>> tripsFuture) {
+    tripsFuture.then((List<TripModel> trips) {
+      // Sort the trips based on start times
+      trips.sort((a, b) => a.startTime.compareTo(b.startTime));
+
+      DateTime test = DateTime(1970, 1, 1, 8, 0);
+
+      for (TripModel trip in trips) {
+        DateTime tripTime = DateFormat('HH:mm').parse(trip.startTime);
+
+        if (tripTime.isAfter(test)) {
+          nextTripId = trip.id;
+          break;
+        }
+      }
+      // Set the currentTripId to the nextTripId
+      RouteDetailPage.currentTripId = nextTripId;
+      print("Default trirp id: " + RouteDetailPage.currentTripId);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now(); // Get the current time
+    DateTime test = DateTime(1970, 1, 1, 8, 0);
+    bool isNextTrip = true;
+
     return FutureBuilder<List<TripModel>>(
       future: _trips,
       builder: (context, snapshot) {
@@ -51,17 +81,55 @@ class _RouteScheduleTabState extends State<RouteScheduleTab> {
 
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: rowTrips.map((trip) {
+                  children: rowTrips.asMap().entries.map((entry) {
+                    int tripIndex = entry.key + startIndex;
+                    TripModel trip = entry.value;
+
+                    DateTime tripTime =
+                        DateFormat('HH:mm').parse(trip.startTime);
+
+                    Color textColor = Colors.black;
+                    FontWeight textFontWeight = FontWeight.w400;
+
+                    // Compare startTime with the current time
+                    if (tripTime.isBefore(test) ||
+                        tripTime.isAtSameMomentAs(test)) {
+                      textColor = Colors.grey;
+                    } else if (tripTime.isAfter(test)) {
+                      if (tripIndex == tappedTripIndex) {
+                        textColor = Colors.blue;
+                        textFontWeight = FontWeight.bold;
+                      } else if (isNextTrip) {
+                        textColor = const Color(0xFFFCCF59);
+                        textFontWeight = FontWeight.bold;
+                        isNextTrip = false;
+                      } else {
+                        textColor = Colors.black;
+                      }
+                    }
+
                     return Expanded(
                       child: Column(
                         children: [
                           Container(
                             margin: const EdgeInsets.all(8.0),
-                            child: Text(
-                              trip.startTime,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  tappedTripIndex = tripIndex;
+                                  RouteDetailPage.currentTripId =
+                                      trips[tripIndex].id;
+                                  print("Trip id: " +
+                                      RouteDetailPage.currentTripId);
+                                });
+                              },
+                              child: Text(
+                                trip.startTime,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: textFontWeight,
+                                  color: textColor,
+                                ),
                               ),
                             ),
                           ),
