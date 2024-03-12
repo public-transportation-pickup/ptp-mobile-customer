@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:capstone_ptp/models/trip_model.dart';
 import 'package:capstone_ptp/services/api_services/route_api.dart';
 
+import '../../../store_pages/store_detail_page.dart';
+
 class RouteTripsTab extends StatefulWidget {
   static String currentTripId = '';
   RouteTripsTab();
@@ -99,13 +101,11 @@ class _RouteTripsTabState extends State<RouteTripsTab> {
                                   const Color(0xFFFCCF59)),
                             ),
                             onPressed: () {
-                              // Navigate to another page here
-                              // You can replace 'YourPage()' with the actual page you want to navigate to
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //       builder: (context) => YourPage()),
-                              // );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => StoreDetailPage()),
+                              );
                             },
                             child: const Text(
                               "Đặt đơn",

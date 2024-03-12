@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../route_pages/list_routes_page.dart';
-import '../route_pages/route_detail_page.dart';
+import '../store_pages/store_detail_page.dart';
 import 'components/carousel_slider.dart';
 import 'components/notify_topic_component.dart';
 import 'profile_page.dart';
@@ -517,11 +517,11 @@ class HomePage extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       HapticFeedback.mediumImpact();
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (context) => RouteDetailPage()),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => StoreDetailPage()),
+                      );
                     },
                     child: SizedBox(
                       width: double.infinity,
