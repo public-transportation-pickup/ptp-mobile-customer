@@ -1,9 +1,9 @@
-import 'package:capstone_ptp/pages/route_pages/route_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../models/trip_model.dart';
 import '../../../../services/api_services/route_api.dart';
+import 'route_trips_tab.dart';
 
 class RouteScheduleTab extends StatefulWidget {
   final String routeId;
@@ -43,8 +43,8 @@ class _RouteScheduleTabState extends State<RouteScheduleTab> {
         }
       }
       // Set the currentTripId to the nextTripId
-      RouteDetailPage.currentTripId = nextTripId;
-      print("Default trirp id: " + RouteDetailPage.currentTripId);
+      RouteTripsTab.currentTripId = nextTripId;
+      print("Default trirp id: " + RouteTripsTab.currentTripId);
     });
   }
 
@@ -117,10 +117,10 @@ class _RouteScheduleTabState extends State<RouteScheduleTab> {
                               onTap: () {
                                 setState(() {
                                   tappedTripIndex = tripIndex;
-                                  RouteDetailPage.currentTripId =
+                                  RouteTripsTab.currentTripId =
                                       trips[tripIndex].id;
-                                  print("Trip id: " +
-                                      RouteDetailPage.currentTripId);
+                                  print("Tapped trip id: " +
+                                      RouteTripsTab.currentTripId);
                                 });
                               },
                               child: Text(

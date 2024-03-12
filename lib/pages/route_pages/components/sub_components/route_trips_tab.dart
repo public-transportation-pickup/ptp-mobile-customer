@@ -3,9 +3,8 @@ import 'package:capstone_ptp/models/trip_model.dart';
 import 'package:capstone_ptp/services/api_services/route_api.dart';
 
 class RouteTripsTab extends StatefulWidget {
-  final String currentTripId;
-
-  RouteTripsTab({required this.currentTripId});
+  static String currentTripId = '';
+  RouteTripsTab();
 
   @override
   _RouteTripsTabState createState() => _RouteTripsTabState();
@@ -17,13 +16,16 @@ class _RouteTripsTabState extends State<RouteTripsTab> {
   @override
   void initState() {
     super.initState();
-    _trip = fetchTripsAndProcess();
+    print("Current trip id: " + RouteTripsTab.currentTripId);
+    if (RouteTripsTab.currentTripId.isNotEmpty) {
+      _trip = fetchTripsAndProcess();
+    }
   }
 
   Future<TripModel> fetchTripsAndProcess() async {
     try {
       // Replace the parameters with actual values
-      return await RouteApi.getTripById(widget.currentTripId);
+      return await RouteApi.getTripById(RouteTripsTab.currentTripId);
     } catch (e) {
       // Handle errors
       print("Error fetching and processing trips: $e");
@@ -33,6 +35,11 @@ class _RouteTripsTabState extends State<RouteTripsTab> {
 
   @override
   Widget build(BuildContext context) {
+    if (RouteTripsTab.currentTripId.isEmpty) {
+      // Return a message indicating no trips data
+      return const Center(child: Text('Không có chuyến trong ngày.'));
+    }
+
     return FutureBuilder<TripModel>(
       future: _trip,
       builder: (context, snapshot) {
@@ -50,14 +57,17 @@ class _RouteTripsTabState extends State<RouteTripsTab> {
                   ?.map((schedule) => schedule.stationName)
                   .toList() ??
               [];
+          List<String> arrivalTime = trip.schedules
+                  ?.map((schedule) => schedule.arrivalTime)
+                  .toList() ??
+              [];
 
           return SizedBox(
             height: MediaQuery.of(context).size.height,
             child: ListView.builder(
               itemCount: stationNames.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  dense: true,
+                return ExpansionTile(
                   leading: const Icon(
                     size: 16,
                     Icons.circle,
@@ -71,6 +81,43 @@ class _RouteTripsTabState extends State<RouteTripsTab> {
                       color: Colors.grey,
                     ),
                   ),
+                  children: [
+                    ListTile(
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Thời gian đến: ${arrivalTime[index]}",
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  const Color(0xFFFCCF59)),
+                            ),
+                            onPressed: () {
+                              // Navigate to another page here
+                              // You can replace 'YourPage()' with the actual page you want to navigate to
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => YourPage()),
+                              // );
+                            },
+                            child: const Text(
+                              "Đặt đơn",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 );
               },
             ),
