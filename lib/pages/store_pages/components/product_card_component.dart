@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
+
+  String formatPrice(double price) {
+    final format = NumberFormat("#,##0", "en_US");
+    String formattedPrice = format.format(price);
+    return '${formattedPrice.replaceAll(',', '.')} VND';
+  }
 
   ProductCard({required this.product});
 
@@ -38,19 +45,23 @@ class ProductCard extends StatelessWidget {
                     Text(
                       product.name,
                       style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        fontFamily: 'Montserrat',
                       ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '\$${product.price.toString()}',
+                      formatPrice(product.price),
                       style: const TextStyle(
-                        fontWeight: FontWeight.normal,
+                        fontWeight: FontWeight.bold,
                         fontSize: 14,
+                        fontFamily: 'Montserrat',
                       ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
                   ],
                 ),

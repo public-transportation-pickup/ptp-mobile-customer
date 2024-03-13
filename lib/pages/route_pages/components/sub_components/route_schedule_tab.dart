@@ -35,7 +35,12 @@ class _RouteScheduleTabState extends State<RouteScheduleTab> {
       DateTime now = DateTime.now();
 
       for (TripModel trip in trips) {
-        DateTime tripTime = DateFormat('HH:mm').parse(trip.startTime);
+        DateTime tripTime = DateTime(
+            now.year,
+            now.month,
+            now.day,
+            DateFormat('HH:mm').parse(trip.startTime).hour,
+            DateFormat('HH:mm').parse(trip.startTime).minute);
 
         if (tripTime.isAfter(now)) {
           nextTripId = trip.id;

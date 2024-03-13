@@ -21,53 +21,78 @@ class StoreDetailPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Store Detail'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.all(16.0),
-              child: StoreDetailCard(
-                storeName: storeName,
-                description: description,
-                phone: phone,
-                fullAddress: fullAddress,
-                openTime: openTime,
-                closeTime: closeTime,
-              ),
-            ),
-            //const Text("Menu this time: "),
-            SizedBox(
-              height: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListProductComponent(
-                  products: [
-                    Product(
-                      name: '1 Mì ý sốt bò bằm lớn + 1 Miếng Gà Giòn Vui Vẻ',
-                      imageUrl:
-                          'https://firebasestorage.googleapis.com/v0/b/capstone-ptp.appspot.com/o/assets%2FStoreImages%2Fhouse1.jpg?alt=media&token=10999e68-8be9-448a-97a6-0e05ed349d51',
-                      price: 80000,
-                    ),
-                    Product(
-                      name: 'Product 2',
-                      imageUrl:
-                          'https://firebasestorage.googleapis.com/v0/b/capstone-ptp.appspot.com/o/assets%2FStoreImages%2Fhouse1.jpg?alt=media&token=10999e68-8be9-448a-97a6-0e05ed349d51',
-                      price: 229000,
-                    ),
-                    Product(
-                      name: '1 Mì ý sốt bò bằm lớn + 1 Miếng Gà Giòn Vui Vẻ',
-                      imageUrl:
-                          'https://firebasestorage.googleapis.com/v0/b/capstone-ptp.appspot.com/o/assets%2FStoreImages%2Fhouse1.jpg?alt=media&token=10999e68-8be9-448a-97a6-0e05ed349d51',
-                      price: 1250000,
-                    ),
-                  ],
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.all(16.0),
+                child: StoreDetailCard(
+                  storeName: storeName,
+                  description: description,
+                  phone: phone,
+                  fullAddress: fullAddress,
+                  openTime: openTime,
+                  closeTime: closeTime,
                 ),
               ),
-            ),
-            // Add other components or widgets as needed
-          ],
+              const SizedBox(
+                height: 40,
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text("Menu this time: "),
+                ),
+              ),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  return ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: constraints.maxHeight,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SingleChildScrollView(
+                        child: ListProductComponent(
+                          products: [
+                            Product(
+                              name:
+                                  '1 Mì ý sốt bò bằm lớn + 1 Miếng Gà Giòn Vui Vẻ',
+                              imageUrl:
+                                  'https://firebasestorage.googleapis.com/v0/b/capstone-ptp.appspot.com/o/assets%2FStoreImages%2Fhouse1.jpg?alt=media&token=10999e68-8be9-448a-97a6-0e05ed349d51',
+                              price: 80000,
+                            ),
+                            Product(
+                              name: 'Product 2',
+                              imageUrl:
+                                  'https://firebasestorage.googleapis.com/v0/b/capstone-ptp.appspot.com/o/assets%2FStoreImages%2Fhouse1.jpg?alt=media&token=10999e68-8be9-448a-97a6-0e05ed349d51',
+                              price: 229000,
+                            ),
+                            Product(
+                              name:
+                                  '1 Mì ý sốt bò bằm lớn + 1 Miếng Gà Giòn Vui Vẻ',
+                              imageUrl:
+                                  'https://firebasestorage.googleapis.com/v0/b/capstone-ptp.appspot.com/o/assets%2FStoreImages%2Fhouse1.jpg?alt=media&token=10999e68-8be9-448a-97a6-0e05ed349d51',
+                              price: 1250000,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(
+                height: 40,
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text("Menu this time: "),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
