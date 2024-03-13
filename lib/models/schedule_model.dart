@@ -17,6 +17,10 @@ class ScheduleModel {
   final String stationName;
   @JsonKey(name: 'arrivalTime')
   final String arrivalTime;
+  @JsonKey(name: 'storeId')
+  final String storeId;
+  @JsonKey(name: 'stationId')
+  final String stationId;
 
   ScheduleModel({
     required this.index,
@@ -26,6 +30,8 @@ class ScheduleModel {
     required this.durationToNext,
     required this.stationName,
     required this.arrivalTime,
+    required this.storeId,
+    required this.stationId,
   });
 
   factory ScheduleModel.fromJson(Map<String, dynamic> json) =>

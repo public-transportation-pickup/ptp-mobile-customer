@@ -520,7 +520,10 @@ class HomePage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => StoreDetailPage()),
+                            builder: (context) => StoreDetailPage(
+                                  storeId:
+                                      '02e5958b-cdd6-48d8-9259-edc212f53719',
+                                )),
                       );
                     },
                     child: SizedBox(

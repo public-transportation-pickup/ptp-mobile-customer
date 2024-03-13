@@ -15,6 +15,8 @@ ScheduleModel _$ScheduleModelFromJson(Map<String, dynamic> json) =>
       durationToNext: (json['durationToNext'] as num).toDouble(),
       stationName: json['stationName'] as String,
       arrivalTime: json['arrivalTime'] as String,
+      storeId: json['storeId'] as String,
+      stationId: json['stationId'] as String,
     );
 
 Map<String, dynamic> _$ScheduleModelToJson(ScheduleModel instance) =>
@@ -26,4 +28,6 @@ Map<String, dynamic> _$ScheduleModelToJson(ScheduleModel instance) =>
       'durationToNext': instance.durationToNext,
       'stationName': instance.stationName,
       'arrivalTime': instance.arrivalTime,
+      'storeId': instance.storeId,
+      'stationId': instance.stationId,
     };

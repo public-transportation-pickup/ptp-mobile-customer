@@ -38,8 +38,11 @@ class _RouteTripsTabState extends State<RouteTripsTab> {
   @override
   Widget build(BuildContext context) {
     if (RouteTripsTab.currentTripId.isEmpty) {
-      // Return a message indicating no trips data
-      return const Center(child: Text('Không có chuyến trong ngày.'));
+      return const Center(
+          child: Padding(
+        padding: EdgeInsets.fromLTRB(8, 16, 8, 8),
+        child: Text('Không có chuyến trong ngày.'),
+      ));
     }
 
     return FutureBuilder<TripModel>(
@@ -101,11 +104,11 @@ class _RouteTripsTabState extends State<RouteTripsTab> {
                                   const Color(0xFFFCCF59)),
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => StoreDetailPage()),
-                              );
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => StoreDetailPage()),
+                              // );
                             },
                             child: const Text(
                               "Đặt đơn",

@@ -67,7 +67,11 @@ class _RouteScheduleTabState extends State<RouteScheduleTab> {
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('Không có chuyến trong ngày.'));
+          return const Center(
+              child: Padding(
+            padding: EdgeInsets.fromLTRB(8, 16, 8, 8),
+            child: Text('Không có chuyến trong ngày.'),
+          ));
         } else {
           // Sort the trips based on start times
           List<TripModel> trips = snapshot.data!;

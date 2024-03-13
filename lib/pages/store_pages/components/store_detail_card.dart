@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
 class StoreDetailCard extends StatelessWidget {
   final String storeName;
@@ -18,6 +19,11 @@ class StoreDetailCard extends StatelessWidget {
     required this.openTime,
     required this.closeTime,
   });
+
+  String _formatTime(String time) {
+    final parsedTime = DateTime.parse("2022-01-01 $time");
+    return DateFormat.Hm().format(parsedTime);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +68,7 @@ class StoreDetailCard extends StatelessWidget {
                   width: 24.0,
                   height: 24.0,
                 ),
-                const SizedBox(width: 8.0),
+                const SizedBox(width: 16.0),
                 Expanded(
                   child: Text(
                     fullAddress,
@@ -90,7 +96,7 @@ class StoreDetailCard extends StatelessWidget {
                   height: 24.0,
                   color: Colors.blueAccent,
                 ),
-                const SizedBox(width: 8.0),
+                const SizedBox(width: 16.0),
                 Expanded(
                   child: Text(
                     phone,
@@ -113,14 +119,15 @@ class StoreDetailCard extends StatelessWidget {
             Row(
               children: [
                 SvgPicture.asset(
-                  'lib/assets/icons/healthicons_walking_icon.svg',
+                  'lib/assets/icons/clock_icon.svg',
                   width: 24.0,
                   height: 24.0,
+                  color: Colors.orangeAccent,
                 ),
-                const SizedBox(width: 8.0),
+                const SizedBox(width: 16.0),
                 Expanded(
                   child: Text(
-                    openTime,
+                    "${_formatTime(openTime)} - ${_formatTime(closeTime)}",
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
