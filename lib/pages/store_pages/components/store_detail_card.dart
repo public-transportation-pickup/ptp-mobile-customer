@@ -21,8 +21,14 @@ class StoreDetailCard extends StatelessWidget {
   });
 
   String _formatTime(String time) {
-    final parsedTime = DateTime.parse("2022-01-01 $time");
-    return DateFormat.Hm().format(parsedTime);
+    DateTime now = DateTime.now();
+    DateTime formatedTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        DateFormat('HH:mm').parse(time).hour,
+        DateFormat('HH:mm').parse(time).minute);
+    return DateFormat('HH:mm').format(formatedTime).toString();
   }
 
   @override

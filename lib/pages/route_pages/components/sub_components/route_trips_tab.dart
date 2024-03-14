@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:capstone_ptp/models/trip_model.dart';
 import 'package:capstone_ptp/services/api_services/route_api.dart';
+import 'package:intl/intl.dart';
 
 import '../../../store_pages/store_detail_page.dart';
 
@@ -35,6 +36,17 @@ class _RouteTripsTabState extends State<RouteTripsTab> {
     }
   }
 
+  String _formatTime(String time) {
+    DateTime now = DateTime.now();
+    DateTime formatedTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        DateFormat('HH:mm').parse(time).hour,
+        DateFormat('HH:mm').parse(time).minute);
+    return DateFormat('HH:mm').format(formatedTime).toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (RouteTripsTab.currentTripId.isEmpty) {
@@ -66,6 +78,9 @@ class _RouteTripsTabState extends State<RouteTripsTab> {
                   ?.map((schedule) => schedule.arrivalTime)
                   .toList() ??
               [];
+          List<String?> stores =
+              trip.schedules?.map((schedule) => schedule.storeId).toList() ??
+                  [];
 
           return SizedBox(
             height: MediaQuery.of(context).size.height,
@@ -92,31 +107,42 @@ class _RouteTripsTabState extends State<RouteTripsTab> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Thời gian đến: ${arrivalTime[index]}",
+                            "Thời gian đến: ${_formatTime(arrivalTime[index])}",
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  const Color(0xFFFCCF59)),
-                            ),
-                            onPressed: () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //       builder: (context) => StoreDetailPage()),
-                              // );
-                            },
-                            child: const Text(
-                              "Đặt đơn",
+                          if (stores[index] == null || stores[index]!.isEmpty)
+                            const Text(
+                              "*Chưa có cửa hàng",
                               style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700),
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold),
                             ),
-                          ),
+                          if (stores[index] != null &&
+                              stores[index]!.isNotEmpty)
+                            ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        const Color(0xFFFCCF59)),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => StoreDetailPage(
+                                          storeId: stores[index]!)),
+                                );
+                              },
+                              child: const Text(
+                                "Đặt đơn",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            )
                         ],
                       ),
                     ),

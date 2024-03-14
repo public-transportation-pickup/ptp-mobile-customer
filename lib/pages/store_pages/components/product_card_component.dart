@@ -45,6 +45,7 @@ class ProductCard extends StatelessWidget {
                       onPressed: () {
                         // Add your action here
                       },
+                      heroTag: null,
                       mini: true,
                       backgroundColor: const Color(0xFFFCCF59),
                       foregroundColor: Colors.white,

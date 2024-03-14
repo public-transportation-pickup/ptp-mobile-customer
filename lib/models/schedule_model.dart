@@ -17,8 +17,7 @@ class ScheduleModel {
   final String stationName;
   @JsonKey(name: 'arrivalTime')
   final String arrivalTime;
-  @JsonKey(name: 'storeId')
-  final String storeId;
+  final String? storeId;
   @JsonKey(name: 'stationId')
   final String stationId;
 

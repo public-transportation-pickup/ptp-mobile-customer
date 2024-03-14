@@ -20,7 +20,7 @@ TripModel _$TripModelFromJson(Map<String, dynamic> json) => TripModel(
 
 Map<String, dynamic> _$TripModelToJson(TripModel instance) => <String, dynamic>{
       'id': instance.id,
-      'description': instance.description,
+      'description': instance.description ?? '',
       'startTime': instance.startTime,
       'endTime': instance.endTime,
       'applyDates': instance.applyDates,

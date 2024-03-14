@@ -28,7 +28,9 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Store Detail'),
+        //title: const Text('Thông tin cửa hàng'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       body: FutureBuilder(
         future: _storeFuture,
