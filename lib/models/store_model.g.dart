@@ -25,8 +25,8 @@ StoreModel _$StoreModelFromJson(Map<String, dynamic> json) => StoreModel(
       imageName: json['imageName'] as String,
       imageURL: json['imageURL'] as String,
       userId: json['userId'] as String,
-      email: json['email'] as String,
-      password: json['password'] as String,
+      email: json['email'] as String?,
+      password: json['password'] as String?,
     );
 
 Map<String, dynamic> _$StoreModelToJson(StoreModel instance) =>

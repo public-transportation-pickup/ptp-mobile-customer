@@ -31,8 +31,8 @@ class StoreModel {
   String imageURL;
   @JsonKey(name: 'userId')
   String userId;
-  String email;
-  String password;
+  String? email;
+  String? password;
 
   StoreModel(
       {required this.id,
@@ -53,8 +53,8 @@ class StoreModel {
       required this.imageName,
       required this.imageURL,
       required this.userId,
-      required this.email,
-      required this.password});
+      this.email,
+      this.password});
 
   factory StoreModel.fromJson(Map<String, dynamic> json) =>
       _$StoreModelFromJson(json);

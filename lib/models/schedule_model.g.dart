@@ -28,6 +28,6 @@ Map<String, dynamic> _$ScheduleModelToJson(ScheduleModel instance) =>
       'durationToNext': instance.durationToNext,
       'stationName': instance.stationName,
       'arrivalTime': instance.arrivalTime,
-      'storeId': instance.storeId ?? '',
+      'storeId': instance.storeId,
       'stationId': instance.stationId,
     };

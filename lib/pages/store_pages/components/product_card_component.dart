@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
+import '../../../models/product_in_menu_model.dart';
+
 class ProductCard extends StatelessWidget {
-  final Product product;
+  final ProductInMenu product;
 
   String formatPrice(double price) {
     final format = NumberFormat("#,##0", "en_US");
@@ -28,12 +30,19 @@ class ProductCard extends StatelessWidget {
               child: Stack(children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(
-                    product.imageUrl,
-                    height: 140,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
+                  child: product.imageURL.isNotEmpty
+                      ? Image.network(
+                          product.imageURL,
+                          height: 140,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.asset(
+                          'lib/assets/images/cafe.jpg',
+                          height: 140,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
                 ),
                 Positioned(
                   bottom: 4,
@@ -64,7 +73,7 @@ class ProductCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      product.name,
+                      product.productName,
                       style: const TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 14,
@@ -75,7 +84,7 @@ class ProductCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      formatPrice(product.price),
+                      formatPrice(product.productPrice),
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
@@ -93,16 +102,4 @@ class ProductCard extends StatelessWidget {
       ),
     );
   }
-}
-
-class Product {
-  final String name;
-  final String imageUrl;
-  final double price;
-
-  Product({
-    required this.name,
-    required this.imageUrl,
-    required this.price,
-  });
 }

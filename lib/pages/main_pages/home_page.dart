@@ -522,7 +522,8 @@ class HomePage extends StatelessWidget {
                         MaterialPageRoute(
                             builder: (context) => StoreDetailPage(
                                   storeId:
-                                      '02e5958b-cdd6-48d8-9259-edc212f53719',
+                                      '4504b5b5-2a3f-4815-a768-d166faabd33d',
+                                  arrivalTime: "16:00",
                                 )),
                       );
                     },

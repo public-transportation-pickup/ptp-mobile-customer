@@ -133,7 +133,9 @@ class _RouteTripsTabState extends State<RouteTripsTab> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => StoreDetailPage(
-                                          storeId: stores[index]!)),
+                                            storeId: stores[index]!,
+                                            arrivalTime: arrivalTime[index],
+                                          )),
                                 );
                               },
                               child: const Text(

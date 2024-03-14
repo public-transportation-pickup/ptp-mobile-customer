@@ -3,13 +3,13 @@ import 'package:capstone_ptp/models/store_model.dart';
 
 import '../../services/api_services/store_api.dart';
 import 'components/list_product_component.dart';
-import 'components/product_card_component.dart';
 import 'components/store_detail_card.dart';
 
 class StoreDetailPage extends StatefulWidget {
   final String storeId;
+  final String arrivalTime;
 
-  StoreDetailPage({required this.storeId});
+  StoreDetailPage({required this.storeId, required this.arrivalTime});
 
   @override
   _StoreDetailPageState createState() => _StoreDetailPageState();
@@ -17,6 +17,7 @@ class StoreDetailPage extends StatefulWidget {
 
 class _StoreDetailPageState extends State<StoreDetailPage> {
   late Future<StoreModel> _storeFuture;
+  DateTime now = DateTime.now();
 
   @override
   void initState() {
@@ -120,29 +121,9 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: SingleChildScrollView(
                           child: ListProductComponent(
-                            products: [
-                              // Add your products based on your API response
-                              Product(
-                                name: 'Product 1',
-                                imageUrl:
-                                    'https://firebasestorage.googleapis.com/v0/b/capstone-ptp.appspot.com/o/assets%2FStoreImages%2Fhouse1.jpg?alt=media&token=10999e68-8be9-448a-97a6-0e05ed349d51',
-                                price: 80000,
-                              ),
-                              Product(
-                                name:
-                                    '2 Gà Giòn Vui Vẻ + 2 Mì Ý siêu to khổng lồ',
-                                imageUrl:
-                                    'https://firebasestorage.googleapis.com/v0/b/capstone-ptp.appspot.com/o/assets%2FStoreImages%2Fhouse1.jpg?alt=media&token=10999e68-8be9-448a-97a6-0e05ed349d51',
-                                price: 229000,
-                              ),
-                              Product(
-                                name:
-                                    '2 Gà Giòn Vui Vẻ + 2 Mì Ý vừa+ 1 Khoai tây chiên xù quành tánh',
-                                imageUrl:
-                                    'https://firebasestorage.googleapis.com/v0/b/capstone-ptp.appspot.com/o/assets%2FStoreImages%2Fhouse1.jpg?alt=media&token=10999e68-8be9-448a-97a6-0e05ed349d51',
-                                price: 1250000,
-                              ),
-                            ],
+                            storeId: widget.storeId,
+                            arrivalTime: widget.arrivalTime,
+                            now: now,
                           ),
                         ),
                       ),
