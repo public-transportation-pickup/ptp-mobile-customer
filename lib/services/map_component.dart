@@ -1,8 +1,13 @@
+import 'package:capstone_ptp/models/station_model.dart';
+import 'package:capstone_ptp/models/store_model.dart';
+import 'package:capstone_ptp/services/api_services/station_api.dart';
+import 'package:capstone_ptp/services/api_services/store_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
+import 'package:logger/logger.dart';
 
 class MapComponent extends StatefulWidget {
   @override
@@ -13,11 +18,79 @@ class _MapComponentState extends State<MapComponent> {
   final MapController _mapController = MapController();
   LocationData? _currentLocation;
   bool _isLoading = true;
+  List<StoreModel>? _stores;
+  List<StationModel>? _stations;
+  List<Marker>? _markers;
+  var log = Logger(printer: PrettyPrinter());
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
 
   @override
   void initState() {
-    _getCurrentLocation();
     super.initState();
+    _getCurrentLocation();
+    getListMarkers();
+  }
+
+  Future<void> _fetchStation() async {
+    try {
+      List<StationModel> stationsFromApi = await StationApi.getStations();
+
+      _stations = stationsFromApi;
+    } catch (e) {
+      log.e('Error fetching station $e');
+      rethrow;
+    }
+  }
+
+  Future<List<StoreModel>> _fetchStores() async {
+    try {
+      List<StoreModel> stores = await StoreApi.getStores();
+      _stores = stores;
+      return stores;
+    } catch (e) {
+      log.e('Error fetching stores $e');
+      rethrow;
+    }
+  }
+
+  Future<List<Marker>> getListMarkers() async {
+    //await _fetchStation();
+    await _fetchStores();
+    var storeMarker = _stores
+        ?.map((store) => Marker(
+              point: LatLng(store.latitude, store.longitude),
+              child: const Icon(
+                IconData(0xe60a, fontFamily: 'MaterialIcons'),
+              ),
+              width: 10,
+              height: 10,
+            ))
+        .toList();
+    // var stationMarkers = _stations
+    //     .map((station) => Marker(
+    //           point: LatLng(station.latitude, station.longitude),
+    //           child: FlutterLogo(),
+    //           // child: const Icon(
+    //           //   IconData(0xe1d5, fontFamily: 'MaterialIcons'),
+    //           // ),
+    //           width: 10,
+    //           height: 10,
+    //         ))
+    //     .toList();
+
+    List<Marker> markerList = [];
+    //markerList.addAll(stationMarkers);
+    markerList.addAll(storeMarker ??= []);
+    setState(() {
+      _isLoading = false;
+      _markers = markerList;
+    });
+    return markerList;
   }
 
   Future<void> _getCurrentLocation() async {
@@ -60,6 +133,7 @@ class _MapComponentState extends State<MapComponent> {
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
           maxZoom: 19,
         ),
+        MarkerLayer(markers: _markers ?? []),
         CurrentLocationLayer(
           alignPositionOnUpdate: AlignOnUpdate.always,
           alignDirectionOnUpdate: AlignOnUpdate.never,
@@ -89,7 +163,8 @@ class _MapComponentState extends State<MapComponent> {
     return Scaffold(
       body: Stack(
         children: [
-          if (!_isLoading && _currentLocation != null) _buildMap(),
+          if (!_isLoading && _currentLocation != null && _markers != null)
+            _buildMap(),
           // Check map load
           if (_isLoading)
             Center(
