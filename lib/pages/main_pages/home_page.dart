@@ -523,7 +523,7 @@ class HomePage extends StatelessWidget {
                             builder: (context) => StoreDetailPage(
                                   storeId:
                                       '4504b5b5-2a3f-4815-a768-d166faabd33d',
-                                  arrivalTime: "16:00",
+                                  arrivalTime: "16:44",
                                 )),
                       );
                     },

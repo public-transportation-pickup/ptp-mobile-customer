@@ -51,13 +51,15 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   # Package for decode, encode, format
   crypto: ^3.0.2
-  intl: ^0.17.0
+  intl: ^0.18.1
   # Package for performance and system
   provider: ^6.0.5
   rxdart: ^0.27.7
   logger: ^2.0.2+1
   permission_handler: ^11.0.1
   open_settings: ^2.0.2
+  flutter_form_builder: ^9.2.1
+  form_builder_validators: ^9.1.0
   # Package for Firebase authentication
   firebase_core: ^2.9.0
   cloud_firestore: ^4.5.0
