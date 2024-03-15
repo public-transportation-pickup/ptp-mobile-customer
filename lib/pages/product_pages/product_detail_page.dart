@@ -1,10 +1,13 @@
+import 'package:capstone_ptp/models/product_in_menu_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
-import '../../models/product_model.dart';
+import '../../models/product_in_cart_model.dart';
 import '../../services/api_services/product_api.dart';
 import 'add_to_cart_form.dart';
+import 'cart_provider.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final String productId;
@@ -16,7 +19,7 @@ class ProductDetailPage extends StatefulWidget {
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
-  late Future<Product> _productFuture;
+  late Future<ProductInMenu> _productFuture;
 
   String formatPrice(double price) {
     final format = NumberFormat("#,##0", "en_US");
@@ -27,7 +30,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   @override
   void initState() {
     super.initState();
-    _productFuture = ProductApi.getProductById(widget.productId);
+    _productFuture = ProductApi.getProductInMenuById(widget.productId);
   }
 
   @override
@@ -37,7 +40,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         title: const Text('Product Detail'),
       ),
       body: SingleChildScrollView(
-        child: FutureBuilder<Product>(
+        child: FutureBuilder<ProductInMenu>(
           future: _productFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -53,7 +56,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     );
   }
 
-  Widget _buildProductDetail(Product product) {
+  Widget _buildProductDetail(ProductInMenu product) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -84,7 +87,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Text(
-                  product.name,
+                  product.productName,
                   style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -98,7 +101,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
-                formatPrice(product.price),
+                formatPrice(product.productPrice),
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -114,7 +117,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            product.description.isNotEmpty ? product.description : 'N/A',
+            product.productDescription.isNotEmpty
+                ? product.productDescription
+                : 'N/A',
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.normal,
@@ -156,13 +161,24 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return AddToCartForm(
-                    onAddToCart: (String note, int quantity) {
-                      // Here you can implement logic to add the product to the cart
-                      // For example, you can use a function from your product service
-                      // or manage the cart state within this widget or its parent widget.
-                      print(
-                          'Added to cart: $quantity ${widget.productId}(s) with note: $note');
+                  return FutureBuilder<ProductInMenu>(
+                    future: _productFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else {
+                        return AddToCartForm(
+                          product: snapshot.data!,
+                          onAddToCart: (ProductInCartModel productInCart) {
+                            // Here you can add the productInCart to the cart
+                            // using CartProvider
+                            Provider.of<CartProvider>(context, listen: false)
+                                .addToCart(productInCart);
+                          },
+                        );
+                      }
                     },
                   );
                 },

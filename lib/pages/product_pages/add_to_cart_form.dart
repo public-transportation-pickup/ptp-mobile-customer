@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../../models/product_in_cart_model.dart';
+import '../../models/product_in_menu_model.dart';
+
 class AddToCartForm extends StatefulWidget {
-  final Function(String note, int quantity) onAddToCart;
+  final ProductInMenu product;
+  final Function(ProductInCartModel) onAddToCart;
 
   const AddToCartForm({
     Key? key,
+    required this.product,
     required this.onAddToCart,
   }) : super(key: key);
 
@@ -19,27 +24,26 @@ class _AddToCartFormState extends State<AddToCartForm> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      // title: const Text(
-      //   'Thêm vào giỏ hàng',
-      //   style: TextStyle(color: Color(0xFFFBAB40)),
-      // ),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
+            const Text(
+              'Ghi chú cho cửa hàng',
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black),
+            ),
             TextFormField(
               decoration: const InputDecoration(
-                labelText: 'Ghi chú cho cửa hàng',
-                labelStyle: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black),
+                border: OutlineInputBorder(),
                 hintText: 'Không bắt buộc',
                 hintStyle: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
                     color: Colors.grey),
-                contentPadding: EdgeInsets.symmetric(vertical: 20.0),
+                contentPadding: EdgeInsets.fromLTRB(12, 20, 12, 20),
               ),
               maxLines: null, // Allow multiple lines
               onChanged: (value) => note = value,
@@ -93,8 +97,18 @@ class _AddToCartFormState extends State<AddToCartForm> {
         ),
         ElevatedButton(
           onPressed: () {
-            // Call the callback function with the note and quantity
-            widget.onAddToCart(note, quantity);
+            // Create a ProductInCartModel instance
+            ProductInCartModel productInCart = ProductInCartModel(
+              productName: widget.product.productName,
+              actualPrice: widget.product.productPrice,
+              quantity: quantity,
+              note: note.isEmpty ? "Không có ghi chú" : note,
+              productId: widget.product.productId,
+              imageURL: widget.product.imageURL,
+            );
+
+            // Call the callback function with the productInCart
+            widget.onAddToCart(productInCart);
             Navigator.pop(context);
           },
           style: ButtonStyle(
