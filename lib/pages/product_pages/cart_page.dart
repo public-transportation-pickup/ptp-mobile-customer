@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../models/product_in_cart_model.dart';
 import '../../services/api_services/store_api.dart';
+import '../../utils/global_message.dart';
 import '../store_pages/components/store_detail_card.dart';
 import '../store_pages/store_detail_page.dart';
 import 'cart_provider.dart';
@@ -44,6 +45,8 @@ class _CartPageState extends State<CartPage> {
     final List<ProductInCartModel> items = cartProvider.items;
 
     final double totalPrice = cartProvider.calculateTotal();
+
+    GlobalMessage globalMessage = GlobalMessage(context);
 
     return SafeArea(
       child: Scaffold(
@@ -347,6 +350,11 @@ class _CartPageState extends State<CartPage> {
                               await cartProvider.createOrderAndClearCart();
                           if (orderCreated) {
                             setState(() {});
+                            globalMessage
+                                .showSuccessMessage("Tạo đơn hàng thành công!");
+                          } else {
+                            globalMessage
+                                .showErrorMessage("Tạo đơn hàng thất bại!");
                           }
                         },
                         style: ElevatedButton.styleFrom(

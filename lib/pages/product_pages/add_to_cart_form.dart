@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/product_in_cart_model.dart';
 import '../../models/product_in_menu_model.dart';
+import '../../utils/global_message.dart';
 
 class AddToCartForm extends StatefulWidget {
   final ProductInMenu product;
@@ -23,6 +24,7 @@ class _AddToCartFormState extends State<AddToCartForm> {
 
   @override
   Widget build(BuildContext context) {
+    GlobalMessage globalMessage = GlobalMessage(context);
     return AlertDialog(
       content: SingleChildScrollView(
         child: Column(
@@ -110,6 +112,7 @@ class _AddToCartFormState extends State<AddToCartForm> {
             // Call the callback function with the productInCart
             widget.onAddToCart(productInCart);
             Navigator.pop(context);
+            globalMessage.showSuccessMessage("Đã thêm vào giỏ hàng!");
           },
           style: ButtonStyle(
             backgroundColor:
