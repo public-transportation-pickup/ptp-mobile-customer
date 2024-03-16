@@ -13,19 +13,19 @@ class OrderCardComponent extends StatelessWidget {
 
   // Map status to corresponding icon
   final Map<String, String> statusIconMap = {
-    'created': 'lib/assets/icons/order_wait_confirm_icon.svg',
-    'processing': 'lib/assets/icons/order_processing_icon.svg',
-    'completed': 'lib/assets/icons/order_ready_icon.svg',
+    'waiting': 'lib/assets/icons/order_wait_confirm_icon.svg',
+    'preparing': 'lib/assets/icons/order_processing_icon.svg',
+    'prepared': 'lib/assets/icons/order_ready_icon.svg',
   };
 
   // Function to get the appropriate status text based on order status
   String getOrderStatusText(String status) {
     switch (status.toLowerCase()) {
-      case 'created':
+      case 'waiting':
         return 'Chờ xác nhận';
-      case 'processing':
+      case 'preparing':
         return 'Đang xử lý';
-      case 'completed':
+      case 'prepared':
         return 'Có thể đến lấy';
       default:
         return status;

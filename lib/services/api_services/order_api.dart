@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 
 import '../../models/order_model.dart';
+import '../../models/order_create_model.dart';
 import '../local_variables.dart';
 import 'api_services.dart';
 
@@ -50,6 +51,25 @@ class OrderApi extends ApiService {
     } else {
       checkLog.e('Failed to load order details: ${response.statusCode}');
       throw Exception('Failed to load order details: ${response.statusCode}');
+    }
+  }
+
+  static Future<bool> createOrder(OrderCreateModel order) async {
+    final Uri orderUrl = Uri.parse('${ApiService.baseUrl}/order');
+
+    final response = await http.post(
+      orderUrl,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${LocalVariables.jwtToken}',
+      },
+      body: jsonEncode(order.toJson()),
+    );
+
+    if (response.statusCode == 201) {
+      return true; // Success
+    } else {
+      return false; // Failure
     }
   }
 }

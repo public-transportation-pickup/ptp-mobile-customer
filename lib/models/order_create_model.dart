@@ -23,16 +23,17 @@ class OrderCreateModel {
 
   factory OrderCreateModel.fromJson(Map<String, dynamic> json) {
     return OrderCreateModel(
-      name: json['name'],
-      phoneNumber: json['phoneNumber'],
-      pickUpTime: DateTime.parse(json['pickUpTime']),
-      total: json['total'],
-      menuId: json['menuId'],
-      stationId: json['stationId'],
-      storeId: json['storeId'],
-      payment: Payment.fromJson(json['payment']),
-      orderDetails: List<OrderDetailCreateModel>.from(
-          json['orderDetails'].map((x) => OrderDetailCreateModel.fromJson(x))),
+      name: json['name'] ?? '',
+      phoneNumber: json['phoneNumber'] ?? '',
+      pickUpTime: DateTime.tryParse(json['pickUpTime'] ?? '') ?? DateTime.now(),
+      total: json['total'] != null ? json['total'].toDouble() : 0.0,
+      menuId: json['menuId'] ?? '',
+      stationId: json['stationId'] ?? '',
+      storeId: json['storeId'] ?? '',
+      payment: Payment.fromJson(json['payment'] ?? {}),
+      orderDetails: (json['orderDetails'] as List<dynamic>? ?? [])
+          .map((x) => OrderDetailCreateModel.fromJson(x ?? {}))
+          .toList(),
     );
   }
 

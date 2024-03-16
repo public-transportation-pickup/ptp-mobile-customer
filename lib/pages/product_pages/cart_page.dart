@@ -341,8 +341,13 @@ class _CartPageState extends State<CartPage> {
                         height: 16,
                       ),
                       ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           // Handle creating order
+                          bool orderCreated =
+                              await cartProvider.createOrderAndClearCart();
+                          if (orderCreated) {
+                            setState(() {});
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFFBAB40),

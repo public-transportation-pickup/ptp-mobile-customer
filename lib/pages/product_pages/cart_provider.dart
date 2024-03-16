@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
+import '../../models/order_create_model.dart';
 import '../../models/product_in_cart_model.dart';
+import '../../services/api_services/order_api.dart';
 import '../../services/local_variables.dart';
 
 class CartProvider extends ChangeNotifier {
+  static var checkLog = Logger(printer: PrettyPrinter());
+
   static String name = 'Customer - ${LocalVariables.displayName} - Order';
   static String? phoneNumber = LocalVariables.phoneNumber;
   static DateTime pickUpTime = DateTime.now();
@@ -69,5 +74,44 @@ class CartProvider extends ChangeNotifier {
       totalPrice += item.actualPrice * item.quantity;
     }
     return totalPrice;
+  }
+
+  Future<bool> createOrderAndClearCart() async {
+    try {
+      // Construct order details
+      var initTotal = calculateTotal();
+      final order = OrderCreateModel(
+        name: name,
+        phoneNumber: phoneNumber ?? '',
+        pickUpTime: pickUpTime,
+        total: initTotal,
+        menuId: menuId,
+        stationId: stationId,
+        storeId: storeId,
+        payment: Payment(total: initTotal, paymentType: 'Wallet'),
+        orderDetails: items
+            .map((item) => OrderDetailCreateModel(
+                  actualPrice: item.actualPrice,
+                  quantity: item.quantity,
+                  note: item.note,
+                  productMenuId: item.productId,
+                ))
+            .toList(),
+      );
+
+      // Call API to create order
+      final createdOrder = await OrderApi.createOrder(order);
+
+      // Clear cart items if order creation is successful
+      _items.clear();
+      notifyListeners();
+
+      // Return the created order
+      return createdOrder;
+    } catch (e) {
+      // Handle errors appropriately
+      checkLog.e('Failed to call create order: $e');
+      rethrow;
+    }
   }
 }

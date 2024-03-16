@@ -82,9 +82,9 @@ class _OrderPageState extends State<OrderPage>
             child: TabBarView(
               controller: _tabController,
               children: [
-                OrderListTab(orderStatus: 'Created'),
-                OrderListTab(orderStatus: 'Processing'),
-                OrderListTab(orderStatus: 'Completed'),
+                OrderListTab(orderStatus: 'Waiting'),
+                OrderListTab(orderStatus: 'Preparing'),
+                OrderListTab(orderStatus: 'Prepared'),
               ],
             ),
           ),
