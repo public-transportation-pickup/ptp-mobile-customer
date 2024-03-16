@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../models/product_in_cart_model.dart';
@@ -94,6 +95,7 @@ class _CartPageState extends State<CartPage> {
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
+                                    HapticFeedback.mediumImpact();
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -345,6 +347,7 @@ class _CartPageState extends State<CartPage> {
                       ),
                       ElevatedButton(
                         onPressed: () async {
+                          HapticFeedback.mediumImpact();
                           // Handle creating order
                           bool orderCreated =
                               await cartProvider.createOrderAndClearCart();

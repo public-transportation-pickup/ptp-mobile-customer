@@ -24,8 +24,21 @@ class CartProvider extends ChangeNotifier {
 
   int get itemCount => _items.length;
 
-  void addToCart(ProductInCartModel item) {
-    _items.add(item);
+  // void addToCart(ProductInCartModel item) {
+  //   _items.add(item);
+  //   notifyListeners();
+  // }
+  void addToCart(ProductInCartModel newItem) {
+    // Check if the item already exists in the cart
+    for (var existingItem in _items) {
+      if (existingItem.productId == newItem.productId) {
+        // If the item already exists, update the quantity and notify listeners
+        updateQuantity(existingItem, existingItem.quantity + newItem.quantity);
+        return;
+      }
+    }
+    // If the item doesn't exist, add it to the cart
+    _items.add(newItem);
     notifyListeners();
   }
 

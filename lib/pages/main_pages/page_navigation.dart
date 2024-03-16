@@ -1,7 +1,9 @@
 import 'package:capstone_ptp/pages/main_pages/order_page.dart';
 import 'package:capstone_ptp/utils/footer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:badges/badges.dart' as badges;
 
 import '../product_pages/cart_page.dart';
 import '../product_pages/cart_provider.dart';
@@ -52,32 +54,49 @@ class _PageNavigation extends State<PageNavigation> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          HapticFeedback.mediumImpact();
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => CartPage()),
           );
         },
+        backgroundColor: Colors.amber,
         heroTag: null,
         child: Consumer<CartProvider>(
           builder: (context, cartProvider, child) {
             return Stack(
               children: [
-                const Icon(Icons.shopping_cart),
-                if (cartProvider.itemCount > 0)
-                  Positioned(
-                    right: 0,
-                    child: CircleAvatar(
-                      radius: 8,
-                      backgroundColor: Colors.red,
-                      child: Text(
-                        cartProvider.itemCount.toString(),
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.white,
-                        ),
+                if (cartProvider.itemCount == 0)
+                  badges.Badge(
+                    position: badges.BadgePosition.topEnd(top: -10, end: -12),
+                    badgeContent: Text(
+                      cartProvider.itemCount.toString(),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.white,
                       ),
                     ),
+                    showBadge: false,
+                    child: const Icon(
+                      Icons.shopping_cart,
+                      color: Colors.white,
+                    ),
                   ),
+                if (cartProvider.itemCount > 0)
+                  badges.Badge(
+                    position: badges.BadgePosition.topEnd(top: -10, end: -12),
+                    badgeContent: Text(
+                      cartProvider.itemCount.toString(),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.white,
+                      ),
+                    ),
+                    child: const Icon(
+                      Icons.shopping_cart,
+                      color: Colors.white,
+                    ),
+                  )
               ],
             );
           },

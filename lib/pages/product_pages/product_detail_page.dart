@@ -1,6 +1,6 @@
 import 'package:capstone_ptp/models/product_in_menu_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -158,6 +158,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         Center(
           child: ElevatedButton(
             onPressed: () {
+              HapticFeedback.mediumImpact();
               showDialog(
                 context: context,
                 builder: (BuildContext context) {

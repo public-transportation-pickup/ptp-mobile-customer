@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../models/product_in_cart_model.dart';
 import '../../models/product_in_menu_model.dart';
@@ -99,6 +100,7 @@ class _AddToCartFormState extends State<AddToCartForm> {
         ),
         ElevatedButton(
           onPressed: () {
+            HapticFeedback.mediumImpact();
             // Create a ProductInCartModel instance
             ProductInCartModel productInCart = ProductInCartModel(
               productName: widget.product.productName,
