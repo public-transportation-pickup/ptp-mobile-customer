@@ -7,25 +7,26 @@ part of 'order_model.dart';
 // **************************************************************************
 
 OrderModel _$OrderModelFromJson(Map<String, dynamic> json) => OrderModel(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      phoneNumber: json['phoneNumber'] as String,
+      id: json['id'] as String? ?? '',
+      name: json['name'] as String? ?? '',
+      phoneNumber: json['phoneNumber'] as String? ?? '',
       pickUpTime: DateTime.parse(json['pickUpTime'] as String),
-      total: (json['total'] as num).toDouble(),
-      status: json['status'] as String,
-      userId: json['userId'] as String,
-      stationId: json['stationId'] as String,
-      stationName: json['stationName'] as String,
-      stationAddress: json['stationAddress'] as String,
-      storeId: json['storeId'] as String,
-      storeName: json['storeName'] as String,
-      storePhoneNumber: json['storePhoneNumber'] as String,
-      paymentId: json['paymentId'] as String,
-      paymentType: json['paymentType'] as String,
-      paymentStatus: json['paymentStatus'] as String,
-      orderDetails: (json['orderDetails'] as List<dynamic>)
-          .map((e) => OrderDetailModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      total: (json['total'] as num?)?.toDouble() ?? 0.0,
+      status: json['status'] as String? ?? '',
+      userId: json['userId'] as String? ?? '',
+      stationId: json['stationId'] as String? ?? '',
+      stationName: json['stationName'] as String? ?? '',
+      stationAddress: json['stationAddress'] as String? ?? '',
+      storeId: json['storeId'] as String? ?? '',
+      storeName: json['storeName'] as String? ?? '',
+      storePhoneNumber: json['storePhoneNumber'] as String? ?? '',
+      paymentId: json['paymentId'] as String? ?? '',
+      paymentType: json['paymentType'] as String? ?? '',
+      paymentStatus: json['paymentStatus'] as String? ?? '',
+      orderDetails: (json['orderDetails'] as List<dynamic>?)
+              ?.map((e) => OrderDetailModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
 
 Map<String, dynamic> _$OrderModelToJson(OrderModel instance) =>

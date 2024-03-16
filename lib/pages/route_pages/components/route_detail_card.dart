@@ -1,36 +1,33 @@
+import 'package:capstone_ptp/models/route_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 
-class RouteCardComponent extends StatelessWidget {
-  final String startLocation;
-  final String endLocation;
-  final String nameRoute;
-  final String numberRoute;
-  final String operationTime;
-  final Function() onTap;
+class RouteCardDetailComponent extends StatelessWidget {
+  final RouteModel routeDetail;
 
-  RouteCardComponent({
-    required this.startLocation,
-    required this.endLocation,
-    required this.nameRoute,
-    required this.numberRoute,
-    required this.operationTime,
-    required this.onTap,
-  });
+  RouteCardDetailComponent({required this.routeDetail});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      surfaceTintColor: Colors.white,
-      elevation: 3,
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25.0),
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.grey,
+            width: 2.0,
+          ),
+        ),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0),
+        ),
       ),
       child: InkWell(
-        onTap: onTap,
+        //onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -49,7 +46,7 @@ class RouteCardComponent extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      numberRoute.toString(),
+                      routeDetail.routeNo.toString(),
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -63,49 +60,45 @@ class RouteCardComponent extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          nameRoute,
+                          routeDetail.name,
                           style: const TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w700),
                         ),
                         const SizedBox(height: 8),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             SvgPicture.asset(
                               'lib/assets/icons/yellow_clock_icon.svg',
-                              width: 20,
-                              height: 20,
-                              //color: Colors.black87,
+                              width: 24,
+                              height: 24,
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              operationTime,
+                              routeDetail.operationTime,
                               style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w400),
+                                  fontSize: 14, fontWeight: FontWeight.w700),
                             ),
+                            const Spacer(),
+                            // GestureDetector(
+                            //   onTap: () {
+                            //     // Handle tap, navigate to another page, etc.
+                            //   },
+                            //   child: const Text(
+                            //     'Lượt đi ^',
+                            //     style: TextStyle(
+                            //       color: Color(0xFFFCCF59),
+                            //       fontSize: 14,
+                            //       fontWeight: FontWeight.w700,
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                       ],
                     ),
                   ),
                 ],
-              ),
-              //const SizedBox(height: 16),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: GestureDetector(
-                  onTap: () {
-                    // Handle tap, navigate to another page, etc.
-                  },
-                  child: const Text(
-                    'Xem chi tiết >',
-                    style: TextStyle(
-                      color: Color(0xFFFCCF59),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      //decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ),
               ),
             ],
           ),

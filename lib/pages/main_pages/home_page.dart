@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../route_pages/list_routes_page.dart';
+import '../store_pages/store_detail_page.dart';
 import 'components/carousel_slider.dart';
 import 'components/notify_topic_component.dart';
 import 'profile_page.dart';
@@ -513,89 +514,102 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  SizedBox(
-                    width: double.infinity,
-                    child: Row(
-                      children: [
-                        // Left side with icon
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.35,
-                          height: 104,
-                          decoration: const ShapeDecoration(
-                            color: Color(0xFFFCCF59),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30),
-                                bottomLeft: Radius.circular(30),
+                  GestureDetector(
+                    onTap: () {
+                      HapticFeedback.mediumImpact();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => StoreDetailPage(
+                                  storeId:
+                                      '02e5958b-cdd6-48d8-9259-edc212f53719',
+                                )),
+                      );
+                    },
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Row(
+                        children: [
+                          // Left side with icon
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.35,
+                            height: 104,
+                            decoration: const ShapeDecoration(
+                              color: Color(0xFFFCCF59),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(30),
+                                  bottomLeft: Radius.circular(30),
+                                ),
+                              ),
+                              shadows: [
+                                BoxShadow(
+                                  color: Color(0xFF909090),
+                                  blurRadius: 10,
+                                  offset: Offset(2, 4),
+                                  spreadRadius: -3,
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: SvgPicture.asset(
+                                'lib/assets/icons/route_spot_guide_map.svg',
+                                width: 64,
+                                height: 64,
+                                color: Colors.white,
                               ),
                             ),
-                            shadows: [
-                              BoxShadow(
-                                color: Color(0xFF909090),
-                                blurRadius: 10,
-                                offset: Offset(2, 4),
-                                spreadRadius: -3,
-                              ),
-                            ],
                           ),
-                          child: Center(
-                            child: SvgPicture.asset(
-                              'lib/assets/icons/route_spot_guide_map.svg',
-                              width: 64,
-                              height: 64,
+                          // Right side with white background and text
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.55,
+                            height: 104,
+                            padding: const EdgeInsets.all(16),
+                            decoration: const ShapeDecoration(
                               color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        // Right side with white background and text
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.55,
-                          height: 104,
-                          padding: const EdgeInsets.all(16),
-                          decoration: const ShapeDecoration(
-                            color: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(30),
-                                bottomRight: Radius.circular(30),
-                              ),
-                            ),
-                            shadows: [
-                              BoxShadow(
-                                color: Color(0xFF909090),
-                                blurRadius: 10,
-                                offset: Offset(2, 4),
-                                spreadRadius: -3,
-                              ),
-                            ],
-                          ),
-                          child: const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'TÊN ĐƯỜNG',
-                                style: TextStyle(
-                                  color: Color(0xFF353434),
-                                  fontSize: 14,
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w700,
-                                  height: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(30),
+                                  bottomRight: Radius.circular(30),
                                 ),
                               ),
-                              Text(
-                                'Tìm tuyến xe phù hợp theo tên đường',
-                                style: TextStyle(
-                                  color: Color(0xFF353434),
-                                  fontSize: 12,
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w300,
-                                  height: 0,
+                              shadows: [
+                                BoxShadow(
+                                  color: Color(0xFF909090),
+                                  blurRadius: 10,
+                                  offset: Offset(2, 4),
+                                  spreadRadius: -3,
                                 ),
-                              )
-                            ],
+                              ],
+                            ),
+                            child: const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'TÊN ĐƯỜNG',
+                                  style: TextStyle(
+                                    color: Color(0xFF353434),
+                                    fontSize: 14,
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.w700,
+                                    height: 0,
+                                  ),
+                                ),
+                                Text(
+                                  'Tìm tuyến xe phù hợp theo tên đường',
+                                  style: TextStyle(
+                                    color: Color(0xFF353434),
+                                    fontSize: 12,
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.w300,
+                                    height: 0,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],

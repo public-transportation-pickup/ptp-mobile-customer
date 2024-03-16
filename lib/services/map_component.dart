@@ -59,7 +59,7 @@ class _MapComponentState extends State<MapComponent> {
   }
 
   Future<List<Marker>> getListMarkers() async {
-    //await _fetchStation();
+    await _fetchStation();
     await _fetchStores();
     var storeMarker = _stores
         ?.map((store) => Marker(
@@ -71,20 +71,19 @@ class _MapComponentState extends State<MapComponent> {
               height: 10,
             ))
         .toList();
-    // var stationMarkers = _stations
-    //     .map((station) => Marker(
-    //           point: LatLng(station.latitude, station.longitude),
-    //           child: FlutterLogo(),
-    //           // child: const Icon(
-    //           //   IconData(0xe1d5, fontFamily: 'MaterialIcons'),
-    //           // ),
-    //           width: 10,
-    //           height: 10,
-    //         ))
-    //     .toList();
+    var stationMarkers = _stations
+        ?.map((station) => Marker(
+              point: LatLng(station.latitude, station.longitude),
+              child: const Icon(
+                IconData(0xe1d5, fontFamily: 'MaterialIcons'),
+              ),
+              width: 10,
+              height: 10,
+            ))
+        .toList();
 
     List<Marker> markerList = [];
-    //markerList.addAll(stationMarkers);
+    markerList.addAll(stationMarkers ??= []);
     markerList.addAll(storeMarker ??= []);
     setState(() {
       _isLoading = false;
