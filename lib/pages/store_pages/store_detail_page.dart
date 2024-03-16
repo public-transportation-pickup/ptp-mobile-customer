@@ -29,6 +29,7 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
     super.initState();
     _storeFuture = StoreApi.getStoreById(widget.storeId);
     CartProvider.stationId = widget.stationId;
+    CartProvider.arrivalTime = widget.arrivalTime;
   }
 
   @override

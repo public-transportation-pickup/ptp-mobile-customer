@@ -6,6 +6,7 @@ class CartProvider extends ChangeNotifier {
   static String name = 'Customer - ${LocalVariables.displayName} - Order';
   static String? phoneNumber = LocalVariables.phoneNumber;
   static DateTime pickUpTime = DateTime.now();
+  static String arrivalTime = '';
   static String menuId = '';
   static String stationId = '';
   static String storeId = '';
