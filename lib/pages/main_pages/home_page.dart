@@ -146,6 +146,16 @@ class HomePage extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                              ),
+                              child: Image.asset(
+                                'lib/assets/images/bus.jpg',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                           Container(
                             width: 100,
@@ -222,6 +232,16 @@ class HomePage extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                              ),
+                              child: Image.asset(
+                                'lib/assets/images/banhmi.jpg',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                           Container(
                             width: 100,
@@ -297,6 +317,16 @@ class HomePage extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                              ),
+                              child: Image.asset(
+                                'lib/assets/images/cafe.jpg',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                           Container(
                             width: 100,
@@ -334,7 +364,7 @@ class HomePage extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    'Tìm quán coffee gần bạn',
+                                    'Tìm coffee gần bạn',
                                     style: TextStyle(
                                       color: Color(0xFF353434),
                                       fontSize: 12,
@@ -496,8 +526,11 @@ class HomePage extends StatelessWidget {
                                     height: 0,
                                   ),
                                 ),
+                                SizedBox(
+                                  height: 8,
+                                ),
                                 Text(
-                                  'Xem thông tin các tuyến xe buýt',
+                                  'Xem thông tin các tuyến xe buýt đang hoạt động tại TP.HCM',
                                   style: TextStyle(
                                     color: Color(0xFF353434),
                                     fontSize: 12,
@@ -589,7 +622,7 @@ class HomePage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'TÊN ĐƯỜNG',
+                                  'TRẠM CUỐI',
                                   style: TextStyle(
                                     color: Color(0xFF353434),
                                     fontSize: 14,
@@ -598,8 +631,11 @@ class HomePage extends StatelessWidget {
                                     height: 0,
                                   ),
                                 ),
+                                SizedBox(
+                                  height: 8,
+                                ),
                                 Text(
-                                  'Tìm tuyến xe phù hợp theo tên đường',
+                                  'Tìm tuyến xe phù hợp theo trạm mà bạn muốn đến',
                                   style: TextStyle(
                                     color: Color(0xFF353434),
                                     fontSize: 12,
