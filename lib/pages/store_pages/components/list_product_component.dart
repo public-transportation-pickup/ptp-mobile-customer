@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:capstone_ptp/models/menu_model.dart';
 import 'package:capstone_ptp/services/api_services/store_api.dart';
+import 'package:intl/intl.dart';
 
+import '../../product_pages/cart_provider.dart';
 import 'product_card_component.dart';
 
 class ListProductComponent extends StatelessWidget {
@@ -22,6 +24,18 @@ class ListProductComponent extends StatelessWidget {
         arrivalTime,
         now.toString(),
       );
+
+      CartProvider.storeId = storeId;
+      DateTime current = DateTime.now();
+      DateTime formatedTime = DateTime(
+          current.year,
+          current.month,
+          current.day,
+          DateFormat('HH:mm').parse(arrivalTime).hour,
+          DateFormat('HH:mm').parse(arrivalTime).minute);
+      DateTime pickUpDateTime = formatedTime.add(const Duration(hours: 1));
+      CartProvider.pickUpTime = pickUpDateTime;
+
       return menu;
     } catch (e) {
       throw Exception('Failed to fetch menu: $e');

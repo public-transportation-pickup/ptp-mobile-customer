@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import '../../models/product_in_cart_model.dart';
+import '../../services/local_variables.dart';
 
 class CartProvider extends ChangeNotifier {
+  static String name = 'Customer - ${LocalVariables.displayName} - Order';
+  static String? phoneNumber = LocalVariables.phoneNumber;
+  static DateTime pickUpTime = DateTime.now();
+  static String menuId = '';
+  static String stationId = '';
+  static String storeId = '';
+
   final List<ProductInCartModel> _items = [];
 
   CartProvider();
@@ -52,5 +60,13 @@ class CartProvider extends ChangeNotifier {
       _items[index] = updatedItem;
       notifyListeners();
     }
+  }
+
+  double calculateTotal() {
+    double totalPrice = 0;
+    for (var item in _items) {
+      totalPrice += item.actualPrice * item.quantity;
+    }
+    return totalPrice;
   }
 }

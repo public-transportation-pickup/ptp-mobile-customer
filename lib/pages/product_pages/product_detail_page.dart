@@ -176,6 +176,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             // using CartProvider
                             Provider.of<CartProvider>(context, listen: false)
                                 .addToCart(productInCart);
+                            // Set Value cart
+                            CartProvider.menuId = product.menuId;
                           },
                         );
                       }

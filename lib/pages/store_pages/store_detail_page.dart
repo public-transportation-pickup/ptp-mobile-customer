@@ -1,3 +1,4 @@
+import 'package:capstone_ptp/pages/product_pages/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone_ptp/models/store_model.dart';
 
@@ -7,9 +8,13 @@ import 'components/store_detail_card.dart';
 
 class StoreDetailPage extends StatefulWidget {
   final String storeId;
+  final String stationId;
   final String arrivalTime;
 
-  StoreDetailPage({required this.storeId, required this.arrivalTime});
+  StoreDetailPage(
+      {required this.storeId,
+      required this.arrivalTime,
+      required this.stationId});
 
   @override
   _StoreDetailPageState createState() => _StoreDetailPageState();
@@ -23,6 +28,7 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
   void initState() {
     super.initState();
     _storeFuture = StoreApi.getStoreById(widget.storeId);
+    CartProvider.stationId = widget.stationId;
   }
 
   @override

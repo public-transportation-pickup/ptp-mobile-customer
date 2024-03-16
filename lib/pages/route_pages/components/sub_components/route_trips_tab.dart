@@ -81,6 +81,9 @@ class _RouteTripsTabState extends State<RouteTripsTab> {
           List<String?> stores =
               trip.schedules?.map((schedule) => schedule.storeId).toList() ??
                   [];
+          List<String?> stationIds =
+              trip.schedules?.map((schedule) => schedule.stationId).toList() ??
+                  [];
 
           return SizedBox(
             height: MediaQuery.of(context).size.height,
@@ -136,6 +139,7 @@ class _RouteTripsTabState extends State<RouteTripsTab> {
                                             storeId: stores[index]!,
                                             arrivalTime:
                                                 _formatTime(arrivalTime[index]),
+                                            stationId: stationIds[index]!,
                                           )),
                                 );
                               },

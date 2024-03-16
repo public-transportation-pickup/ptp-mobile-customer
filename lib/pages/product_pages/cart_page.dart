@@ -6,6 +6,14 @@ import 'cart_provider.dart';
 import 'components/edit_note_form.dart';
 
 class CartPage extends StatelessWidget {
+  // static String name = 'Customer - ${LocalVariables.displayName} - Order';
+  // static String? phoneNumber = LocalVariables.phoneNumber;
+  // static DateTime pickUpTime = DateTime.now();
+  // static double total = 0;
+  // static String menuId = '';
+  // static String stationId = '';
+  // static String storeId = '';
+
   String formatPrice(double price) {
     final format = NumberFormat("#,##0", "en_US");
     String formattedPrice = format.format(price);
@@ -16,6 +24,15 @@ class CartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
     final List<ProductInCartModel> items = cartProvider.items;
+    print("CART INFO");
+    print(CartProvider.name);
+    print(CartProvider.phoneNumber);
+    print(CartProvider.pickUpTime);
+    var test = cartProvider.calculateTotal();
+    print(test);
+    print(CartProvider.menuId);
+    print(CartProvider.stationId);
+    print(CartProvider.storeId);
 
     return Scaffold(
       appBar: AppBar(
