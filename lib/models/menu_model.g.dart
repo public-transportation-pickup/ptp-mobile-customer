@@ -23,6 +23,9 @@ Menu _$MenuFromJson(Map<String, dynamic> json) => Menu(
       productInMenus: (json['productInMenus'] as List<dynamic>?)
           ?.map((e) => ProductInMenu.fromJson(e as Map<String, dynamic>))
           .toList(),
+      categories: (json['categories'] as List<dynamic>?)
+          ?.map((e) => CategoryModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$MenuToJson(Menu instance) => <String, dynamic>{
@@ -38,4 +41,5 @@ Map<String, dynamic> _$MenuToJson(Menu instance) => <String, dynamic>{
       'creationDate': instance.creationDate.toIso8601String(),
       'store': instance.store,
       'productInMenus': instance.productInMenus,
+      'categories': instance.categories,
     };

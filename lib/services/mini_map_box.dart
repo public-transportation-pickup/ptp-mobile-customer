@@ -16,8 +16,8 @@ class _MiniMapComponentState extends State<MiniMapComponent> {
 
   @override
   void initState() {
-    _getCurrentLocation();
     super.initState();
+    _getCurrentLocation();
   }
 
   Future<void> _getCurrentLocation() async {

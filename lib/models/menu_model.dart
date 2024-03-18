@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'store_model.dart';
 import 'product_in_menu_model.dart';
+import 'category_model.dart';
 
 part 'menu_model.g.dart';
 
@@ -18,6 +19,7 @@ class Menu {
   DateTime creationDate;
   StoreModel? store;
   List<ProductInMenu>? productInMenus;
+  List<CategoryModel>? categories;
 
   Menu({
     required this.id,
@@ -31,6 +33,7 @@ class Menu {
     required this.storeId,
     required this.creationDate,
     required this.store,
+    required this.categories,
     required this.productInMenus,
   });
 

@@ -4,10 +4,30 @@ import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 
 import '../../models/menu_model.dart';
+import '../local_variables.dart';
 import 'api_services.dart';
 
 class StoreApi extends ApiService {
   static var checkLog = Logger(printer: PrettyPrinter());
+
+  // GET STORES
+  static Future<List<StoreModel>> getStores() async {
+    final Uri storeUri = Uri.parse('${ApiService.baseUrl}/stores');
+    final response = await http.get(
+      storeUri,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${LocalVariables.jwtToken}',
+      },
+    );
+    if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = json.decode(response.body);
+      return jsonResponse.map((json) => StoreModel.fromJson(json)).toList();
+    } else {
+      checkLog.e('Failed to load stores ${response.statusCode}');
+      throw Exception('Failed to load stores ${response.statusCode}');
+    }
+  }
 
   //GET STORE BY STORE ID
   static Future<StoreModel> getStoreById(String storeId) async {
@@ -45,7 +65,7 @@ class StoreApi extends ApiService {
 
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonResponse = json.decode(response.body);
-        //checkLog.t(jsonResponse);
+        checkLog.t(jsonResponse);
         return Menu.fromJson(jsonResponse);
       } else {
         checkLog.e('Failed to load products in menu: ${response.statusCode}');
