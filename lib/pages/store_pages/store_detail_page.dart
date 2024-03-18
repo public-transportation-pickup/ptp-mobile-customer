@@ -1,9 +1,14 @@
+import 'package:capstone_ptp/models/product_in_menu_model.dart';
 import 'package:capstone_ptp/pages/product_pages/cart_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone_ptp/models/store_model.dart';
+import 'package:flutter/services.dart';
 
+import '../../models/category_model.dart';
 import '../../services/api_services/store_api.dart';
+import '../product_pages/product_detail_page.dart';
 import 'components/list_product_component.dart';
+import 'components/list_product_with_category.dart';
 import 'components/store_detail_card.dart';
 
 class StoreDetailPage extends StatefulWidget {
@@ -23,6 +28,8 @@ class StoreDetailPage extends StatefulWidget {
 class _StoreDetailPageState extends State<StoreDetailPage> {
   late Future<StoreModel> _storeFuture;
   DateTime now = DateTime.now();
+  List<CategoryModel>? listCategories = [];
+  List<ProductInMenu>? listProductsInMenu = [];
 
   @override
   void initState() {
@@ -30,6 +37,18 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
     _storeFuture = StoreApi.getStoreById(widget.storeId);
     CartProvider.stationId = widget.stationId;
     CartProvider.arrivalTime = widget.arrivalTime;
+  }
+
+  void updateCategories(List<CategoryModel>? categories) {
+    setState(() {
+      listCategories = categories ?? [];
+    });
+  }
+
+  void updateProductsInMenu(List<ProductInMenu>? products) {
+    setState(() {
+      listProductsInMenu = products ?? [];
+    });
   }
 
   @override
@@ -130,27 +149,54 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
                           child: ListProductComponent(
                             storeId: widget.storeId,
                             arrivalTime: widget.arrivalTime,
-                            now: now,
+                            now: DateTime.now(),
+                            updateCategories: updateCategories,
+                            updateProductsInMenu: updateProductsInMenu,
                           ),
                         ),
                       ),
                     );
                   },
                 ),
-                const SizedBox(
-                  height: 40,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(32, 8, 8, 0),
-                    child: Text(
-                      "Burger: ",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'Montserrat',
+                // Loop through categories to display products for each category
+                for (int i = 0; i < listCategories!.length; i++)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 40,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(32, 8, 8, 0),
+                          child: Text(
+                            listCategories![i].name,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'Montserrat',
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                      // List products for this category
+                      ...listProductsInMenu!
+                          .where((product) =>
+                              product.categoryId == listCategories![i].id)
+                          .map((product) => ProductWithCategoryCard(
+                                product: product,
+                                onPressed: () {
+                                  HapticFeedback.mediumImpact();
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ProductDetailPage(
+                                              productId: product.id,
+                                            )),
+                                  );
+                                },
+                              ))
+                          .toList(),
+                    ],
                   ),
-                ),
               ],
             ),
           ),
