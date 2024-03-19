@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
+import '../activity_pages/transaction_history_tab.dart';
+
 class ActivityPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: DefaultTabController(
         length: 4,
         child: CustomScrollView(
           slivers: [
-            SliverAppBar(
+            const SliverAppBar(
               title: Text(
                 'Lịch sử hoạt động',
                 style: TextStyle(color: Colors.black),
@@ -36,7 +38,7 @@ class ActivityPage extends StatelessWidget {
             SliverFillRemaining(
               child: TabBarView(
                 children: [
-                  Center(child: Text('Transaction History')),
+                  TransactionHistoryTab(),
                   Center(child: Text('Completed Orders')),
                   Center(child: Text('Canceled Orders')),
                   Center(child: Text('Payment Orders')),
