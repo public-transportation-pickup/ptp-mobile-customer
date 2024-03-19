@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:badges/badges.dart' as badges;
 
+import '../../services/local_variables.dart';
 import '../product_pages/cart_page.dart';
 import '../product_pages/cart_provider.dart';
 import 'notification_page.dart';
@@ -41,7 +42,7 @@ class _PageNavigation extends State<PageNavigation> {
           children: [
             HomePage(),
             NotificationPage(),
-            WalletPage(),
+            WalletPage(userId: LocalVariables.userGUID!),
             OrderSamplePage(),
             OrderPage(),
           ],

@@ -21,6 +21,7 @@ class AuthenticationApi extends ApiService {
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseBody = json.decode(response.body);
       LocalVariables.jwtToken = responseBody['token'];
+      LocalVariables.userGUID = responseBody['user']['id'];
       checkLog.i('System JWT: ${LocalVariables.jwtToken}');
       checkLog.t(responseBody);
       return responseBody;

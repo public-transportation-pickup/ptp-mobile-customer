@@ -3,10 +3,12 @@ import 'package:capstone_ptp/services/map_component.dart';
 import 'package:capstone_ptp/services/mini_map_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../route_pages/list_routes_page.dart';
 //import '../store_pages/store_detail_page.dart';
+import '../store_pages/store_detail_page.dart';
 import 'components/carousel_slider.dart';
 import 'components/notify_topic_component.dart';
 import 'profile_page.dart';
@@ -125,90 +127,106 @@ class HomePage extends StatelessWidget {
                   // Container for Bus / Food / Coffee
                   child: Row(
                     children: [
-                      Column(
-                        children: [
-                          Container(
-                            width: 100,
-                            height: 50, // 50% of 131 (total height)
-                            decoration: const ShapeDecoration(
-                              color: Colors.red,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                ),
-                              ),
-                              shadows: [
-                                BoxShadow(
-                                  color: Color(0xFF909090),
-                                  blurRadius: 10,
-                                  offset: Offset(0, 4),
-                                  spreadRadius: -3,
-                                ),
-                              ],
-                            ),
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                              child: Image.asset(
-                                'lib/assets/images/bus.jpg',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: 100,
-                            height: 65,
-                            decoration: const ShapeDecoration(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(20),
-                                  bottomRight: Radius.circular(20),
-                                ),
-                              ),
-                              shadows: [
-                                BoxShadow(
-                                  color: Color(0xFF909090),
-                                  blurRadius: 10,
-                                  offset: Offset(0, 4),
-                                  spreadRadius: -3,
-                                ),
-                              ],
-                            ),
-                            child: const Padding(
-                              padding: EdgeInsets.fromLTRB(8, 4, 0,
-                                  4), // Left: 8, Top: 4, Right: 0, Bottom: 4
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'XE BUÝT',
-                                    style: TextStyle(
-                                      color: Color(0xFF353434),
-                                      fontSize: 14,
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w700,
-                                      height: 0,
-                                    ),
+                      GestureDetector(
+                        onTap: () {
+                          HapticFeedback.mediumImpact();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => StoreDetailPage(
+                                      storeId:
+                                          '4504b5b5-2a3f-4815-a768-d166faabd33d',
+                                      arrivalTime: "16:00",
+                                      stationId:
+                                          'd92acefd-04e1-4806-92d5-dc79402be22f',
+                                    )),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 100,
+                              height: 50, // 50% of 131 (total height)
+                              decoration: const ShapeDecoration(
+                                color: Colors.red,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20),
                                   ),
-                                  Text(
-                                    'Tìm trạm xe gần bạn',
-                                    style: TextStyle(
-                                      color: Color(0xFF353434),
-                                      fontSize: 12,
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w300,
-                                      height: 0,
-                                    ),
+                                ),
+                                shadows: [
+                                  BoxShadow(
+                                    color: Color(0xFF909090),
+                                    blurRadius: 10,
+                                    offset: Offset(0, 4),
+                                    spreadRadius: -3,
                                   ),
                                 ],
                               ),
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                ),
+                                child: Image.asset(
+                                  'lib/assets/images/bus.jpg',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
+                            Container(
+                              width: 100,
+                              height: 65,
+                              decoration: const ShapeDecoration(
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(20),
+                                    bottomRight: Radius.circular(20),
+                                  ),
+                                ),
+                                shadows: [
+                                  BoxShadow(
+                                    color: Color(0xFF909090),
+                                    blurRadius: 10,
+                                    offset: Offset(0, 4),
+                                    spreadRadius: -3,
+                                  ),
+                                ],
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.fromLTRB(8, 4, 0,
+                                    4), // Left: 8, Top: 4, Right: 0, Bottom: 4
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'XE BUÝT',
+                                      style: TextStyle(
+                                        color: Color(0xFF353434),
+                                        fontSize: 14,
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w700,
+                                        height: 0,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Tìm trạm xe gần bạn',
+                                      style: TextStyle(
+                                        color: Color(0xFF353434),
+                                        fontSize: 12,
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w300,
+                                        height: 0,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(width: 16),
                       Column(

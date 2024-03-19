@@ -8,4 +8,5 @@ class LocalVariables {
   // System Data
   static String? jwtToken = '';
   static String? phoneNumber = '0917321456';
+  static String? userGUID = '';
 }
