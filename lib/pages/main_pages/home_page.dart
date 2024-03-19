@@ -1,3 +1,4 @@
+import 'package:capstone_ptp/pages/route_pages/final_station_page.dart';
 import 'package:capstone_ptp/services/map_component.dart';
 import 'package:capstone_ptp/services/mini_map_box.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../route_pages/list_routes_page.dart';
-import '../store_pages/store_detail_page.dart';
+//import '../store_pages/store_detail_page.dart';
 import 'components/carousel_slider.dart';
 import 'components/notify_topic_component.dart';
 import 'profile_page.dart';
@@ -550,16 +551,21 @@ class HomePage extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       HapticFeedback.mediumImpact();
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //       builder: (context) => StoreDetailPage(
+                      //             storeId:
+                      //                 '4504b5b5-2a3f-4815-a768-d166faabd33d',
+                      //             arrivalTime: "16:00",
+                      //             stationId:
+                      //                 'd92acefd-04e1-4806-92d5-dc79402be22f',
+                      //           )),
+                      // );
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => StoreDetailPage(
-                                  storeId:
-                                      '4504b5b5-2a3f-4815-a768-d166faabd33d',
-                                  arrivalTime: "16:00",
-                                  stationId:
-                                      'd92acefd-04e1-4806-92d5-dc79402be22f',
-                                )),
+                            builder: (context) => FinalStationPage()),
                       );
                     },
                     child: SizedBox(
