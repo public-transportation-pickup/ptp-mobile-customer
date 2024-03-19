@@ -259,7 +259,8 @@ class OrderCardComponent extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // Check if the order status is 'created' to show the second button
-                if (order.status.toLowerCase() == 'created')
+                if (order.status.toLowerCase() == 'waiting' ||
+                    order.status.toLowerCase() == 'preparing')
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {

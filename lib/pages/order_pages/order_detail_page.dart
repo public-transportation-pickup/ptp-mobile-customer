@@ -67,7 +67,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               children: [
                 buildOrderDetails(snapshot.data!),
                 const SizedBox(height: 8),
-                if (snapshot.data?.status.toLowerCase() == 'created')
+                if (snapshot.data?.status.toLowerCase() == 'waiting' ||
+                    snapshot.data?.status.toLowerCase() == 'preparing')
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(horizontal: 16),

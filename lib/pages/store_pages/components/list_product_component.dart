@@ -74,7 +74,8 @@ class _ListProductComponentState extends State<ListProductComponent> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
+          return Center(
+              child: Text('Có lỗi xảy ra vui lòng thử lại: ${snapshot.error}'));
         } else {
           Menu menu = snapshot.data!;
           return Column(

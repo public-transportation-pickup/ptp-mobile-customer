@@ -62,7 +62,10 @@ class StoreApi extends ApiService {
 
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonResponse = json.decode(response.body);
-        //checkLog.t(jsonResponse);
+        // ApiService.checkLog.d(storeId);
+        // ApiService.checkLog.d(arrivalTime);
+        // ApiService.checkLog.d(dateApply);
+        //ApiService.checkLog.t(jsonResponse);
         return Menu.fromJson(jsonResponse);
       } else {
         ApiService.checkLog
