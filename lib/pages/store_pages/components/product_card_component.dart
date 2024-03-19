@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 import '../../../models/product_in_menu_model.dart';
@@ -103,15 +104,35 @@ class ProductCard extends StatelessWidget {
                         maxLines: 1,
                       ),
                       const SizedBox(height: 4),
-                      Text(
-                        formatPrice(product.productPrice),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          fontFamily: 'Montserrat',
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
+                      Row(
+                        children: [
+                          Text(
+                            formatPrice(product.salePrice),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              fontFamily: 'Montserrat',
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            formatPrice(product.productPrice),
+                            style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Montserrat',
+                                color: Colors.grey,
+                                decoration: TextDecoration.lineThrough),
+                          ),
+                          const SizedBox(width: 4),
+                          SvgPicture.asset(
+                            'lib/assets/icons/baseline_discount_icon.svg',
+                            width: 14,
+                            height: 14,
+                          ),
+                        ],
                       ),
                     ],
                   ),

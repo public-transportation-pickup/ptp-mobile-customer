@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:capstone_ptp/models/product_in_menu_model.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 class ProductWithCategoryCard extends StatelessWidget {
@@ -70,14 +72,48 @@ class ProductWithCategoryCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 5),
 
-                      // Product Price
+                      // Product description
                       Text(
-                        formatPrice(product.productPrice),
+                        product.productDescription,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                          color: Colors.grey,
                         ),
+                      ),
+                      const SizedBox(height: 5),
+
+                      // Product Price
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            formatPrice(product.salePrice),
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 18,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            formatPrice(product.productPrice),
+                            style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Montserrat',
+                                color: Colors.grey,
+                                decoration: TextDecoration.lineThrough),
+                          ),
+                          const SizedBox(width: 4),
+                          SvgPicture.asset(
+                            'lib/assets/icons/baseline_discount_icon.svg',
+                            width: 14,
+                            height: 14,
+                          ),
+                        ],
                       ),
 
                       Row(

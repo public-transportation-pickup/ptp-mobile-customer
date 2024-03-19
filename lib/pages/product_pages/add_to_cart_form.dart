@@ -104,7 +104,7 @@ class _AddToCartFormState extends State<AddToCartForm> {
             // Create a ProductInCartModel instance
             ProductInCartModel productInCart = ProductInCartModel(
               productName: widget.product.productName,
-              actualPrice: widget.product.productPrice,
+              actualPrice: widget.product.salePrice,
               quantity: quantity,
               note: note.isEmpty ? "Không có ghi chú" : note,
               productId: widget.product.productId,

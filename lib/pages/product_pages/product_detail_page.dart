@@ -79,7 +79,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 ),
         ),
         const SizedBox(height: 16),
-        // Product Name & price
+        // Product Name & sale price
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -101,12 +101,30 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
-                formatPrice(product.productPrice),
+                formatPrice(product.salePrice),
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Montserrat',
                 ),
+              ),
+            ),
+          ],
+        ),
+        // Product price
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(
+                formatPrice(product.productPrice),
+                style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Montserrat',
+                    color: Colors.grey,
+                    decoration: TextDecoration.lineThrough),
               ),
             ),
           ],
@@ -130,21 +148,57 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         ),
 
         const SizedBox(height: 8),
-        // Product Description
+        // Product Preparing Time
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(
-            product.preparationTime.toString().isNotEmpty
-                ? product.preparationTime.toString()
-                : 'N/A',
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.normal,
-              fontFamily: 'Montserrat',
-              color: Colors.grey,
-            ),
+          child: Row(
+            children: [
+              const Icon(
+                Icons.access_time,
+                color: Colors.black,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                product.preparationTime.toString().isNotEmpty
+                    ? 'Thời gian chuẩn bị món:  ${product.preparationTime} phút'
+                    : 'Thời gian chuẩn bị món:  N/A',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'Montserrat',
+                  color: Colors.black,
+                ),
+              ),
+            ],
           ),
         ),
+
+        const SizedBox(height: 8),
+        // Product quantity in day
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              const Icon(
+                Icons.production_quantity_limits,
+                color: Colors.black,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                product.preparationTime.toString().isNotEmpty
+                    ? 'Số lượng còn lại: ${product.quantityInDay - product.quantityUsed}'
+                    : 'Số lượng còn lại: N/A',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'Montserrat',
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+        ),
+
         // Divider
         const SizedBox(height: 8),
         const Divider(
