@@ -10,7 +10,7 @@ import '../product_pages/cart_page.dart';
 import '../product_pages/cart_provider.dart';
 import 'notification_page.dart';
 import 'wallet_page.dart';
-import 'order_sample_page.dart';
+import 'activity_page.dart';
 import 'home_page.dart';
 
 class PageNavigation extends StatefulWidget {
@@ -43,7 +43,7 @@ class _PageNavigation extends State<PageNavigation> {
             HomePage(),
             NotificationPage(),
             WalletPage(userId: LocalVariables.userGUID!),
-            OrderSamplePage(),
+            ActivityPage(),
             OrderPage(),
           ],
         ),

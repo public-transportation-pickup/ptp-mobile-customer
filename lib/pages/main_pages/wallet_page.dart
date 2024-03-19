@@ -109,16 +109,16 @@ class _WalletPageState extends State<WalletPage> {
                     children: [
                       Column(
                         children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFEEBBB),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: IconButton(
-                              onPressed: () {
-                                // Handle recharge button press
-                              },
-                              icon: const Icon(Icons.credit_card),
+                          InkWell(
+                            onTap: () {},
+                            child: Container(
+                              height: 48,
+                              width: 48,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFEEBBB),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: const Icon(Icons.credit_card),
                             ),
                           ),
                           const Text('Nạp tiền'),
@@ -126,16 +126,16 @@ class _WalletPageState extends State<WalletPage> {
                       ),
                       Column(
                         children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFEEBBB),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: IconButton(
-                              onPressed: () {
-                                // Handle bank link button press
-                              },
-                              icon: const Icon(Icons.add_link_outlined),
+                          InkWell(
+                            onTap: () {},
+                            child: Container(
+                              height: 48,
+                              width: 48,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFEEBBB),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: const Icon(Icons.add_link_outlined),
                             ),
                           ),
                           const Text('Liên kết ngân hàng'),
