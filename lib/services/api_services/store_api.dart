@@ -1,15 +1,12 @@
 import 'dart:convert';
 import 'package:capstone_ptp/models/store_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:logger/logger.dart';
 
 import '../../models/menu_model.dart';
 import '../local_variables.dart';
 import 'api_services.dart';
 
 class StoreApi extends ApiService {
-  static var checkLog = Logger(printer: PrettyPrinter());
-
   // GET STORES
   static Future<List<StoreModel>> getStores() async {
     final Uri storeUri = Uri.parse('${ApiService.baseUrl}/stores');
@@ -24,7 +21,7 @@ class StoreApi extends ApiService {
       List<dynamic> jsonResponse = json.decode(response.body);
       return jsonResponse.map((json) => StoreModel.fromJson(json)).toList();
     } else {
-      checkLog.e('Failed to load stores ${response.statusCode}');
+      ApiService.checkLog.e('Failed to load stores ${response.statusCode}');
       throw Exception('Failed to load stores ${response.statusCode}');
     }
   }
@@ -43,11 +40,11 @@ class StoreApi extends ApiService {
         //checkLog.t(jsonResponse);
         return StoreModel.fromJson(jsonResponse);
       } else {
-        checkLog.e('Failed to load store: ${response.statusCode}');
+        ApiService.checkLog.e('Failed to load store: ${response.statusCode}');
         throw Exception('Failed to load store: ${response.statusCode}');
       }
     } catch (e) {
-      checkLog.e('Error while fetching store: $e');
+      ApiService.checkLog.e('Error while fetching store: $e');
       throw Exception('Error while fetching store: $e');
     }
   }
@@ -68,12 +65,13 @@ class StoreApi extends ApiService {
         //checkLog.t(jsonResponse);
         return Menu.fromJson(jsonResponse);
       } else {
-        checkLog.e('Failed to load products in menu: ${response.statusCode}');
+        ApiService.checkLog
+            .e('Failed to load products in menu: ${response.statusCode}');
         throw Exception(
             'Failed to load products in menu: ${response.statusCode}');
       }
     } catch (e) {
-      checkLog.e('Error while fetching products in menu: $e');
+      ApiService.checkLog.e('Error while fetching products in menu: $e');
       throw Exception('Error while fetching products in menu: $e');
     }
   }

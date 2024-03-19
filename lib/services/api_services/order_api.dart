@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:logger/logger.dart';
 
 import '../../models/order_model.dart';
 import '../../models/order_create_model.dart';
@@ -8,8 +7,7 @@ import '../local_variables.dart';
 import 'api_services.dart';
 
 class OrderApi extends ApiService {
-  static var checkLog = Logger(printer: PrettyPrinter());
-
+  // GET ORDERS OF USER
   static Future<List<OrderModel>> getOrdersOfUser(
       {int pageNumber = -1, int pageSize = 100}) async {
     final Uri ordersUrl = Uri.parse(
@@ -28,7 +26,7 @@ class OrderApi extends ApiService {
       //checkLog.t(jsonResponse);
       return jsonResponse.map((json) => OrderModel.fromJson(json)).toList();
     } else {
-      checkLog.e('Failed to load orders: ${response.statusCode}');
+      ApiService.checkLog.e('Failed to load orders: ${response.statusCode}');
       throw Exception('Failed to load orders: ${response.statusCode}');
     }
   }
@@ -49,7 +47,8 @@ class OrderApi extends ApiService {
       Map<String, dynamic> jsonResponse = json.decode(response.body);
       return OrderModel.fromJson(jsonResponse);
     } else {
-      checkLog.e('Failed to load order details: ${response.statusCode}');
+      ApiService.checkLog
+          .e('Failed to load order details: ${response.statusCode}');
       throw Exception('Failed to load order details: ${response.statusCode}');
     }
   }
@@ -66,9 +65,12 @@ class OrderApi extends ApiService {
       body: jsonEncode(order.toJson()),
     );
 
+    ApiService.checkLog.e(jsonEncode(order.toJson()));
+
     if (response.statusCode == 201) {
       return true; // Success
     } else {
+      ApiService.checkLog.e('Failed to create order: ${response.statusCode}');
       return false; // Failure
     }
   }

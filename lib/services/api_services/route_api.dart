@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:logger/logger.dart';
 
 import '../../models/route_model.dart';
 import '../../models/route_var_model.dart';
@@ -8,8 +7,6 @@ import '../../models/trip_model.dart';
 import 'api_services.dart';
 
 class RouteApi extends ApiService {
-  static var checkLog = Logger(printer: PrettyPrinter());
-
   // GET ALL ROUTES
   static Future<List<RouteModel>> getRoutes() async {
     final Uri routesUrl = Uri.parse('${ApiService.baseUrl}/routes');
@@ -22,7 +19,7 @@ class RouteApi extends ApiService {
       List<dynamic> jsonResponse = json.decode(response.body);
       return jsonResponse.map((json) => RouteModel.fromJson(json)).toList();
     } else {
-      checkLog.e('Failed to load routes: ${response.statusCode}');
+      ApiService.checkLog.e('Failed to load routes: ${response.statusCode}');
       throw Exception('Failed to load routes: ${response.statusCode}');
     }
   }
@@ -40,7 +37,8 @@ class RouteApi extends ApiService {
       Map<String, dynamic> jsonResponse = json.decode(response.body);
       return RouteModel.fromJson(jsonResponse);
     } else {
-      checkLog.e('Failed to load route details: ${response.statusCode}');
+      ApiService.checkLog
+          .e('Failed to load route details: ${response.statusCode}');
       throw Exception('Failed to load route details: ${response.statusCode}');
     }
   }
@@ -63,16 +61,19 @@ class RouteApi extends ApiService {
           try {
             return RouteVarModel.fromJson(json);
           } catch (e) {
-            checkLog.e('Error parsing RouteVarModel: $e, JSON: $json');
+            ApiService.checkLog
+                .e('Error parsing RouteVarModel: $e, JSON: $json');
             rethrow;
           }
         }).toList();
       } catch (e) {
-        checkLog.e('Error mapping JSON response to RouteVarModel list: $e');
+        ApiService.checkLog
+            .e('Error mapping JSON response to RouteVarModel list: $e');
         rethrow;
       }
     } else {
-      checkLog.e('Failed to load route vars: ${response.statusCode}');
+      ApiService.checkLog
+          .e('Failed to load route vars: ${response.statusCode}');
       throw Exception('Failed to load route vars: ${response.statusCode}');
     }
   }
@@ -92,7 +93,7 @@ class RouteApi extends ApiService {
       //checkLog.t(jsonResponse);
       return jsonResponse.map((json) => TripModel.fromJson(json)).toList();
     } else {
-      checkLog.e('Failed to load trips: ${response.statusCode}');
+      ApiService.checkLog.e('Failed to load trips: ${response.statusCode}');
       throw Exception('Failed to load trips: ${response.statusCode}');
     }
   }
@@ -111,7 +112,7 @@ class RouteApi extends ApiService {
       //checkLog.t(jsonResponse);
       return TripModel.fromJson(jsonResponse);
     } else {
-      checkLog.e('Failed to load trip: ${response.statusCode}');
+      ApiService.checkLog.e('Failed to load trip: ${response.statusCode}');
       throw Exception('Failed to load trip: ${response.statusCode}');
     }
   }

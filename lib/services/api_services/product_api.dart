@@ -1,14 +1,11 @@
 import 'dart:convert';
 import 'package:capstone_ptp/models/product_in_menu_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:logger/logger.dart';
 
 import '../../models/product_model.dart';
 import 'api_services.dart';
 
 class ProductApi extends ApiService {
-  static var checkLog = Logger(printer: PrettyPrinter());
-
   //GET PRODUCT BY PRODUCT ID
   static Future<Product> getProductById(String productId) async {
     final Uri productUrl =
@@ -24,11 +21,11 @@ class ProductApi extends ApiService {
         //checkLog.t(jsonResponse);
         return Product.fromJson(jsonResponse);
       } else {
-        checkLog.e('Failed to load product: ${response.statusCode}');
+        ApiService.checkLog.e('Failed to load product: ${response.statusCode}');
         throw Exception('Failed to load product: ${response.statusCode}');
       }
     } catch (e) {
-      checkLog.e('Error while fetching product: $e');
+      ApiService.checkLog.e('Error while fetching product: $e');
       throw Exception('Error while fetching product: $e');
     }
   }
@@ -48,11 +45,11 @@ class ProductApi extends ApiService {
         //checkLog.t(jsonResponse);
         return ProductInMenu.fromJson(jsonResponse);
       } else {
-        checkLog.e('Failed to load product: ${response.statusCode}');
+        ApiService.checkLog.e('Failed to load product: ${response.statusCode}');
         throw Exception('Failed to load product: ${response.statusCode}');
       }
     } catch (e) {
-      checkLog.e('Error while fetching product: $e');
+      ApiService.checkLog.e('Error while fetching product: $e');
       throw Exception('Error while fetching product: $e');
     }
   }

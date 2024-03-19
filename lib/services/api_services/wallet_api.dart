@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:capstone_ptp/models/wallet_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:capstone_ptp/services/api_services/api_services.dart';
-//import 'package:logger/logger.dart';
 
 class WalletApi extends ApiService {
   //GET USER WALLET BY USER ID
