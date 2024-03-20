@@ -6,13 +6,18 @@ import 'package:logger/logger.dart';
 import '../../../models/order_model.dart';
 
 // ignore: must_be_immutable
-class OrderListTab extends StatelessWidget {
-  //CHECK LOG
-  var checkLog = Logger(printer: PrettyPrinter());
-  //CLASS VARIABLES
+class OrderListTab extends StatefulWidget {
   final String orderStatus;
 
   OrderListTab({required this.orderStatus});
+
+  @override
+  _OrderListTabState createState() => _OrderListTabState();
+}
+
+class _OrderListTabState extends State<OrderListTab> {
+  //CHECK LOG
+  var checkLog = Logger(printer: PrettyPrinter());
 
   Future<List<OrderModel>> _fetchOrders() async {
     try {
@@ -39,13 +44,21 @@ class OrderListTab extends StatelessWidget {
           );
         } else {
           List<OrderModel> orders = snapshot.data!;
-          List<OrderModel> filteredOrders =
-              orders.where((order) => order.status == orderStatus).toList();
+          List<OrderModel> filteredOrders = orders
+              .where((order) => order.status == widget.orderStatus)
+              .toList();
 
           return ListView.builder(
             itemCount: filteredOrders.length,
             itemBuilder: (context, index) {
-              return OrderCardComponent(order: filteredOrders[index]);
+              return OrderCardComponent(
+                order: filteredOrders[index],
+                onOrderCancelled: () {
+                  // Refresh logic for parent class page
+                  // For example, you can call setState() to rebuild the widget
+                  setState(() {});
+                },
+              );
             },
           );
         }

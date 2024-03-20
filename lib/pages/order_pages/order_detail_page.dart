@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import '../../../models/order_model.dart';
 import '../../services/api_services/order_api.dart';
+import '../../utils/global_message.dart';
+import '../main_pages/components/confirm_cancel_order_card.dart';
 
 class OrderDetailPage extends StatefulWidget {
   final String orderUuid;
+  final Function()? refreshCallback;
 
-  OrderDetailPage({required this.orderUuid});
+  OrderDetailPage({required this.orderUuid, this.refreshCallback});
 
   @override
   _OrderDetailPageState createState() => _OrderDetailPageState();
@@ -23,8 +27,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     'preparing': 'lib/assets/icons/order_processing_icon.svg',
     'prepared': 'lib/assets/icons/order_ready_icon.svg',
     'completed': 'lib/assets/icons/order_completed_icon.svg',
-    'storecancel': 'lib/assets/icons/order_cancel_icon.svg',
-    'customercancel': 'lib/assets/icons/order_cancel_icon.svg',
+    'canceled': 'lib/assets/icons/order_cancel_icon.svg',
     'pickuptimeout': 'lib/assets/icons/order_time_out_icon.svg',
   };
 
@@ -39,12 +42,10 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         return 'Có thể đến lấy';
       case 'completed':
         return 'Hoàn thành';
-      case 'storecancel':
-        return 'Đơn bị hủy bởi cửa hàng';
-      case 'customercancel':
-        return 'Người dùng hủy đơn';
+      case 'canceled':
+        return 'Hủy đơn';
       case 'pickuptimeout':
-        return 'Đơn đã quá thời gian lấy';
+        return 'Đơn đã quá thời gian có thể lấy';
       default:
         return status;
     }
@@ -59,6 +60,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    GlobalMessage globalMessage = GlobalMessage(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chi tiết đơn hàng'),
@@ -86,7 +88,60 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: ElevatedButton(
                       onPressed: () {
+                        HapticFeedback.mediumImpact();
                         // Handle cancel button tap
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: AlertDialog(
+                                backgroundColor: Colors.white,
+                                contentPadding: EdgeInsets.zero,
+                                content: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.bottomCenter,
+                                        end: Alignment.topCenter,
+                                        colors: [
+                                          Color(0xFFFCCF59),
+                                          Color.fromRGBO(255, 255, 255, 0),
+                                        ],
+                                        stops: [0.0126, 0.6296],
+                                        transform: GradientRotation(
+                                            178.52 * (3.141592653589793 / 180)),
+                                      ),
+                                    ),
+                                    child: ConfirmCancelOrderCard(
+                                      onCancel: () async {
+                                        HapticFeedback.mediumImpact();
+                                        // Call the function to cancel order
+                                        bool cancellationSuccessful =
+                                            await OrderApi.cancelOrder(
+                                                widget.orderUuid);
+                                        Navigator.pop(context);
+                                        if (cancellationSuccessful) {
+                                          // return page before
+                                          Navigator.pop(context);
+                                          widget.refreshCallback?.call();
+                                          globalMessage.showSuccessMessage(
+                                            "Hủy đơn thành công!",
+                                          );
+                                        } else {
+                                          globalMessage.showErrorMessage(
+                                            "Hủy đơn thất bại!",
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
                       },
                       style: ButtonStyle(
                         backgroundColor:

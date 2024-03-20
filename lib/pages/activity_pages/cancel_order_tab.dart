@@ -26,11 +26,7 @@ class _CancelOrderTabState extends State<CancelOrderTab> {
   Future<List<OrderModel>> _fetchOrders() async {
     try {
       List<OrderModel> allOrders = await OrderApi.getOrdersOfUser();
-      return allOrders
-          .where((order) =>
-              order.status == 'StoreCanceled' ||
-              order.status == 'CustomerCanceled')
-          .toList();
+      return allOrders.where((order) => order.status == 'Canceled').toList();
     } catch (error) {
       checkLog.e('Error fetching orders: $error');
       rethrow;

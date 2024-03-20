@@ -65,13 +65,41 @@ class OrderApi extends ApiService {
       body: jsonEncode(order.toJson()),
     );
 
-    ApiService.checkLog.e(jsonEncode(order.toJson()));
+    //ApiService.checkLog.e(jsonEncode(order.toJson()));
 
     if (response.statusCode == 201) {
       return true; // Success
     } else {
       ApiService.checkLog.e('Failed to create order: ${response.statusCode}');
       return false; // Failure
+    }
+  }
+
+  // CANCEL ORDER
+  static Future<bool> cancelOrder(String orderId) async {
+    final Uri cancelOrderUrl =
+        Uri.parse('${ApiService.baseUrl}/order/$orderId');
+
+    final Map<String, dynamic> requestBody = {
+      "id": orderId,
+      "canceledReason": "Bố m thích hủy đấy, rồi sao? làm j nhau",
+      "status": "Canceled"
+    };
+
+    final response = await http.put(
+      cancelOrderUrl,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${LocalVariables.jwtToken}',
+      },
+      body: jsonEncode(requestBody),
+    );
+
+    if (response.statusCode == 204) {
+      return true;
+    } else {
+      ApiService.checkLog.e('Failed to cancel order: ${response.statusCode}');
+      return false;
     }
   }
 }

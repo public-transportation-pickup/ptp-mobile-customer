@@ -62,11 +62,11 @@ class StoreApi extends ApiService {
 
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonResponse = json.decode(response.body);
-        // ApiService.checkLog.d(storeId);
-        // ApiService.checkLog.d(arrivalTime);
-        // ApiService.checkLog.d(dateApply);
         //ApiService.checkLog.t(jsonResponse);
         return Menu.fromJson(jsonResponse);
+      } else if (response.statusCode == 404) {
+        // Return an empty list when resource is not found
+        throw Exception('Menu not found');
       } else {
         ApiService.checkLog
             .e('Failed to load products in menu: ${response.statusCode}');

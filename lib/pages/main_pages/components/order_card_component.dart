@@ -4,13 +4,22 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import '../../../models/order_model.dart';
+import '../../../services/api_services/order_api.dart';
+import '../../../utils/global_message.dart';
 import '../../order_pages/order_detail_page.dart';
+import 'confirm_cancel_order_card.dart';
 
-class OrderCardComponent extends StatelessWidget {
+class OrderCardComponent extends StatefulWidget {
   final OrderModel order;
+  final Function()? onOrderCancelled;
 
-  OrderCardComponent({required this.order});
+  OrderCardComponent({required this.order, this.onOrderCancelled});
 
+  @override
+  _OrderCardComponentState createState() => _OrderCardComponentState();
+}
+
+class _OrderCardComponentState extends State<OrderCardComponent> {
   // Map status to corresponding icon
   final Map<String, String> statusIconMap = {
     'waiting': 'lib/assets/icons/order_wait_confirm_icon.svg',
@@ -34,12 +43,14 @@ class OrderCardComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final OrderModel order = widget.order;
     final String iconPath = statusIconMap[order.status.toLowerCase()] ?? '';
     int numberOfProducts = 0;
     // Calculate the total number of products
     for (var detail in order.orderDetails) {
       numberOfProducts += detail.quantity;
     }
+    GlobalMessage globalMessage = GlobalMessage(context);
 
     return Card(
       surfaceTintColor: Colors.white,
@@ -201,7 +212,15 @@ class OrderCardComponent extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => OrderDetailPage(orderUuid: order.id),
+                    builder: (context) => OrderDetailPage(
+                      orderUuid: order.id,
+                      refreshCallback: () {
+                        // setState(() {
+                        //   // Reload data
+                        // });
+                        widget.onOrderCancelled?.call();
+                      },
+                    ),
                   ),
                 );
               },
@@ -264,7 +283,59 @@ class OrderCardComponent extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
+                        HapticFeedback.mediumImpact();
                         // Handle cancel button tap
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: AlertDialog(
+                                backgroundColor: Colors.white,
+                                contentPadding: EdgeInsets.zero,
+                                content: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.bottomCenter,
+                                        end: Alignment.topCenter,
+                                        colors: [
+                                          Color(0xFFFCCF59),
+                                          Color.fromRGBO(255, 255, 255, 0),
+                                        ],
+                                        stops: [0.0126, 0.6296],
+                                        transform: GradientRotation(
+                                            178.52 * (3.141592653589793 / 180)),
+                                      ),
+                                    ),
+                                    child: ConfirmCancelOrderCard(
+                                      onCancel: () async {
+                                        HapticFeedback.mediumImpact();
+                                        // Call the function to cancel order
+                                        bool cancellationSuccessful =
+                                            await OrderApi.cancelOrder(
+                                                order.id);
+                                        Navigator.pop(context);
+                                        if (cancellationSuccessful) {
+                                          setState(() {});
+                                          globalMessage.showSuccessMessage(
+                                            "Hủy đơn thành công!",
+                                          );
+                                          widget.onOrderCancelled?.call();
+                                        } else {
+                                          globalMessage.showErrorMessage(
+                                            "Hủy đơn thất bại!",
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
                       },
                       style: ButtonStyle(
                         backgroundColor:
