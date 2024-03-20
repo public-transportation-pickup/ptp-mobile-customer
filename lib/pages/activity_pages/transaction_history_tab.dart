@@ -91,9 +91,13 @@ class TransactionCard extends StatelessWidget {
           children: [
             const Align(
               alignment: Alignment.center,
-              child: Icon(Icons.attach_money),
+              child: Icon(
+                Icons.attach_money,
+                size: 36,
+                color: Colors.green,
+              ),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: 16),
             Expanded(
               flex: 3,
               child: Column(
@@ -105,7 +109,7 @@ class TransactionCard extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text('Type: ${transaction.transactionType}'),
+                  Text('Hình thức: ${transaction.transactionType}'),
                   Text(formatDate(transaction.creationDate)),
                 ],
               ),

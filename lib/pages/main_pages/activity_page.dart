@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../activity_pages/cancel_order_tab.dart';
+import '../activity_pages/completed_order_tab.dart';
 import '../activity_pages/transaction_history_tab.dart';
+import '../activity_pages/time_out_order_tab.dart';
 
 class ActivityPage extends StatelessWidget {
   @override
@@ -39,9 +42,9 @@ class ActivityPage extends StatelessWidget {
               child: TabBarView(
                 children: [
                   TransactionHistoryTab(),
-                  Center(child: Text('Completed Orders')),
-                  Center(child: Text('Canceled Orders')),
-                  Center(child: Text('Payment Orders')),
+                  CompletedOrderTab(),
+                  CancelOrderTab(),
+                  TimeOutOrderTab(),
                 ],
               ),
             ),
