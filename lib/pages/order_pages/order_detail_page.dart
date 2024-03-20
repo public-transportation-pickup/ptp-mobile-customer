@@ -22,6 +22,10 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     'waiting': 'lib/assets/icons/order_wait_confirm_icon.svg',
     'preparing': 'lib/assets/icons/order_processing_icon.svg',
     'prepared': 'lib/assets/icons/order_ready_icon.svg',
+    'completed': 'lib/assets/icons/order_completed_icon.svg',
+    'storecancel': 'lib/assets/icons/order_cancel_icon.svg',
+    'customercancel': 'lib/assets/icons/order_cancel_icon.svg',
+    'pickuptimeout': 'lib/assets/icons/order_time_out_icon.svg',
   };
 
   // Function to get the appropriate status text based on order status
@@ -33,6 +37,14 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         return 'Đang xử lý';
       case 'prepared':
         return 'Có thể đến lấy';
+      case 'completed':
+        return 'Hoàn thành';
+      case 'storecancel':
+        return 'Đơn bị hủy bởi cửa hàng';
+      case 'customercancel':
+        return 'Người dùng hủy đơn';
+      case 'pickuptimeout':
+        return 'Đơn đã quá thời gian lấy';
       default:
         return status;
     }
