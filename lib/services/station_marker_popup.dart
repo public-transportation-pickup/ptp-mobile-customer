@@ -1,23 +1,21 @@
 import 'package:capstone_ptp/models/station_model.dart';
+import 'package:capstone_ptp/models/store_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';
 
-class StationMarkerPopup extends StatefulWidget {
+class MarkerPopup extends StatelessWidget {
   final Marker marker;
   final StationModel station;
+  final StoreModel store;
 
-  const StationMarkerPopup({
+  const MarkerPopup({
     Key? key,
     required this.marker,
     required this.station,
+    required this.store,
   }) : super(key: key);
 
-  @override
-  State<StatefulWidget> createState() => _StationMarkerPopupState();
-}
-
-class _StationMarkerPopupState extends State<StationMarkerPopup> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -25,34 +23,33 @@ class _StationMarkerPopupState extends State<StationMarkerPopup> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(left: 20, right: 10),
+            padding: const EdgeInsets.all(16),
             child: SvgPicture.asset(
               'lib/assets/icons/end_search.svg',
               width: 24,
               height: 24,
-              // You can adjust other properties as needed, such as color
             ),
           ),
-          _cardDescription(context),
+          _cardDescription(),
         ],
       ),
     );
   }
 
-  Widget _cardDescription(BuildContext context) {
+  Widget _cardDescription() {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Container(
-        constraints: const BoxConstraints(minWidth: 100, maxWidth: 200),
+        constraints: const BoxConstraints(minWidth: 80, maxWidth: 150),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text(
-              widget.station.name,
-              overflow: TextOverflow.ellipsis,
-              softWrap: false,
+              station.name != "N/A" ? station.name : store.name,
+              //overflow: TextOverflow.ellipsis,
+              //softWrap: false,
               style: const TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 14.0,
@@ -60,13 +57,11 @@ class _StationMarkerPopupState extends State<StationMarkerPopup> {
             ),
             const Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
             Text(
-              widget.station.address,
+              station.address != "N/A"
+                  ? station.address
+                  : "${store.addressNo} ${store.street}, ${store.ward}, ${store.zone}",
               style: const TextStyle(fontSize: 12.0),
             ),
-            // Text(
-            //   '${widget.marker.point.latitude}, ${widget.marker.point.longitude}',
-            //   style: const TextStyle(fontSize: 12.0),
-            // ),
           ],
         ),
       ),

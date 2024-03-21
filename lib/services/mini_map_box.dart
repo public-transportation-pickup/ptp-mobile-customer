@@ -170,7 +170,7 @@ class _MiniMapComponentState extends State<MiniMapComponent> {
             markers: _markers ?? [],
             popupDisplayOptions: PopupDisplayOptions(
               builder: (BuildContext context, Marker marker) {
-                // Find the corresponding station for the marker
+                // Find the corresponding station or store for the marker
                 StationModel station = _stations!.firstWhere(
                   (s) =>
                       s.latitude == marker.point.latitude &&
@@ -191,7 +191,37 @@ class _MiniMapComponentState extends State<MiniMapComponent> {
                     longitude: 0.0,
                   ),
                 );
-                return StationMarkerPopup(marker: marker, station: station);
+
+                StoreModel store = _stores!.firstWhere(
+                  (s) =>
+                      s.latitude == marker.point.latitude &&
+                      s.longitude == marker.point.longitude,
+                  orElse: () => StoreModel(
+                      id: "N/A",
+                      creationDate: "N/A",
+                      name: "N/A",
+                      description: "N/A",
+                      phoneNumber: "N/A",
+                      status: "N/A",
+                      openedTime: "N/A",
+                      closedTime: "N/A",
+                      latitude: 0.0,
+                      longitude: 0.0,
+                      addressNo: "N/A",
+                      street: "N/A",
+                      zone: "N/A",
+                      ward: "N/A",
+                      activationDate: "N/A",
+                      imageName: "N/A",
+                      imageURL: "N/A",
+                      userId: "N/A"),
+                );
+
+                return MarkerPopup(
+                  marker: marker,
+                  station: station,
+                  store: store, // Pass store information to the popup
+                );
               },
             ),
           ),
