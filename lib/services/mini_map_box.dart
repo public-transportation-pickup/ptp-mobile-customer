@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
+import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
+import 'package:logger/logger.dart';
+
+import '../models/station_model.dart';
+import '../models/store_model.dart';
+import 'api_services/station_api.dart';
+import 'api_services/store_api.dart';
+import 'station_marker_popup.dart';
 
 class MiniMapComponent extends StatefulWidget {
   @override
@@ -13,11 +21,93 @@ class _MiniMapComponentState extends State<MiniMapComponent> {
   final MapController _mapController = MapController();
   LocationData? _currentLocation;
   bool _isLoading = true;
+  bool _showMarkers = true;
+  // CHECK LOG
+  var checkLog = Logger(printer: PrettyPrinter());
+  // MARKERS VALUE
+  List<StoreModel>? _stores;
+  List<StationModel>? _stations;
+  List<Marker>? _markers;
 
   @override
   void initState() {
     super.initState();
     _getCurrentLocation();
+    _getListMarkers();
+  }
+
+  Future<void> _fetchStation() async {
+    try {
+      List<StationModel> stationsFromApi = await StationApi.getStations();
+      _stations = stationsFromApi;
+    } catch (e) {
+      checkLog.e('Error fetching station $e');
+      rethrow;
+    }
+  }
+
+  Future<List<StoreModel>> _fetchStores() async {
+    try {
+      List<StoreModel> stores = await StoreApi.getStores();
+      _stores = stores;
+      return stores;
+    } catch (e) {
+      checkLog.e('Error fetching stores $e');
+      rethrow;
+    }
+  }
+
+  Future<List<Marker>> _getListMarkers() async {
+    await _fetchStation();
+    await _fetchStores();
+    var storeMarker = _stores
+        ?.map((store) => Marker(
+              height: 24,
+              width: 24,
+              point: LatLng(store.latitude, store.longitude),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.blue, width: 2),
+                ),
+                child: const Icon(
+                  IconData(0xe60a, fontFamily: 'MaterialIcons'),
+                  color: Colors.blue,
+                  size: 16,
+                ),
+              ),
+            ))
+        .toList();
+
+    var stationMarkers = _stations
+        ?.map((station) => Marker(
+              height: 24,
+              width: 24,
+              point: LatLng(station.latitude, station.longitude),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.green, width: 2),
+                ),
+                child: const Icon(
+                  IconData(0xe1d5, fontFamily: 'MaterialIcons'),
+                  color: Colors.green,
+                  size: 16,
+                ),
+              ),
+            ))
+        .toList();
+
+    List<Marker> markerList = [];
+    markerList.addAll(stationMarkers ??= []);
+    markerList.addAll(storeMarker ??= []);
+    setState(() {
+      _isLoading = false;
+      _markers = markerList;
+    });
+    return markerList;
   }
 
   Future<void> _getCurrentLocation() async {
@@ -40,7 +130,7 @@ class _MiniMapComponentState extends State<MiniMapComponent> {
       setState(() {
         _isLoading = false;
       });
-      print("Error getting location: $e");
+      checkLog.e("Error getting location: $e");
     }
   }
 
@@ -53,15 +143,63 @@ class _MiniMapComponentState extends State<MiniMapComponent> {
           _currentLocation!.longitude!,
         ),
         initialZoom: 15,
-        maxZoom: 19,
+        maxZoom: 16,
+        minZoom: 12,
+        onPositionChanged: (position, _) {
+          if (position.zoom! <= 14 && _showMarkers) {
+            setState(() {
+              _showMarkers = false;
+              _markers = []; // Clear markers when zoom level is <=> 14
+            });
+          } else if (position.zoom! > 14 && !_showMarkers) {
+            setState(() {
+              _showMarkers = true;
+              _getListMarkers(); // Populate markers
+            });
+          }
+        },
       ),
       children: [
         TileLayer(
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          maxZoom: 19,
+          maxZoom: 16,
+          minZoom: 12,
         ),
+        PopupMarkerLayer(
+          options: PopupMarkerLayerOptions(
+            markers: _markers ?? [],
+            popupDisplayOptions: PopupDisplayOptions(
+              builder: (BuildContext context, Marker marker) {
+                // Find the corresponding station for the marker
+                StationModel station = _stations!.firstWhere(
+                  (s) =>
+                      s.latitude == marker.point.latitude &&
+                      s.longitude == marker.point.longitude,
+                  orElse: () => StationModel(
+                    id: "N/A",
+                    addressNo: "N/A",
+                    name: "N/A",
+                    address: "N/A",
+                    code: "N/A",
+                    status: "N/A",
+                    stopType: "N/A",
+                    street: "N/A",
+                    supportDisability: "N/A",
+                    ward: "N/A",
+                    zone: "N/A",
+                    latitude: 0.0,
+                    longitude: 0.0,
+                  ),
+                );
+                return StationMarkerPopup(marker: marker, station: station);
+              },
+            ),
+          ),
+        ),
+
+        //MarkerLayer(markers: _markers ?? []),
         CurrentLocationLayer(
-          alignPositionOnUpdate: AlignOnUpdate.always,
+          alignPositionOnUpdate: AlignOnUpdate.never,
           alignDirectionOnUpdate: AlignOnUpdate.never,
           style: const LocationMarkerStyle(
             marker: DefaultLocationMarker(

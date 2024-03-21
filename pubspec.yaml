@@ -75,6 +75,7 @@ dependencies:
   geolocator: ^10.1.0
   flutter_map: ^6.1.0
   flutter_map_location_marker: ^8.0.4
+  flutter_map_marker_popup: ^6.1.2
   flutter_map_tappable_polyline: ^6.0.0
   syncfusion_flutter_maps: ^25.1.35
   
