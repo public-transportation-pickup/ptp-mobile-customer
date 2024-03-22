@@ -40,4 +40,21 @@ class StationApi extends ApiService {
       throw Exception('Failed to load routes ${response.statusCode}');
     }
   }
+
+  static Future<List<StationModel>> getStationsByRouteVarId(
+      String routeVarId) async {
+    final Uri stationUri =
+        Uri.parse('${ApiService.baseUrl}/route-vars/$routeVarId/stations');
+    final response = await http.get(
+      stationUri,
+      headers: {'Content-Type': 'application/json'},
+    );
+    if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = json.decode(response.body);
+      return jsonResponse.map((json) => StationModel.fromJson(json)).toList();
+    } else {
+      ApiService.checkLog.e("Failed to load stations: ${response.statusCode}");
+      throw Exception('Failed to load stations: ${response.statusCode}');
+    }
+  }
 }

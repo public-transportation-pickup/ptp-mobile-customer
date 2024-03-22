@@ -32,7 +32,7 @@ class _ListRoutePageState extends State<ListRoutePage> {
     try {
       List<RouteModel> routes = await RouteApi.getRoutes();
       setState(() {
-        _allRoutes = routes;
+        _allRoutes = routes.reversed.toList();
         _displayedRoutes.addAll(_allRoutes);
       });
       return routes;

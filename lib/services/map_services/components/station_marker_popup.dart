@@ -47,7 +47,7 @@ class MarkerPopup extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text(
-              station.name != "N/A" ? station.name : store.name,
+              station.name != "N/A" ? station.name! : store.name,
               //overflow: TextOverflow.ellipsis,
               //softWrap: false,
               style: const TextStyle(
@@ -58,7 +58,7 @@ class MarkerPopup extends StatelessWidget {
             const Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
             Text(
               station.address != "N/A"
-                  ? station.address
+                  ? station.address!
                   : "${store.addressNo} ${store.street}, ${store.ward}, ${store.zone}",
               style: const TextStyle(fontSize: 12.0),
             ),

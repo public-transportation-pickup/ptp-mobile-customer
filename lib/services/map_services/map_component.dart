@@ -6,10 +6,10 @@ import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:logger/logger.dart';
 
-import '../models/station_model.dart';
-import '../models/store_model.dart';
-import 'api_services/station_api.dart';
-import 'api_services/store_api.dart';
+import '../../models/station_model.dart';
+import '../../models/store_model.dart';
+import '../api_services/station_api.dart';
+import '../api_services/store_api.dart';
 
 class MapComponent extends StatefulWidget {
   @override

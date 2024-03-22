@@ -6,11 +6,11 @@ import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:logger/logger.dart';
 
-import '../models/station_model.dart';
-import '../models/store_model.dart';
-import 'api_services/station_api.dart';
-import 'api_services/store_api.dart';
-import 'station_marker_popup.dart';
+import '../../models/station_model.dart';
+import '../../models/store_model.dart';
+import '../api_services/station_api.dart';
+import '../api_services/store_api.dart';
+import 'components/station_marker_popup.dart';
 
 class MiniMapComponent extends StatefulWidget {
   @override
@@ -297,10 +297,10 @@ class _MiniMapComponentState extends State<MiniMapComponent> {
               },
               shape: const CircleBorder(),
               mini: true,
-              backgroundColor: const Color(0xFFFBAB40),
+              backgroundColor: Colors.white,
               child: const Icon(
                 Icons.my_location,
-                color: Colors.white,
+                color: Color(0xFFFBAB40),
               ),
             ),
           ),

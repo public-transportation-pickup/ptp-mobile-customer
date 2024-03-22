@@ -1,6 +1,5 @@
-import 'package:capstone_ptp/services/mini_map_box.dart';
+import 'package:capstone_ptp/services/map_services/map_with_trip.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import '../../models/route_model.dart';
 import '../../models/route_var_model.dart';
@@ -76,7 +75,8 @@ class _RouteDetailPageState extends State<RouteDetailPage> {
                         height: MediaQuery.of(context).size.height,
                         width: MediaQuery.of(context).size.width,
                         color: Colors.grey,
-                        child: MiniMapComponent(),
+                        child:
+                            MapWithTripComponent(routeVarId: currentRouteVar),
                       ),
                     ),
                     DraggableScrollableSheet(

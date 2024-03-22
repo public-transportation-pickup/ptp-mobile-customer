@@ -1,6 +1,6 @@
 import 'package:capstone_ptp/pages/route_pages/final_station_page.dart';
-import 'package:capstone_ptp/services/map_component.dart';
-import 'package:capstone_ptp/services/mini_map_box.dart';
+import 'package:capstone_ptp/services/map_services/map_component.dart';
+import 'package:capstone_ptp/services/map_services/mini_map_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
