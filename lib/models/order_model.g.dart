@@ -27,6 +27,8 @@ OrderModel _$OrderModelFromJson(Map<String, dynamic> json) => OrderModel(
               ?.map((e) => OrderDetailModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
+      canceledReason: json['canceledReason'] as String? ?? '',
+      returnAmount: json['returnAmount'] as int? ?? 0,
     );
 
 Map<String, dynamic> _$OrderModelToJson(OrderModel instance) =>

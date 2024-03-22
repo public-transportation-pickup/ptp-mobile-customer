@@ -168,6 +168,8 @@ class _MapWithTripComponentState extends State<MapWithTripComponent> {
                 initialZoom: 15,
                 maxZoom: 16,
                 minZoom: 12,
+                interactiveFlags: InteractiveFlag.all &
+                    ~InteractiveFlag.rotate, // cant rotate
                 onPositionChanged: (position, _) {
                   if (position.zoom! <= 14 && _showMarkers) {
                     setState(() {
@@ -327,7 +329,30 @@ class _MapWithTripComponentState extends State<MapWithTripComponent> {
               backgroundColor: Colors.white,
               child: const Icon(Icons.my_location, color: Color(0xFFFBAB40)),
             ),
-          )
+          ),
+          Positioned(
+            top: 150,
+            right: 16,
+            child: FloatingActionButton(
+              heroTag: null,
+              onPressed: () {
+                if (_currentLocation != null) {
+                  _mapController.move(
+                    LatLng(
+                      _stations![0].latitude,
+                      _stations![0].longitude,
+                    ),
+                    15.0,
+                  );
+                }
+              },
+              shape: const CircleBorder(),
+              mini: true,
+              backgroundColor: Colors.white,
+              child: const Icon(Icons.bus_alert_outlined,
+                  color: Color(0xFFFBAB40)),
+            ),
+          ),
         ],
       ),
     );

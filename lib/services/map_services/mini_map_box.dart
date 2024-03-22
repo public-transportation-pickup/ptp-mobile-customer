@@ -145,6 +145,8 @@ class _MiniMapComponentState extends State<MiniMapComponent> {
         initialZoom: 15,
         maxZoom: 16,
         minZoom: 12,
+        interactiveFlags:
+            InteractiveFlag.all & ~InteractiveFlag.rotate, // cant rotate
         onPositionChanged: (position, _) {
           if (position.zoom! <= 14 && _showMarkers) {
             setState(() {

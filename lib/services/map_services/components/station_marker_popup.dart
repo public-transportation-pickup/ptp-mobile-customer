@@ -1,6 +1,7 @@
 import 'package:capstone_ptp/models/station_model.dart';
 import 'package:capstone_ptp/models/store_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -47,7 +48,9 @@ class MarkerPopup extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text(
-              station.name != "N/A" ? station.name! : store.name,
+              station.name != "N/A"
+                  ? "[${station.code}] ${station.name!}"
+                  : store.name,
               //overflow: TextOverflow.ellipsis,
               //softWrap: false,
               style: const TextStyle(
@@ -56,11 +59,15 @@ class MarkerPopup extends StatelessWidget {
               ),
             ),
             const Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
-            Text(
-              station.address != "N/A"
-                  ? station.address!
-                  : "${store.addressNo} ${store.street}, ${store.ward}, ${store.zone}",
-              style: const TextStyle(fontSize: 12.0),
+            Flexible(
+              child: Text(
+                station.address != "N/A"
+                    ? station.address!
+                    : "${store.addressNo} ${store.street}, ${store.ward}, ${store.zone}",
+                style: const TextStyle(fontSize: 12.0),
+                //overflow: TextOverflow.ellipsis,
+                //softWrap: false,
+              ),
             ),
           ],
         ),

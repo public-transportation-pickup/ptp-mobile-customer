@@ -22,6 +22,8 @@ class OrderModel {
   final String paymentType;
   final String paymentStatus;
   final List<OrderDetailModel> orderDetails;
+  final int? returnAmount;
+  final String? canceledReason;
 
   OrderModel({
     required this.id,
@@ -41,6 +43,8 @@ class OrderModel {
     required this.paymentType,
     required this.paymentStatus,
     required this.orderDetails,
+    this.canceledReason,
+    this.returnAmount,
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) =>
