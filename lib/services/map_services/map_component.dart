@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
-import 'package:flutter_map_tappable_polyline/flutter_map_tappable_polyline.dart';
+import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:logger/logger.dart';
@@ -10,6 +10,7 @@ import '../../models/station_model.dart';
 import '../../models/store_model.dart';
 import '../api_services/station_api.dart';
 import '../api_services/store_api.dart';
+import 'components/station_marker_popup.dart';
 
 class MapComponent extends StatefulWidget {
   @override
@@ -20,41 +21,27 @@ class _MapComponentState extends State<MapComponent> {
   final MapController _mapController = MapController();
   LocationData? _currentLocation;
   bool _isLoading = true;
-
+  bool _showMarkers = true;
+  // CHECK LOG
+  var checkLog = Logger(printer: PrettyPrinter());
+  // MARKERS VALUE
   List<StoreModel>? _stores;
   List<StationModel>? _stations;
   List<Marker>? _markers;
-
-  List<LatLng> points = [
-    const LatLng(10.7512531281, 106.6525650024),
-    const LatLng(10.750232, 106.652554),
-    const LatLng(10.750732, 106.655075),
-    const LatLng(10.751368, 106.659203),
-  ];
-
-  var log = Logger(printer: PrettyPrinter());
-
-  @override
-  void setState(fn) {
-    if (mounted) {
-      super.setState(fn);
-    }
-  }
 
   @override
   void initState() {
     super.initState();
     _getCurrentLocation();
-    getListMarkers();
+    _getListMarkers();
   }
 
   Future<void> _fetchStation() async {
     try {
       List<StationModel> stationsFromApi = await StationApi.getStations();
-
       _stations = stationsFromApi;
     } catch (e) {
-      log.e('Error fetching station $e');
+      checkLog.e('Error fetching station $e');
       rethrow;
     }
   }
@@ -65,47 +52,56 @@ class _MapComponentState extends State<MapComponent> {
       _stores = stores;
       return stores;
     } catch (e) {
-      log.e('Error fetching stores $e');
+      checkLog.e('Error fetching stores $e');
       rethrow;
     }
   }
 
-  Future<List<Marker>> getListMarkers() async {
+  Future<List<Marker>> _getListMarkers() async {
     await _fetchStation();
     await _fetchStores();
     var storeMarker = _stores
         ?.map((store) => Marker(
+              height: 24,
+              width: 24,
               point: LatLng(store.latitude, store.longitude),
-              child: const Icon(
-                IconData(0xe60a, fontFamily: 'MaterialIcons'),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.blue, width: 2),
+                ),
+                child: const Icon(
+                  IconData(0xe60a, fontFamily: 'MaterialIcons'),
+                  color: Colors.blue,
+                  size: 16,
+                ),
               ),
-              width: 10,
-              height: 10,
             ))
         .toList();
-    // var stationMarkers = _stations
-    //     ?.map((station) => Marker(
-    //           point: LatLng(station.latitude, station.longitude),
-    //           child: Container(
-    //             decoration: BoxDecoration(
-    //               color: Colors.white,
-    //               shape: BoxShape.circle,
-    //               border: Border.all(
-    //                 color: Colors.orange,
-    //                 width: 2,
-    //               ),
-    //             ),
-    //             child: const Icon(
-    //               IconData(0xe1d5, fontFamily: 'MaterialIcons'),
-    //               color: Colors.orange,
-    //               size: 16,
-    //             ),
-    //           ),
-    //         ))
-    //     .toList();
+
+    var stationMarkers = _stations
+        ?.map((station) => Marker(
+              height: 24,
+              width: 24,
+              point: LatLng(station.latitude, station.longitude),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.green, width: 2),
+                ),
+                child: const Icon(
+                  IconData(0xe1d5, fontFamily: 'MaterialIcons'),
+                  color: Colors.green,
+                  size: 16,
+                ),
+              ),
+            ))
+        .toList();
 
     List<Marker> markerList = [];
-    //markerList.addAll(stationMarkers ??= []);
+    markerList.addAll(stationMarkers ??= []);
     markerList.addAll(storeMarker ??= []);
     setState(() {
       _isLoading = false;
@@ -134,7 +130,7 @@ class _MapComponentState extends State<MapComponent> {
       setState(() {
         _isLoading = false;
       });
-      print("Error getting location: $e");
+      checkLog.e("Error getting location: $e");
     }
   }
 
@@ -147,40 +143,93 @@ class _MapComponentState extends State<MapComponent> {
           _currentLocation!.longitude!,
         ),
         initialZoom: 15,
-        maxZoom: 19,
+        maxZoom: 16,
+        minZoom: 12,
+        interactiveFlags:
+            InteractiveFlag.all & ~InteractiveFlag.rotate, // cant rotate
+        onPositionChanged: (position, _) {
+          if (position.zoom! <= 14 && _showMarkers) {
+            setState(() {
+              _showMarkers = false;
+              _markers = []; // Clear markers when zoom level is <=> 14
+            });
+          } else if (position.zoom! > 14 && !_showMarkers) {
+            setState(() {
+              _showMarkers = true;
+              _getListMarkers(); // Populate markers
+            });
+          }
+        },
       ),
       children: [
         TileLayer(
           urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          maxZoom: 19,
+          maxZoom: 16,
+          minZoom: 12,
         ),
-        TappablePolylineLayer(
-            // Will only render visible polylines, increasing performance
-            polylineCulling: true,
-            pointerDistanceTolerance: 20,
-            polylines: [
-              TaggedPolyline(
-                tag: 'My Polyline',
-                // An optional tag to distinguish polylines in callback
-                points: points,
-                color: Colors.red,
-                strokeWidth: 9.0,
-              ),
-              // TaggedPolyline(
-              //   tag: 'My 2nd Polyline',
-              //   // An optional tag to distinguish polylines in callback
-              //   points: getPoints(1),
-              //   color: Colors.black,
-              //   strokeWidth: 3.0,
-              // ),
-            ],
-            onTap: (polylines, tapPosition) => log.d(
-                'Tapped: ${polylines.map((polyline) => polyline.tag).join(',')} at ${tapPosition.globalPosition}'),
-            onMiss: (tapPosition) {
-              log.d(
-                  'No polyline was tapped at position ${tapPosition.globalPosition}');
-            }),
-        MarkerLayer(markers: _markers ?? []),
+        PopupMarkerLayer(
+          options: PopupMarkerLayerOptions(
+            markers: _markers ?? [],
+            popupDisplayOptions: PopupDisplayOptions(
+              builder: (BuildContext context, Marker marker) {
+                // Find the corresponding station or store for the marker
+                StationModel station = _stations!.firstWhere(
+                  (s) =>
+                      s.latitude == marker.point.latitude &&
+                      s.longitude == marker.point.longitude,
+                  orElse: () => StationModel(
+                    id: "N/A",
+                    addressNo: "N/A",
+                    name: "N/A",
+                    address: "N/A",
+                    code: "N/A",
+                    status: "N/A",
+                    stopType: "N/A",
+                    street: "N/A",
+                    supportDisability: "N/A",
+                    ward: "N/A",
+                    zone: "N/A",
+                    latitude: 0.0,
+                    longitude: 0.0,
+                  ),
+                );
+
+                StoreModel store = _stores!.firstWhere(
+                  (s) =>
+                      s.latitude == marker.point.latitude &&
+                      s.longitude == marker.point.longitude,
+                  orElse: () => StoreModel(
+                      id: "N/A",
+                      creationDate: "N/A",
+                      name: "N/A",
+                      description: "N/A",
+                      phoneNumber: "N/A",
+                      status: "N/A",
+                      openedTime: "N/A",
+                      closedTime: "N/A",
+                      latitude: 0.0,
+                      longitude: 0.0,
+                      addressNo: "N/A",
+                      street: "N/A",
+                      zone: "N/A",
+                      ward: "N/A",
+                      activationDate: "N/A",
+                      imageName: "N/A",
+                      imageURL: "N/A",
+                      userId: "N/A"),
+                );
+
+                return MarkerPopup(
+                  marker: marker,
+                  station: station,
+                  store: store, // Pass store information to the popup
+                );
+              },
+            ),
+          ),
+        ),
+
+        //MarkerLayer(markers: _markers ?? []),
         CurrentLocationLayer(
           alignPositionOnUpdate: AlignOnUpdate.never,
           alignDirectionOnUpdate: AlignOnUpdate.never,
@@ -210,8 +259,7 @@ class _MapComponentState extends State<MapComponent> {
     return Scaffold(
       body: Stack(
         children: [
-          if (!_isLoading && _currentLocation != null && _markers != null)
-            _buildMap(),
+          if (!_isLoading && _currentLocation != null) _buildMap(),
           // Check map load
           if (_isLoading)
             Center(
@@ -232,10 +280,10 @@ class _MapComponentState extends State<MapComponent> {
               ),
             ),
 
-          // Hangle logic button
+          // Handle move current location button
           Positioned(
-            bottom: 4,
-            left: 4,
+            top: 112,
+            right: 8,
             child: FloatingActionButton(
               heroTag: null,
               onPressed: () {
@@ -249,14 +297,18 @@ class _MapComponentState extends State<MapComponent> {
                   );
                 }
               },
+              shape: const CircleBorder(),
               mini: true,
-              backgroundColor: const Color(0xFFFBAB40),
-              child: const Icon(Icons.my_location),
+              backgroundColor: Colors.white,
+              child: const Icon(
+                Icons.my_location,
+                color: Color(0xFFFBAB40),
+              ),
             ),
           ),
           Positioned(
-            bottom: 4,
-            right: 4,
+            top: 8,
+            right: 8,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -266,12 +318,16 @@ class _MapComponentState extends State<MapComponent> {
                     // Implement the zoom-in functionality here
                     _mapController.move(
                       _mapController.camera.center,
-                      _mapController.camera.zoom + 1,
+                      _mapController.camera.zoom + 0.25,
                     );
                   },
+                  shape: const CircleBorder(),
                   mini: true,
-                  backgroundColor: const Color(0xFFFBAB40),
-                  child: const Icon(Icons.add),
+                  backgroundColor: Colors.white,
+                  child: const Icon(
+                    Icons.add,
+                    color: Color(0xFFFBAB40),
+                  ),
                 ),
                 const SizedBox(height: 4),
                 FloatingActionButton(
@@ -280,16 +336,20 @@ class _MapComponentState extends State<MapComponent> {
                     // Implement the zoom-out functionality here
                     _mapController.move(
                       _mapController.camera.center,
-                      _mapController.camera.zoom - 1,
+                      _mapController.camera.zoom - 0.25,
                     );
                   },
+                  shape: const CircleBorder(),
                   mini: true,
-                  backgroundColor: const Color(0xFFFBAB40),
-                  child: const Icon(Icons.remove),
+                  backgroundColor: Colors.white,
+                  child: const Icon(
+                    Icons.remove,
+                    color: Color(0xFFFBAB40),
+                  ),
                 ),
               ],
             ),
-          ),
+          )
         ],
       ),
     );

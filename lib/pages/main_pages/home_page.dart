@@ -1,5 +1,5 @@
+import 'package:capstone_ptp/pages/map_pages/map_page.dart';
 import 'package:capstone_ptp/pages/route_pages/final_station_page.dart';
-import 'package:capstone_ptp/services/map_services/map_component.dart';
 import 'package:capstone_ptp/services/map_services/mini_map_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -436,18 +436,18 @@ class HomePage extends StatelessWidget {
                           right: 4,
                           child: FloatingActionButton(
                             shape: const CircleBorder(),
-                            backgroundColor: const Color(0xFFFBAB40),
+                            backgroundColor: Colors.white,
                             mini: true,
                             onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => MapComponent()),
+                                    builder: (context) => MapPage()),
                               );
                             },
                             child: const Icon(
                               Icons.zoom_out_map_rounded,
-                              color: Colors.white,
+                              color: Color(0xFFFBAB40),
                             ),
                           ),
                         ),
@@ -569,17 +569,6 @@ class HomePage extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       HapticFeedback.mediumImpact();
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //       builder: (context) => StoreDetailPage(
-                      //             storeId:
-                      //                 '4504b5b5-2a3f-4815-a768-d166faabd33d',
-                      //             arrivalTime: "16:00",
-                      //             stationId:
-                      //                 'd92acefd-04e1-4806-92d5-dc79402be22f',
-                      //           )),
-                      // );
                       Navigator.push(
                         context,
                         MaterialPageRoute(
