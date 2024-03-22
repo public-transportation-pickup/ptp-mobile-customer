@@ -53,7 +53,8 @@ class _MapWithTripComponentState extends State<MapWithTripComponent> {
 
   Future<List<StoreModel>> _fetchStores() async {
     try {
-      List<StoreModel> stores = await StoreApi.getStores();
+      List<StoreModel> stores =
+          await StoreApi.getStoresByRouteVarId(widget.routeVarId);
       _stores = stores;
       return stores;
     } catch (e) {

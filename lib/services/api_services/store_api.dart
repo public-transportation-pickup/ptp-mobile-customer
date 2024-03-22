@@ -78,4 +78,19 @@ class StoreApi extends ApiService {
       throw Exception('Error while fetching products in menu: $e');
     }
   }
+
+  // GET STORES BY ROUTE VAR ID
+  static Future<List<StoreModel>> getStoresByRouteVarId(
+      String routeVarId) async {
+    final String baseUrl =
+        '${ApiService.baseUrl}/routevars/api/route-vars/$routeVarId/stores';
+    final response = await http.get(Uri.parse(baseUrl));
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = json.decode(response.body);
+      return jsonResponse.map((json) => StoreModel.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load stores: ${response.statusCode}');
+    }
+  }
 }
