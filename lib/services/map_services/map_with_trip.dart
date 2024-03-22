@@ -15,7 +15,7 @@ import 'components/station_marker_popup.dart';
 class MapWithTripComponent extends StatefulWidget {
   final String routeVarId;
 
-  MapWithTripComponent({required this.routeVarId});
+  MapWithTripComponent({required this.routeVarId, Key? key}) : super(key: key);
 
   @override
   _MapWithTripComponentState createState() => _MapWithTripComponentState();
@@ -274,7 +274,7 @@ class _MapWithTripComponentState extends State<MapWithTripComponent> {
               ],
             )
           : const Center(
-              child: Text('No data available.'),
+              child: Text('Đang tải...'),
             );
     }
   }

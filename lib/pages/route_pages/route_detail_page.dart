@@ -75,8 +75,10 @@ class _RouteDetailPageState extends State<RouteDetailPage> {
                         height: MediaQuery.of(context).size.height,
                         width: MediaQuery.of(context).size.width,
                         color: Colors.grey,
-                        child:
-                            MapWithTripComponent(routeVarId: currentRouteVar),
+                        child: MapWithTripComponent(
+                          routeVarId: currentRouteVar,
+                          key: UniqueKey(),
+                        ),
                       ),
                     ),
                     DraggableScrollableSheet(
