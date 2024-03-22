@@ -86,7 +86,7 @@ class _RouteTripsTabState extends State<RouteTripsTab> {
                   [];
 
           return SizedBox(
-            height: MediaQuery.of(context).size.height,
+            height: MediaQuery.of(context).size.height * 0.6,
             child: ListView.builder(
               itemCount: stationNames.length,
               itemBuilder: (context, index) {

@@ -1,11 +1,14 @@
 import 'package:capstone_ptp/models/product_in_menu_model.dart';
 import 'package:capstone_ptp/pages/product_pages/cart_provider.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:capstone_ptp/models/store_model.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/category_model.dart';
 import '../../services/api_services/store_api.dart';
+import '../product_pages/cart_page.dart';
 import '../product_pages/product_detail_page.dart';
 import 'components/list_product_component.dart';
 import 'components/list_product_with_category.dart';
@@ -71,6 +74,56 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
             return buildStoreDetail(store);
           }
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          HapticFeedback.mediumImpact();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CartPage()),
+          );
+        },
+        backgroundColor: Colors.amber,
+        heroTag: null,
+        child: Consumer<CartProvider>(
+          builder: (context, cartProvider, child) {
+            return Stack(
+              children: [
+                if (cartProvider.itemCount == 0)
+                  badges.Badge(
+                    position: badges.BadgePosition.topEnd(top: -10, end: -12),
+                    badgeContent: Text(
+                      cartProvider.itemCount.toString(),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.white,
+                      ),
+                    ),
+                    showBadge: false,
+                    child: const Icon(
+                      Icons.shopping_cart,
+                      color: Colors.white,
+                    ),
+                  ),
+                if (cartProvider.itemCount > 0)
+                  badges.Badge(
+                    position: badges.BadgePosition.topEnd(top: -10, end: -12),
+                    badgeContent: Text(
+                      cartProvider.itemCount.toString(),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.white,
+                      ),
+                    ),
+                    child: const Icon(
+                      Icons.shopping_cart,
+                      color: Colors.white,
+                    ),
+                  )
+              ],
+            );
+          },
+        ),
       ),
     );
   }
