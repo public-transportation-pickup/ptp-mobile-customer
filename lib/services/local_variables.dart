@@ -7,6 +7,6 @@ class LocalVariables {
   static String? uid = '';
   // System Data
   static String? jwtToken = '';
-  static String? phoneNumber = '0917321456';
+  static String? phoneNumber = '';
   static String? userGUID = '';
 }

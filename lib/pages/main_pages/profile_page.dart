@@ -289,6 +289,7 @@ class ProfilePage extends StatelessWidget {
                   LocalVariables.uid = '';
                   LocalVariables.jwtToken = '';
                   LocalVariables.phoneNumber = '';
+                  LocalVariables.userGUID = '';
                   // Redirect to the login page and clear the navigation stack
                   // ignore: use_build_context_synchronously
                   Navigator.pushNamedAndRemoveUntil(

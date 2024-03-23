@@ -23,6 +23,9 @@ class _LoginPageState extends State<LoginPage> {
 
   final FirebaseAuthentication _firebaseAuth = FirebaseAuthentication();
 
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   void _showLoading() {
     setState(() {
       isLoading = true;
@@ -143,12 +146,14 @@ class _LoginPageState extends State<LoginPage> {
                                 borderRadius: BorderRadius.circular(56),
                               ),
                             ),
-                            child: const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
                               child: TextField(
-                                decoration: InputDecoration(
+                                controller: _emailController,
+                                decoration: const InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: 'Tên đăng nhập',
+                                  hintText: 'Email',
                                 ),
                               ),
                             ),
@@ -167,6 +172,7 @@ class _LoginPageState extends State<LoginPage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 16),
                               child: TextField(
+                                controller: _passwordController,
                                 obscureText: !_isPasswordVisible,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
@@ -205,26 +211,79 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          Container(
-                            width: 133,
-                            height: 45,
-                            decoration: ShapeDecoration(
-                              color: const Color(0xFFFBAB40),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(56),
+                          InkWell(
+                            onTap: () async {
+                              HapticFeedback.lightImpact();
+                              _showLoading(); // Show loading animation
+
+                              String email = _emailController.text.trim();
+                              String password = _passwordController.text;
+                              User? user = await _firebaseAuth
+                                  .signInWithEmailAndPassword(email, password);
+
+                              _hideLoading(); // Hide loading animation
+
+                              if (user != null) {
+                                // Successfully signed in with Google
+                                checkLog.d(user.providerData);
+                                // Redirect to the Home Page
+                                // ignore: use_build_context_synchronously
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PageNavigation(),
+                                  ),
+                                );
+                              } else {
+                                // Show error dialog
+                                // ignore: use_build_context_synchronously
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text(
+                                        'Có lỗi xảy ra!',
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      content: const Text(
+                                          'Email không tồn tại hoặc mật khẩu không đúng!\nVui lòng thử lại.'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                            child: Container(
+                              width: 133,
+                              height: 45,
+                              decoration: ShapeDecoration(
+                                color: const Color(0xFFFBAB40),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(56),
+                                ),
                               ),
-                            ),
-                            child: const Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                'Đăng nhập',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Color(0xFFFFEFC8),
-                                  fontSize: 20,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w700,
-                                  height: 0,
+                              child: const Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  'Đăng nhập',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Color(0xFFFFEFC8),
+                                    fontSize: 20,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w700,
+                                    height: 0,
+                                  ),
                                 ),
                               ),
                             ),
@@ -275,7 +334,7 @@ class _LoginPageState extends State<LoginPage> {
                                           ),
                                         ),
                                         content: const Text(
-                                            'Đăng nhập với Google thất bại.\nVui lòng thử lại.'),
+                                            'Đăng nhập với Google thất bại!\nVui lòng thử lại.'),
                                         actions: [
                                           TextButton(
                                             onPressed: () {
