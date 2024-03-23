@@ -63,39 +63,77 @@ class FirebaseAuthentication {
   Future<User?> signInWithEmailAndPassword(
       String email, String password) async {
     try {
-      checkLog.d(email);
-      checkLog.d(password);
       final userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      // Obtain the authentication token
-      final String? authKey = await userCredential.user?.getIdToken(true);
-      // Print log Auth key token from Firebase
-      checkLog.i('Authkey Token: ${authKey?.substring(0, 800)}');
-      checkLog.i('Continue key: ${authKey?.substring(800)}');
+      // Check if email is verified
+      if (userCredential.user!.emailVerified) {
+        // Obtain the authentication token
+        final String? authKey = await userCredential.user?.getIdToken(true);
+        // Print log Auth key token from Firebase
+        checkLog.i('Authkey Token: ${authKey?.substring(0, 800)}');
+        checkLog.i('Continue key: ${authKey?.substring(800)}');
 
-      // Set user information into local variables
-      LocalVariables.authkeyGoogle = authKey;
-      LocalVariables.displayName = userCredential.user?.displayName;
-      LocalVariables.currentEmail = userCredential.user?.email;
-      LocalVariables.photoURL = userCredential.user?.photoURL;
-      LocalVariables.uid = userCredential.user?.uid;
+        // Set user information into local variables
+        LocalVariables.authkeyGoogle = authKey;
+        LocalVariables.displayName = userCredential.user?.displayName;
+        LocalVariables.currentEmail = userCredential.user?.email;
+        LocalVariables.photoURL = userCredential.user?.photoURL;
+        LocalVariables.uid = userCredential.user?.uid;
 
-      // Call login system API
-      await AuthenticationApi.login(authKey!);
+        // Call login system API
+        await AuthenticationApi.login(authKey!);
 
-      checkLog.d('User signed in: ${userCredential.user!.uid}');
+        checkLog.d('User signed in: ${userCredential.user!.uid}');
 
-      return userCredential.user;
+        return userCredential.user;
+      } else {
+        // If email is not verified, delete the account and throw an error
+        //await userCredential.user!.delete();
+        throw 'Vui lòng xác thực email để có thể tiếp tục đăng nhập.';
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        checkLog.e('No user found for that email.');
-        return null;
+        throw ("Email không tồn tại.");
       } else if (e.code == 'wrong-password') {
-        checkLog.e('Wrong password provided for that user.');
-        return null;
+        throw ("Sai mật khẩu.");
+      } else if (e.code == 'invalid-email') {
+        throw ("Email không hợp lệ.");
       } else {
-        checkLog.e("Error during Google Sign In: $e");
-        return null;
+        throw ("Error during Google Sign In: $e");
+      }
+    }
+  }
+
+  Future<User?> createAccountWithEmailAndPassword(
+      String email, String password) async {
+    try {
+      final UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Send email verification
+      await userCredential.user!.sendEmailVerification();
+
+      // Optionally, you can sign in the user after creating the account
+      // await _auth.signInWithEmailAndPassword(email: email, password: password);
+
+      return userCredential.user;
+    } catch (error) {
+      // Handle error during account creation
+      if (error is FirebaseAuthException) {
+        if (error.code == 'email-already-in-use') {
+          throw 'Email đã được sử dụng.';
+        } else if (error.code == 'invalid-email') {
+          throw 'Email không hợp lệ.';
+        } else if (error.code == 'weak-password') {
+          throw 'Mật khẩu phải có tối thiểu 6 ký tự.';
+        } else {
+          throw 'Tạo tài khoản thất bại: $error';
+        }
+      } else {
+        rethrow;
       }
     }
   }

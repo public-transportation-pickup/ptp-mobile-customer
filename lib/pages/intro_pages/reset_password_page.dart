@@ -62,7 +62,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 Image.asset(
                   'lib/assets/images/bus_logo.png',
                   width: 150,
-                  height: 150, // Adjust height as needed
+                  height: 150,
                 ),
                 const Text(
                   "Khôi phục mật khẩu!",

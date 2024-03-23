@@ -1,4 +1,5 @@
 import 'package:capstone_ptp/pages/intro_pages/reset_password_page.dart';
+import 'package:capstone_ptp/pages/intro_pages/sign_up_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +9,7 @@ import 'package:logger/logger.dart';
 import 'package:open_settings/open_settings.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../services/firebase_authentication.dart';
+import '../../utils/global_message.dart';
 import '../main_pages/page_navigation.dart';
 
 class LoginPage extends StatefulWidget {
@@ -26,6 +28,43 @@ class _LoginPageState extends State<LoginPage> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  late GlobalMessage globalMessage;
+
+  void _loginWithEmailAndPass() async {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+
+    if (email.isNotEmpty && password.isNotEmpty) {
+      try {
+        // Call the function to login account with email and password
+        User? user =
+            await _firebaseAuth.signInWithEmailAndPassword(email, password);
+
+        if (user != null) {
+          // Successfully signed in with Google
+          checkLog.d(user.providerData);
+          // Redirect to the Home Page
+          // ignore: use_build_context_synchronously
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PageNavigation(),
+            ),
+          );
+        }
+      } catch (error) {
+        if (error is String) {
+          globalMessage.showErrorMessage(error);
+        } else {
+          globalMessage.showErrorMessage("Somethinwrong:\n$error");
+        }
+      }
+    } else {
+      // Show an error message if email or password is empty
+      globalMessage.showWarnMessage("Vui lòng nhập email và password.");
+    }
+  }
 
   void _showLoading() {
     setState(() {
@@ -66,6 +105,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    globalMessage = GlobalMessage(context);
     return Scaffold(
       body: SingleChildScrollView(
         child: Stack(
@@ -98,12 +138,12 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: Column(
                         children: [
-                          const Padding(
-                            padding: EdgeInsets.symmetric(
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 32, vertical: 32),
                             child: Row(
                               children: [
-                                Text(
+                                const Text(
                                   'Đăng nhập',
                                   style: TextStyle(
                                     color: Color(0xFF353434),
@@ -113,8 +153,8 @@ class _LoginPageState extends State<LoginPage> {
                                     height: 0,
                                   ),
                                 ),
-                                SizedBox(width: 8),
-                                Text(
+                                const SizedBox(width: 8),
+                                const Text(
                                   '|',
                                   style: TextStyle(
                                     color: Color(0xFF353434),
@@ -124,15 +164,26 @@ class _LoginPageState extends State<LoginPage> {
                                     height: 0,
                                   ),
                                 ),
-                                SizedBox(width: 8),
-                                Text(
-                                  'Đăng ký',
-                                  style: TextStyle(
-                                    color: Color(0xFFB1B1B1),
-                                    fontSize: 20,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w600,
-                                    height: 0,
+                                const SizedBox(width: 8),
+                                InkWell(
+                                  onTap: () {
+                                    HapticFeedback.lightImpact();
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SignUpPage(),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text(
+                                    'Đăng ký',
+                                    style: TextStyle(
+                                      color: Color(0xFFB1B1B1),
+                                      fontSize: 20,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w600,
+                                      height: 0,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -227,53 +278,8 @@ class _LoginPageState extends State<LoginPage> {
                             onTap: () async {
                               HapticFeedback.lightImpact();
                               _showLoading(); // Show loading animation
-
-                              String email = _emailController.text.trim();
-                              String password = _passwordController.text;
-                              User? user = await _firebaseAuth
-                                  .signInWithEmailAndPassword(email, password);
-
+                              _loginWithEmailAndPass();
                               _hideLoading(); // Hide loading animation
-
-                              if (user != null) {
-                                // Successfully signed in with Google
-                                checkLog.d(user.providerData);
-                                // Redirect to the Home Page
-                                // ignore: use_build_context_synchronously
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => PageNavigation(),
-                                  ),
-                                );
-                              } else {
-                                // Show error dialog
-                                // ignore: use_build_context_synchronously
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: const Text(
-                                        'Có lỗi xảy ra!',
-                                        style: TextStyle(
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      content: const Text(
-                                          'Email không tồn tại hoặc mật khẩu không đúng!\nVui lòng thử lại.'),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: const Text('OK'),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              }
                             },
                             child: Container(
                               width: 133,
