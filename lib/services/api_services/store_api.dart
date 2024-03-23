@@ -82,8 +82,7 @@ class StoreApi extends ApiService {
   // GET STORES BY ROUTE VAR ID
   static Future<List<StoreModel>> getStoresByRouteVarId(
       String routeVarId) async {
-    final String baseUrl =
-        '${ApiService.baseUrl}/routevars/api/route-vars/$routeVarId/stores';
+    final String baseUrl = '${ApiService.baseUrl}/routevars/$routeVarId/stores';
     final response = await http.get(Uri.parse(baseUrl));
 
     if (response.statusCode == 200) {

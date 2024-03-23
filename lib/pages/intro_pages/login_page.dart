@@ -1,3 +1,4 @@
+import 'package:capstone_ptp/pages/intro_pages/reset_password_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -196,17 +197,28 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          const SizedBox(
-                            width: 280,
-                            height: 23,
-                            child: Text(
-                              'Quên mật khẩu?',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w300,
-                                height: 0,
+                          InkWell(
+                            onTap: () {
+                              HapticFeedback.lightImpact();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ResetPasswordPage(),
+                                ),
+                              );
+                            },
+                            child: const SizedBox(
+                              width: 280,
+                              height: 23,
+                              child: Text(
+                                'Quên mật khẩu?',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w300,
+                                  height: 0,
+                                ),
                               ),
                             ),
                           ),
