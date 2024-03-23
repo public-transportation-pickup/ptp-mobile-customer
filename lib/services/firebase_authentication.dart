@@ -56,7 +56,7 @@ class FirebaseAuthentication {
       return authResult.user;
     } catch (error) {
       checkLog.e("Error during Google Sign In: $error");
-      return null;
+      throw ("Đăng nhập với Google thất bại!\nVui lòng thử lại.");
     }
   }
 
@@ -98,6 +98,8 @@ class FirebaseAuthentication {
         throw ("Sai mật khẩu.");
       } else if (e.code == 'invalid-email') {
         throw ("Email không hợp lệ.");
+      } else if (e.code == 'network-request-failed') {
+        throw ("Không có kết nối mạng Internet.");
       } else {
         throw ("Error during Google Sign In: $e");
       }

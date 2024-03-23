@@ -37,9 +37,11 @@ class _LoginPageState extends State<LoginPage> {
 
     if (email.isNotEmpty && password.isNotEmpty) {
       try {
+        _showLoading();
         // Call the function to login account with email and password
         User? user =
             await _firebaseAuth.signInWithEmailAndPassword(email, password);
+        _hideLoading();
 
         if (user != null) {
           // Successfully signed in with Google
@@ -54,15 +56,45 @@ class _LoginPageState extends State<LoginPage> {
           );
         }
       } catch (error) {
+        _hideLoading();
         if (error is String) {
           globalMessage.showErrorMessage(error);
         } else {
-          globalMessage.showErrorMessage("Somethinwrong:\n$error");
+          globalMessage.showErrorMessage("Something wrong:\n$error");
         }
       }
     } else {
       // Show an error message if email or password is empty
       globalMessage.showWarnMessage("Vui lòng nhập email và password.");
+    }
+  }
+
+  void _loginWithGoogle() async {
+    try {
+      _showLoading();
+      // Call the function to login account with email and password
+      User? user = await _firebaseAuth.signInWithGoogle();
+      _hideLoading();
+
+      if (user != null) {
+        // Successfully signed in with Google
+        checkLog.d(user.providerData);
+        // Redirect to the Home Page
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PageNavigation(),
+          ),
+        );
+      }
+    } catch (error) {
+      _hideLoading();
+      if (error is String) {
+        globalMessage.showErrorMessage(error);
+      } else {
+        globalMessage.showErrorMessage("Something wrong:\n$error");
+      }
     }
   }
 
@@ -277,9 +309,7 @@ class _LoginPageState extends State<LoginPage> {
                           InkWell(
                             onTap: () async {
                               HapticFeedback.lightImpact();
-                              _showLoading(); // Show loading animation
                               _loginWithEmailAndPass();
-                              _hideLoading(); // Hide loading animation
                             },
                             child: Container(
                               width: 133,
@@ -319,52 +349,7 @@ class _LoginPageState extends State<LoginPage> {
                             child: TextButton(
                               onPressed: () async {
                                 HapticFeedback.lightImpact();
-                                _showLoading(); // Show loading animation
-
-                                User? user =
-                                    await _firebaseAuth.signInWithGoogle();
-
-                                _hideLoading(); // Hide loading animation
-
-                                if (user != null) {
-                                  // Successfully signed in with Google
-                                  checkLog.d(user.providerData);
-                                  // Redirect to the Home Page
-                                  // ignore: use_build_context_synchronously
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => PageNavigation(),
-                                    ),
-                                  );
-                                } else {
-                                  // Show error dialog
-                                  // ignore: use_build_context_synchronously
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AlertDialog(
-                                        title: const Text(
-                                          'Có lỗi xảy ra!',
-                                          style: TextStyle(
-                                            color: Colors.red,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        content: const Text(
-                                            'Đăng nhập với Google thất bại!\nVui lòng thử lại.'),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text('OK'),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                }
+                                _loginWithGoogle();
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
