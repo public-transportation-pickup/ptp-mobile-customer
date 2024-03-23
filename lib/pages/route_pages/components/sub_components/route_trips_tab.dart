@@ -91,11 +91,24 @@ class _RouteTripsTabState extends State<RouteTripsTab> {
               itemCount: stationNames.length,
               itemBuilder: (context, index) {
                 return ExpansionTile(
-                  leading: const Icon(
-                    size: 16,
-                    Icons.circle,
-                    color: Colors.grey,
-                  ),
+                  leading: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.blue, width: 2),
+                      ),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          '$index',
+                          style: const TextStyle(
+                              color: Colors.blue,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      )),
                   title: Text(
                     stationNames[index],
                     style: const TextStyle(

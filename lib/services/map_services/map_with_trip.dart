@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
+import 'package:flutter_map_tappable_polyline/flutter_map_tappable_polyline.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:logger/logger.dart';
@@ -32,6 +33,7 @@ class _MapWithTripComponentState extends State<MapWithTripComponent> {
   List<StoreModel>? _stores;
   List<StationModel>? _stations;
   List<Marker>? _markers;
+  List<LatLng> _listPointPolylines = [];
 
   @override
   void initState() {
@@ -75,11 +77,11 @@ class _MapWithTripComponentState extends State<MapWithTripComponent> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.blue, width: 2),
+                  border: Border.all(color: Colors.orange, width: 2),
                 ),
                 child: const Icon(
                   IconData(0xe60a, fontFamily: 'MaterialIcons'),
-                  color: Colors.blue,
+                  color: Colors.orange,
                   size: 16,
                 ),
               ),
@@ -95,7 +97,7 @@ class _MapWithTripComponentState extends State<MapWithTripComponent> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.green, width: 2),
+                    border: Border.all(color: Colors.blue, width: 2),
                   ),
                   child: station.index != null && station.index != -1
                       ? Align(
@@ -103,14 +105,14 @@ class _MapWithTripComponentState extends State<MapWithTripComponent> {
                           child: Text(
                             '${station.index}',
                             style: const TextStyle(
-                                color: Colors.green,
+                                color: Colors.blue,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700),
                           ),
                         )
                       : const Icon(
                           IconData(0xe1d5, fontFamily: 'MaterialIcons'),
-                          color: Colors.green,
+                          color: Colors.blue,
                           size: 16,
                         )),
             ))
@@ -119,9 +121,15 @@ class _MapWithTripComponentState extends State<MapWithTripComponent> {
     List<Marker> markerList = [];
     markerList.addAll(stationMarkers ??= []);
     markerList.addAll(storeMarker ??= []);
+
+    var stationMarkerList = _stations
+        ?.map((station) => LatLng(station.latitude, station.longitude))
+        .toList();
+
     setState(() {
       _isLoading = false;
       _markers = markerList;
+      _listPointPolylines = stationMarkerList!;
     });
     return markerList;
   }
@@ -190,6 +198,22 @@ class _MapWithTripComponentState extends State<MapWithTripComponent> {
                   urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                   maxZoom: 16,
                   minZoom: 12,
+                ),
+                TappablePolylineLayer(
+                  // Will only render visible polylines, increasing performance
+                  polylineCulling: true,
+                  pointerDistanceTolerance: 20,
+                  polylines: [
+                    TaggedPolyline(
+                      tag: 'My Polyline',
+                      // An optional tag to distinguish polylines in callback
+                      points: _listPointPolylines,
+                      color: Colors.lightBlue.shade900,
+                      strokeWidth: 5.0,
+                    ),
+                  ],
+                  onTap: (polylines, tapPosition) => checkLog.i(
+                      'Tapped: ${polylines.map((polyline) => polyline.tag).join(',')} at ${tapPosition.globalPosition}'),
                 ),
                 PopupMarkerLayer(
                   options: PopupMarkerLayerOptions(

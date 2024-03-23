@@ -69,11 +69,11 @@ class _MiniMapComponentState extends State<MiniMapComponent> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.blue, width: 2),
+                  border: Border.all(color: Colors.orange, width: 2),
                 ),
                 child: const Icon(
                   IconData(0xe60a, fontFamily: 'MaterialIcons'),
-                  color: Colors.blue,
+                  color: Colors.orange,
                   size: 16,
                 ),
               ),
@@ -89,11 +89,11 @@ class _MiniMapComponentState extends State<MiniMapComponent> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.green, width: 2),
+                  border: Border.all(color: Colors.blue, width: 2),
                 ),
                 child: const Icon(
                   IconData(0xe1d5, fontFamily: 'MaterialIcons'),
-                  color: Colors.green,
+                  color: Colors.blue,
                   size: 16,
                 ),
               ),
