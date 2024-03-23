@@ -183,7 +183,7 @@ class _MapWithTripComponentState extends State<MapWithTripComponent> {
                   if (position.zoom! <= 14 && _showMarkers) {
                     setState(() {
                       _showMarkers = false;
-                      _markers = []; // Clear markers when zoom level is <=> 14
+                      _markers = []; // Clear markers when zoom level is <= 14
                     });
                   } else if (position.zoom! > 14 && !_showMarkers) {
                     setState(() {
@@ -270,7 +270,7 @@ class _MapWithTripComponentState extends State<MapWithTripComponent> {
                         return MarkerPopup(
                           marker: marker,
                           station: station,
-                          store: store, // Pass store information to the popup
+                          store: store,
                         );
                       },
                     ),
