@@ -8,5 +8,7 @@ class LocalVariables {
   // System Data
   static String? jwtToken = '';
   static String? phoneNumber = '';
+  static String? fullName = '';
+  static String? dateOfBirth = '';
   static String? userGUID = '';
 }
