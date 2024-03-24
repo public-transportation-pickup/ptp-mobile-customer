@@ -32,37 +32,41 @@ class _OrderListTabState extends State<OrderListTab> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<OrderModel>>(
-      future: _fetchOrders(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return const Center(child: Text('Có lỗi xảy ra vui lòng thử lại!'));
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(
-            child: Text('Bạn không có bất kì đơn hàng nào.'),
-          );
-        } else {
-          List<OrderModel> orders = snapshot.data!;
-          List<OrderModel> filteredOrders = orders
-              .where((order) => order.status == widget.orderStatus)
-              .toList();
-
-          return ListView.builder(
-            itemCount: filteredOrders.length,
-            itemBuilder: (context, index) {
-              return OrderCardComponent(
-                order: filteredOrders[index],
-                onOrderCancelled: () {
-                  // Refresh logic for parent class page
-                  // For example, you can call setState() to rebuild the widget
-                  setState(() {});
+        future: _fetchOrders(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return const Center(child: Text('Có lỗi xảy ra vui lòng thử lại!'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(
+              child: Text('Bạn không có bất kì đơn hàng nào.'),
+            );
+          } else {
+            List<OrderModel> orders = snapshot.data!;
+            List<OrderModel> filteredOrders = orders
+                .where((order) => order.status == widget.orderStatus)
+                .toList();
+            if (filteredOrders.isEmpty) {
+              return const Center(
+                child: Text('Không có đơn hàng nào.'),
+              );
+            } else {
+              return ListView.builder(
+                itemCount: filteredOrders.length,
+                itemBuilder: (context, index) {
+                  return OrderCardComponent(
+                    order: filteredOrders[index],
+                    onOrderCancelled: () {
+                      // Refresh logic for parent class page
+                      // For example, you can call setState() to rebuild the widget
+                      setState(() {});
+                    },
+                  );
                 },
               );
-            },
-          );
-        }
-      },
-    );
+            }
+          }
+        });
   }
 }

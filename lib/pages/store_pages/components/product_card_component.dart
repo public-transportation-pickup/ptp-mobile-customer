@@ -52,7 +52,7 @@ class ProductCard extends StatelessWidget {
                             fit: BoxFit.cover,
                           )
                         : Image.asset(
-                            'lib/assets/images/cafe.jpg',
+                            'lib/assets/images/default_food.png',
                             height: 140,
                             width: double.infinity,
                             fit: BoxFit.cover,

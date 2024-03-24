@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 
 import '../../models/product_in_cart_model.dart';
 import '../../services/api_services/product_api.dart';
+import '../../services/local_variables.dart';
+import '../profile_pages/update_profile_page.dart';
 import 'add_to_cart_form.dart';
 import 'cart_page.dart';
 import 'cart_provider.dart';
@@ -125,7 +127,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   fit: BoxFit.cover,
                 )
               : Image.asset(
-                  'lib/assets/images/cafe.jpg',
+                  'lib/assets/images/default_food.png',
                   height: 140,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -266,33 +268,76 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           child: ElevatedButton(
             onPressed: () {
               HapticFeedback.mediumImpact();
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return FutureBuilder<ProductInMenu>(
-                    future: _productFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(child: CircularProgressIndicator());
-                      } else if (snapshot.hasError) {
-                        return Center(child: Text('Error: ${snapshot.error}'));
-                      } else {
-                        return AddToCartForm(
-                          product: snapshot.data!,
-                          onAddToCart: (ProductInCartModel productInCart) {
-                            // Here you can add the productInCart to the cart
-                            // using CartProvider
-                            Provider.of<CartProvider>(context, listen: false)
-                                .addToCart(productInCart);
-                            // Set Value cart
-                            CartProvider.menuId = product.menuId;
+              if (LocalVariables.phoneNumber == null ||
+                  LocalVariables.phoneNumber == "") {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text(
+                        'Chưa cập nhật số điện thoại!',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      content: const Text(
+                          'Bạn cần phải cập nhật số điện thoại để có thể tiếp tục mua sắm.'),
+                      actions: <Widget>[
+                        TextButton(
+                          child: const Text('Hủy'),
+                          onPressed: () {
+                            HapticFeedback.mediumImpact();
+                            Navigator.of(context).pop();
                           },
-                        );
-                      }
-                    },
-                  );
-                },
-              );
+                        ),
+                        TextButton(
+                          child: const Text('Cập nhật'),
+                          onPressed: () {
+                            HapticFeedback.mediumImpact();
+                            Navigator.of(context)
+                                .pop(); // Close the current dialog
+                            // Navigate to the update profile page
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => UpdateProfilePage()),
+                            );
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return FutureBuilder<ProductInMenu>(
+                      future: _productFuture,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Center(
+                              child: Text('Error: ${snapshot.error}'));
+                        } else {
+                          return AddToCartForm(
+                            product: snapshot.data!,
+                            onAddToCart: (ProductInCartModel productInCart) {
+                              // Here you can add the productInCart to the cart
+                              // using CartProvider
+                              Provider.of<CartProvider>(context, listen: false)
+                                  .addToCart(productInCart);
+                              // Set Value cart
+                              CartProvider.menuId = product.menuId;
+                            },
+                          );
+                        }
+                      },
+                    );
+                  },
+                );
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFFBAB40),
