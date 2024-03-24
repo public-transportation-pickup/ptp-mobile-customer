@@ -1,4 +1,5 @@
 import 'package:capstone_ptp/pages/product_pages/cart_page.dart';
+import 'package:capstone_ptp/pages/profile_pages/update_profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 
@@ -9,7 +10,7 @@ class GroupedListOption extends StatelessWidget {
     {
       'name': 'Cập nhật thông tin cá nhân',
       'group': 'Tài khoản của tôi',
-      'page': ActivityPage()
+      'page': UpdateProfilePage()
     },
     {
       'name': 'Giỏ hàng của tôi',

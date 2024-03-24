@@ -146,6 +146,43 @@ class FirebaseAuthentication {
     }
   }
 
+  Future<void> updateProfile(String newName, String newPhone) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        // Update display name
+        if (newName.isNotEmpty) {
+          await user.updateDisplayName(newName);
+          print('Display name updated successfully!');
+        }
+
+        // Update phone number
+        if (newPhone.isNotEmpty) {
+          // You need to reauthenticate the user if updating phone number
+          // Firebase requires re-authentication for security reasons
+          // You can choose the appropriate re-authentication method (phone, email, etc.)
+          // In this example, let's assume the user is already authenticated and proceed
+          PhoneAuthCredential credential = PhoneAuthProvider.credential(
+            verificationId:
+                'your_verification_id', // Replace with actual verification ID
+            smsCode: 'sms_code_here', // Replace with actual SMS code
+          );
+
+          await user.updatePhoneNumber(credential);
+          print('Phone number updated successfully!');
+        }
+
+        // You can add more fields to update here (e.g., email, profile picture)
+      } else {
+        print('No user signed in.');
+        // Handle when no user is signed in
+      }
+    } catch (e) {
+      print('Error updating profile: $e');
+      // Handle error updating profile
+    }
+  }
+
   Future<void> signOut() async {
     await _googleSignIn.signOut();
     await _auth.signOut();
