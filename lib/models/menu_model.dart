@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'store_model.dart';
 import 'product_in_menu_model.dart';
 import 'category_model.dart';
 
@@ -7,32 +6,20 @@ part 'menu_model.g.dart';
 
 @JsonSerializable()
 class Menu {
-  String id;
+  String storeId;
   String name;
   String description;
-  String startTime;
-  String endTime;
-  int maxNumOrderProcess;
-  DateTime dateApply;
+  String phoneNumber;
   String status;
-  String storeId;
-  DateTime creationDate;
-  StoreModel? store;
   List<ProductInMenu>? productInMenus;
   List<CategoryModel>? categories;
 
   Menu({
-    required this.id,
+    required this.storeId,
     required this.name,
     required this.description,
-    required this.startTime,
-    required this.endTime,
-    required this.maxNumOrderProcess,
-    required this.dateApply,
     required this.status,
-    required this.storeId,
-    required this.creationDate,
-    required this.store,
+    required this.phoneNumber,
     required this.categories,
     required this.productInMenus,
   });
