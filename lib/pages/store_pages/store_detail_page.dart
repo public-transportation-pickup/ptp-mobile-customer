@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/category_model.dart';
 import '../../services/api_services/store_api.dart';
+import '../main_pages/page_navigation.dart';
 import '../product_pages/cart_page.dart';
 import '../product_pages/product_detail_page.dart';
 import 'components/list_product_component.dart';
@@ -157,7 +158,7 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
                         ),
                       ),
                       Positioned(
-                        top: 120,
+                        top: 100,
                         child: Container(
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.all(16.0),
@@ -169,6 +170,36 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
                                 "${store.addressNo} ${store.street}, ${store.ward}, ${store.zone}",
                             openTime: store.openedTime,
                             closeTime: store.closedTime,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 10,
+                        right: 10,
+                        child: SizedBox(
+                          width: 100.0,
+                          height: 40.0,
+                          child: FloatingActionButton(
+                            mini: true,
+                            backgroundColor: Colors.orange,
+                            onPressed: () {
+                              // Navigate to HomePage and close all previous pages
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PageNavigation()),
+                                (route) => false,
+                              );
+                            },
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.home, color: Colors.white),
+                                SizedBox(width: 5.0),
+                                Text('Trang chủ',
+                                    style: TextStyle(color: Colors.white)),
+                              ],
+                            ),
                           ),
                         ),
                       ),
