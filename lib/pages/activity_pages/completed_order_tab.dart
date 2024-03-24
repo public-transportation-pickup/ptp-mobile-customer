@@ -65,7 +65,7 @@ class TransactionCard extends StatelessWidget {
 
   TransactionCard({required this.order});
 
-  String formatPrice(double price) {
+  String formatPrice(num price) {
     final format = NumberFormat("#,##0", "en_US");
     String formattedPrice = format.format(price);
     return formattedPrice.replaceAll(',', '.');

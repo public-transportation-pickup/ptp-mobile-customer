@@ -5,7 +5,7 @@ part 'order_detail_model.g.dart';
 @JsonSerializable()
 class OrderDetailModel {
   final String id;
-  final double actualPrice;
+  final num actualPrice;
   final int quantity;
   final String note;
   final String productMenuId;
@@ -13,7 +13,7 @@ class OrderDetailModel {
   final String menuId;
   final String productId;
   final String productName;
-  final double productPrice;
+  final num productPrice;
   final String description;
   final String imageURL;
 

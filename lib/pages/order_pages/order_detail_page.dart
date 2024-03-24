@@ -300,10 +300,15 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         children: [
                           Expanded(
                             flex: 5,
-                            child: Image.asset(
-                              'lib/assets/images/cafe.jpg',
-                              fit: BoxFit.cover,
-                            ),
+                            child: orderDetail.imageURL.isNotEmpty
+                                ? Image.network(
+                                    orderDetail.imageURL,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.asset(
+                                    'lib/assets/images/default_food.png',
+                                    fit: BoxFit.cover,
+                                  ),
                           ),
                           const SizedBox(width: 16),
                           Expanded(

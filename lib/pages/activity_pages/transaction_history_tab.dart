@@ -103,13 +103,32 @@ class TransactionCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Thanh toán đơn hàng",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
+                  if (transaction.transactionType == "Transfer")
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Thanh toán đơn hàng",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text('Hình thức: Chuyển khoản'),
+                      ],
                     ),
-                  ),
-                  Text('Hình thức: ${transaction.transactionType}'),
+                  if (transaction.transactionType == "Receive")
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Hoàn tiền hủy đơn",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text('Hình thức: Hoàn tiền'),
+                      ],
+                    ),
                   Text(formatDate(transaction.creationDate)),
                 ],
               ),
@@ -118,13 +137,23 @@ class TransactionCard extends StatelessWidget {
               flex: 2,
               child: Align(
                 alignment: Alignment.bottomRight,
-                child: Text(
-                  "- ${formatPrice(transaction.amount.toDouble())}",
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                child: transaction.transactionType == "Receive"
+                    ? Text(
+                        "+ ${formatPrice(transaction.amount.toDouble())}",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    : transaction.transactionType == "Transfer"
+                        ? Text(
+                            "- ${formatPrice(transaction.amount.toDouble())}",
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        : const SizedBox(), // If none of the conditions are met, render an empty SizedBox
               ),
             ),
           ],

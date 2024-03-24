@@ -9,7 +9,9 @@ class OrderModel {
   final String name;
   final String phoneNumber;
   final DateTime pickUpTime;
-  final double total;
+  final num totalPreparationTime;
+  final String? canceledReason;
+  final num total;
   final String status;
   final String userId;
   final String stationId;
@@ -21,9 +23,9 @@ class OrderModel {
   final String paymentId;
   final String paymentType;
   final String paymentStatus;
+  final DateTime creationDate;
+  final num? returnAmount;
   final List<OrderDetailModel> orderDetails;
-  final int? returnAmount;
-  final String? canceledReason;
 
   OrderModel({
     required this.id,
@@ -43,6 +45,8 @@ class OrderModel {
     required this.paymentType,
     required this.paymentStatus,
     required this.orderDetails,
+    required this.totalPreparationTime,
+    required this.creationDate,
     this.canceledReason,
     this.returnAmount,
   });

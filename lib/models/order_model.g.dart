@@ -11,7 +11,7 @@ OrderModel _$OrderModelFromJson(Map<String, dynamic> json) => OrderModel(
       name: json['name'] as String? ?? '',
       phoneNumber: json['phoneNumber'] as String? ?? '',
       pickUpTime: DateTime.parse(json['pickUpTime'] as String),
-      total: (json['total'] as num?)?.toDouble() ?? 0.0,
+      total: json['total'] as num,
       status: json['status'] as String? ?? '',
       userId: json['userId'] as String? ?? '',
       stationId: json['stationId'] as String? ?? '',
@@ -28,7 +28,9 @@ OrderModel _$OrderModelFromJson(Map<String, dynamic> json) => OrderModel(
               .toList() ??
           [],
       canceledReason: json['canceledReason'] as String? ?? '',
-      returnAmount: json['returnAmount'] as int? ?? 0,
+      returnAmount: json['returnAmount'] as num? ?? 0,
+      creationDate: DateTime.parse(json['creationDate'] as String),
+      totalPreparationTime: json['totalPreparationTime'] as num,
     );
 
 Map<String, dynamic> _$OrderModelToJson(OrderModel instance) =>
@@ -50,4 +52,8 @@ Map<String, dynamic> _$OrderModelToJson(OrderModel instance) =>
       'paymentType': instance.paymentType,
       'paymentStatus': instance.paymentStatus,
       'orderDetails': instance.orderDetails,
+      'canceledReason': instance.canceledReason,
+      'returnAmount': instance.returnAmount,
+      'creationDate': instance.creationDate,
+      'totalPreparationTime': instance.totalPreparationTime,
     };
