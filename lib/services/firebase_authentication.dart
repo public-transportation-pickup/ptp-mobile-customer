@@ -118,9 +118,6 @@ class FirebaseAuthentication {
       // Send email verification
       await userCredential.user!.sendEmailVerification();
 
-      // Optionally, you can sign in the user after creating the account
-      // await _auth.signInWithEmailAndPassword(email: email, password: password);
-
       return userCredential.user;
     } catch (error) {
       // Handle error during account creation

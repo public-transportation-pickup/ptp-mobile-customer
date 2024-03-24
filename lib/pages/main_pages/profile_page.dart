@@ -2,6 +2,7 @@ import 'package:capstone_ptp/pages/main_pages/components/grouped_list_option.dar
 import 'package:capstone_ptp/services/local_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../services/firebase_authentication.dart';
 import 'components/confirm_logout.dart';
@@ -21,9 +22,10 @@ class ProfilePage extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    SizedBox(
+                    Container(
+                      color: Colors.white,
                       width: double.infinity,
-                      height: 357,
+                      height: 350,
                       child: Stack(
                         children: [
                           // Gradient container
@@ -106,12 +108,19 @@ class ProfilePage extends StatelessWidget {
                                   width: 3.0,
                                 ),
                               ),
-                              child: CircleAvatar(
-                                radius: 50,
-                                backgroundImage: NetworkImage(
-                                  LocalVariables.photoURL ?? '',
-                                ),
-                              ),
+                              child: LocalVariables.photoURL != null &&
+                                      LocalVariables.photoURL != ""
+                                  ? CircleAvatar(
+                                      radius: 50,
+                                      backgroundImage: NetworkImage(
+                                        LocalVariables.photoURL ?? '',
+                                      ),
+                                    )
+                                  : const CircleAvatar(
+                                      radius: 50,
+                                      backgroundImage: AssetImage(
+                                          'lib/assets/images/default_avatar.png'),
+                                    ),
                             ),
                           ),
                           // User name
@@ -126,7 +135,7 @@ class ProfilePage extends StatelessWidget {
                                   Column(
                                     children: [
                                       Text(
-                                        LocalVariables.displayName ?? 'Loading',
+                                        LocalVariables.displayName ?? '',
                                         textAlign: TextAlign.center,
                                         style: const TextStyle(
                                           color: Color(0xFF353434),
@@ -263,9 +272,9 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      color: Colors.white,
+                      color: Colors.transparent,
                       //height: MediaQuery.of(context).size.height,
-                      height: 680,
+                      height: 440,
                       child: GroupedListOption(),
                     ),
                   ],

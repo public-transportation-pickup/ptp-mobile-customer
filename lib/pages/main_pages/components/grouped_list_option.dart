@@ -1,8 +1,8 @@
+import 'package:capstone_ptp/pages/product_pages/cart_page.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
 
 import '../activity_page.dart';
-import '../order_page.dart';
 
 class GroupedListOption extends StatelessWidget {
   final List<Map<String, dynamic>> elements = [
@@ -14,7 +14,7 @@ class GroupedListOption extends StatelessWidget {
     {
       'name': 'Giỏ hàng của tôi',
       'group': 'Tài khoản của tôi',
-      'page': OrderPage()
+      'page': CartPage()
     },
     {
       'name': 'Lịch sử giao dịch',
@@ -27,17 +27,10 @@ class GroupedListOption extends StatelessWidget {
       'page': ActivityPage()
     },
     {
-      'name': 'Điểm tích lũy',
-      'group': 'Ưu đãi và tích điểm',
+      'name': 'Thông tin ứng dụng',
+      'group': 'Trung tâm trợ giúp',
       'page': ActivityPage()
     },
-    {
-      'name': 'Thẻ quà tặng',
-      'group': 'Ưu đãi và tích điểm',
-      'page': ActivityPage()
-    },
-    {'name': 'Trung tâm trợ giúp', 'group': 'Trợ giúp', 'page': ActivityPage()},
-    {'name': 'Thông tin chung', 'group': 'Trợ giúp', 'page': ActivityPage()},
   ];
 
   GroupedListOption({Key? key}) : super(key: key);
@@ -45,7 +38,7 @@ class GroupedListOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.transparent,
       body: GroupedListView<dynamic, String>(
         elements: elements,
         groupBy: (element) => element['group'],
