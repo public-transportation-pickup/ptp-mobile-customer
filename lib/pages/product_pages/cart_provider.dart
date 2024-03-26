@@ -1,8 +1,10 @@
+import 'package:capstone_ptp/models/cart_model.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import '../../models/order_create_model.dart';
 import '../../models/product_in_cart_model.dart';
 import '../../services/api_services/order_api.dart';
+import '../../services/api_services/cart_api.dart';
 import '../../services/local_variables.dart';
 
 class CartProvider extends ChangeNotifier {
@@ -12,22 +14,20 @@ class CartProvider extends ChangeNotifier {
   static String? phoneNumber = LocalVariables.phoneNumber;
   static DateTime pickUpTime = DateTime.now();
   static String arrivalTime = '';
-  static String menuId = '';
   static String stationId = '';
-  static String storeId = '';
+  static String storeId = '4504b5b5-2a3f-4815-a768-d166faabd33d';
 
   final List<ProductInCartModel> _items = [];
 
-  CartProvider();
+  CartProvider() {
+    // Fetch cart automatically when CartProvider is initialized
+    _fetchCart();
+  }
 
   List<ProductInCartModel> get items => _items;
 
   int get itemCount => _items.length;
 
-  // void addToCart(ProductInCartModel item) {
-  //   _items.add(item);
-  //   notifyListeners();
-  // }
   void addToCart(ProductInCartModel newItem) {
     // Check if the item already exists in the cart
     for (var existingItem in _items) {
@@ -42,8 +42,56 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> _fetchCart() async {
+    if (_items.isEmpty) {
+      await fetchCart();
+    } else {
+      // do nothing
+    }
+  }
+
+  // Method to fetch the user's cart from the API
+  Future<List<ProductInCartModel>> fetchCart() async {
+    try {
+      Cart? cart = await CartApi.fetchCart();
+      if (cart != null) {
+        _items.clear(); // Clear existing items
+        for (var item in cart.items) {
+          _items.add(ProductInCartModel(
+            productName: '',
+            actualPrice: item.actualPrice.toDouble(),
+            quantity: item.quantity,
+            imageURL: '',
+            note: item.note,
+            productId: item.productMenuId,
+          ));
+        }
+        // Notify listeners about the changes
+        notifyListeners();
+        return _items; // Return the fetched cart items
+      } else {
+        // If the cart is empty, return an empty list of items
+        _items.clear();
+        notifyListeners();
+        return _items;
+      }
+    } catch (e) {
+      // Handle errors appropriately
+      checkLog.e('Failed to fetch cart: $e');
+      // If an error occurred, set local cart to empty and return an empty list
+      _items.clear();
+      notifyListeners();
+      return _items;
+    }
+  }
+
   void removeFromCart(ProductInCartModel item) {
     _items.remove(item);
+    notifyListeners();
+  }
+
+  void clearCart() {
+    _items.clear();
     notifyListeners();
   }
 
@@ -98,7 +146,7 @@ class CartProvider extends ChangeNotifier {
         phoneNumber: phoneNumber ?? '',
         pickUpTime: pickUpTime,
         total: initTotal,
-        menuId: menuId,
+        menuId: '',
         stationId: stationId,
         storeId: storeId,
         payment: Payment(total: initTotal, paymentType: 'Wallet'),

@@ -1,3 +1,4 @@
+import 'package:capstone_ptp/models/cart_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -26,6 +27,7 @@ class _CartPageState extends State<CartPage> {
 
   void _fetchStoreDetails() async {
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
+    //await cartProvider.fetchCart();
     if (cartProvider.items.isNotEmpty) {
       final storeDetails = await StoreApi.getStoreById(CartProvider.storeId);
       setState(() {
@@ -43,6 +45,7 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
+    //final Future<void> cartCurrent = cartProvider.fetchCart();
     final List<ProductInCartModel> items = cartProvider.items;
 
     final double totalPrice = cartProvider.calculateTotal();

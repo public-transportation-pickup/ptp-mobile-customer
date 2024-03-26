@@ -7,7 +7,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../route_pages/list_routes_page.dart';
-//import '../store_pages/store_detail_page.dart';
 import '../store_pages/store_detail_page.dart';
 import 'components/carousel_slider.dart';
 import 'components/notify_topic_component.dart';
@@ -87,7 +86,7 @@ class HomePage extends StatelessWidget {
                               ),
                               child: TextField(
                                 decoration: InputDecoration(
-                                  hintText: 'Đi đến...',
+                                  hintText: 'Đi đến trạm...',
                                   hintStyle: const TextStyle(
                                     color: Color(0xFFB1B1B1),
                                     fontSize: 16,
@@ -97,7 +96,7 @@ class HomePage extends StatelessWidget {
                                   ),
                                   border: InputBorder.none,
                                   contentPadding: const EdgeInsets.only(
-                                      top: 8, bottom: 8, left: 20),
+                                      top: 4, bottom: 8, left: 20),
                                   suffixIcon: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: SvgPicture.asset(

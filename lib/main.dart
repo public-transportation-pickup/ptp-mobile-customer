@@ -18,8 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) =>
-          CartProvider(),
+      create: (context) => CartProvider(),
       child: MaterialApp(
         themeMode: ThemeMode.system,
         theme: customLightTheme,

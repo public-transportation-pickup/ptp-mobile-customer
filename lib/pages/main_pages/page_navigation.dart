@@ -21,6 +21,14 @@ class PageNavigation extends StatefulWidget {
 class _PageNavigation extends State<PageNavigation> {
   int _currentIndex = 0;
   final PageController _pageController = PageController(initialPage: 0);
+  late CartProvider _cartProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    _cartProvider = Provider.of<CartProvider>(context, listen: false);
+    _cartProvider.fetchCart();
+  }
 
   void _navigateToPage(int pageIndex) {
     _pageController.jumpToPage(pageIndex);

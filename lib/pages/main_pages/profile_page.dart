@@ -3,8 +3,10 @@ import 'package:capstone_ptp/services/local_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 import '../../services/firebase_authentication.dart';
+import '../product_pages/cart_provider.dart';
 import 'components/confirm_logout.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -299,6 +301,9 @@ class ProfilePage extends StatelessWidget {
                   LocalVariables.jwtToken = '';
                   LocalVariables.phoneNumber = '';
                   LocalVariables.userGUID = '';
+
+                  // clear cart
+                  Provider.of<CartProvider>(context, listen: false).clearCart();
                   // Redirect to the login page and clear the navigation stack
                   // ignore: use_build_context_synchronously
                   Navigator.pushNamedAndRemoveUntil(
