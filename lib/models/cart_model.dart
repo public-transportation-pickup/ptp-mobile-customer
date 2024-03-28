@@ -2,6 +2,7 @@ class Cart {
   late String id;
   late String note;
   late String stationId;
+  late String storeId;
   late String userId;
   late bool isCurrent;
   late List<CartItem> items;
@@ -10,6 +11,7 @@ class Cart {
       {required this.id,
       required this.note,
       required this.stationId,
+      required this.storeId,
       required this.userId,
       required this.isCurrent,
       required this.items});
@@ -19,6 +21,7 @@ class Cart {
       id: json['id'],
       note: json['note'],
       stationId: json['stationId'],
+      storeId: json['storeId'],
       userId: json['userId'],
       isCurrent: json['isCurrent'],
       items: (json['items'] as List)
@@ -29,17 +32,21 @@ class Cart {
 }
 
 class CartItem {
-  late String id;
+  late String? id;
   late String productMenuId;
+  late String name;
   late int quantity;
   late int actualPrice;
+  late String imageURL;
   late String note;
 
   CartItem({
-    required this.id,
+    this.id,
     required this.productMenuId,
+    required this.name,
     required this.quantity,
     required this.actualPrice,
+    required this.imageURL,
     required this.note,
   });
 
@@ -47,8 +54,10 @@ class CartItem {
     return {
       'id': id,
       'productMenuId': productMenuId,
+      'name': name,
       'quantity': quantity,
       'actualPrice': actualPrice,
+      'imageURL': imageURL,
       'note': note,
     };
   }
@@ -57,8 +66,10 @@ class CartItem {
     return CartItem(
       id: json['id'],
       productMenuId: json['productMenuId'],
+      name: json['name'],
       quantity: json['quantity'],
       actualPrice: json['actualPrice'],
+      imageURL: json['imageURL'],
       note: json['note'],
     );
   }

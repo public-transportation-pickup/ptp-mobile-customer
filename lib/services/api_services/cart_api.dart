@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:capstone_ptp/models/update_cart_model.dart';
 import 'package:capstone_ptp/services/local_variables.dart';
 import 'package:capstone_ptp/models/cart_model.dart';
 import 'package:http/http.dart' as http;
@@ -31,7 +32,7 @@ class CartApi extends ApiService {
   }
 
   // CREATE CART
-  static Future<void> createCart(CreateCartModel cartModel) async {
+  static Future<bool> createCart(CreateCartModel cartModel) async {
     final Uri cartUrl = Uri.parse('${ApiService.baseUrl}/carts');
     final response = await http.post(
       cartUrl,
@@ -41,9 +42,51 @@ class CartApi extends ApiService {
       },
       body: jsonEncode(CreateCartRequest(model: cartModel).toJson()),
     );
-
-    if (response.statusCode != 200) {
+    ApiService.checkLog
+        .t(jsonEncode(CreateCartRequest(model: cartModel).toJson()));
+    if (response.statusCode == 200) {
+      return true;
+    } else {
       throw Exception('Failed to create cart');
+    }
+  }
+
+  // UPDATE CART
+  static Future<bool> updateCart(UpdateCartModel cartModel) async {
+    final Uri cartUrl = Uri.parse('${ApiService.baseUrl}/carts');
+    final response = await http.put(
+      cartUrl,
+      headers: {
+        'Authorization': 'Bearer ${LocalVariables.jwtToken}',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(UpdateCartRequest(model: cartModel).toJson()),
+    );
+    ApiService.checkLog
+        .t(jsonEncode(UpdateCartRequest(model: cartModel).toJson()));
+    if (response.statusCode == 204) {
+      return true;
+    } else {
+      throw Exception('Failed to update cart');
+    }
+  }
+
+  // DELETE CART
+  static Future<bool> deleteCart() async {
+    final Uri cartUrl = Uri.parse('${ApiService.baseUrl}/carts');
+    final response = await http.delete(
+      cartUrl,
+      headers: {
+        'Authorization': 'Bearer ${LocalVariables.jwtToken}',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({}),
+    );
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception('Failed to delete cart');
     }
   }
 }

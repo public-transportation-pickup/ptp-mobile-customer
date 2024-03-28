@@ -1,7 +1,7 @@
-class CreateCartRequest {
-  late CreateCartModel model;
+class UpdateCartRequest {
+  late UpdateCartModel model;
 
-  CreateCartRequest({required this.model});
+  UpdateCartRequest({required this.model});
 
   Map<String, dynamic> toJson() {
     return {
@@ -10,16 +10,20 @@ class CreateCartRequest {
   }
 }
 
-class CreateCartModel {
+class UpdateCartModel {
+  late String id;
+  late double total;
   late String stationId;
   late String phoneNumber;
   late String storeId;
   late String note;
   late String pickUpTime;
-  late List<CreateCartItem> items;
+  late List<UpdateCartItem> items;
 
-  CreateCartModel(
-      {required this.stationId,
+  UpdateCartModel(
+      {required this.id,
+      required this.total,
+      required this.stationId,
       required this.phoneNumber,
       required this.note,
       required this.pickUpTime,
@@ -28,6 +32,8 @@ class CreateCartModel {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
+      'total': total,
       'stationId': stationId,
       'phoneNumber': phoneNumber,
       'note': note,
@@ -38,7 +44,7 @@ class CreateCartModel {
   }
 }
 
-class CreateCartItem {
+class UpdateCartItem {
   late String productMenuId;
   late String name;
   late int quantity;
@@ -46,7 +52,7 @@ class CreateCartItem {
   late String imageURL;
   late String note;
 
-  CreateCartItem({
+  UpdateCartItem({
     required this.productMenuId,
     required this.name,
     required this.quantity,
@@ -66,8 +72,8 @@ class CreateCartItem {
     };
   }
 
-  factory CreateCartItem.fromJson(Map<String, dynamic> json) {
-    return CreateCartItem(
+  factory UpdateCartItem.fromJson(Map<String, dynamic> json) {
+    return UpdateCartItem(
       productMenuId: json['productMenuId'],
       name: json['name'],
       quantity: json['quantity'],

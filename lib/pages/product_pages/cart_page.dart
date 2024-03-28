@@ -98,6 +98,13 @@ class _CartPageState extends State<CartPage> {
                                 ElevatedButton(
                                   onPressed: () {
                                     HapticFeedback.mediumImpact();
+                                    cartProvider.saveCart();
+                                  },
+                                  child: const Text('Save'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    HapticFeedback.mediumImpact();
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(

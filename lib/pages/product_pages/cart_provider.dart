@@ -1,8 +1,11 @@
 import 'package:capstone_ptp/models/cart_model.dart';
+import 'package:capstone_ptp/models/create_cart_model.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import '../../models/order_create_model.dart';
 import '../../models/product_in_cart_model.dart';
+import '../../models/update_cart_model.dart';
 import '../../services/api_services/order_api.dart';
 import '../../services/api_services/cart_api.dart';
 import '../../services/local_variables.dart';
@@ -15,7 +18,9 @@ class CartProvider extends ChangeNotifier {
   static DateTime pickUpTime = DateTime.now();
   static String arrivalTime = '';
   static String stationId = '';
-  static String storeId = '4504b5b5-2a3f-4815-a768-d166faabd33d';
+  //static String storeId = '4504b5b5-2a3f-4815-a768-d166faabd33d';
+  static String storeId = '';
+  static String cartIdMongo = '';
 
   final List<ProductInCartModel> _items = [];
 
@@ -55,13 +60,16 @@ class CartProvider extends ChangeNotifier {
     try {
       Cart? cart = await CartApi.fetchCart();
       if (cart != null) {
+        cartIdMongo = cart.id;
+        stationId = cart.stationId;
+        storeId = cart.storeId;
         _items.clear(); // Clear existing items
         for (var item in cart.items) {
           _items.add(ProductInCartModel(
-            productName: '',
+            productName: item.name,
             actualPrice: item.actualPrice.toDouble(),
             quantity: item.quantity,
-            imageURL: '',
+            imageURL: item.imageURL,
             note: item.note,
             productId: item.productMenuId,
           ));
@@ -85,13 +93,119 @@ class CartProvider extends ChangeNotifier {
     }
   }
 
-  void removeFromCart(ProductInCartModel item) {
+  // Call API to create cart if fetch cart empty
+  Future<bool> createCart() async {
+    try {
+      final cart = CreateCartModel(
+        stationId: stationId,
+        phoneNumber: phoneNumber ?? '',
+        pickUpTime: DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            .format(pickUpTime.toUtc()),
+        storeId: storeId,
+        note: '',
+        items: items
+            .map((item) => CreateCartItem(
+                  productMenuId: item.productId,
+                  name: item.productName,
+                  quantity: item.quantity,
+                  actualPrice: item.actualPrice.toInt(),
+                  imageURL: item.imageURL,
+                  note: item.note,
+                ))
+            .toList(),
+      );
+
+      // Call API to create cart
+      final createdCart = await CartApi.createCart(cart);
+
+      _fetchCart();
+      Cart? tmpCart = await CartApi.fetchCart();
+      if (tmpCart != null) {
+        cartIdMongo = tmpCart.id;
+      } else {
+        cartIdMongo = '';
+      }
+      notifyListeners();
+
+      // Return the created order
+      return createdCart;
+    } catch (e) {
+      // Handle errors appropriately
+      checkLog.e('Failed to call create cart: $e');
+      rethrow;
+    }
+  }
+
+  // Call API to update cart if fetch cart empty
+  Future<bool> updateCart() async {
+    try {
+      final cart = UpdateCartModel(
+        id: cartIdMongo,
+        total: 0,
+        stationId: stationId,
+        phoneNumber: phoneNumber ?? '',
+        pickUpTime: DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            .format(pickUpTime.toUtc()),
+        storeId: storeId,
+        note: '',
+        items: items
+            .map((item) => UpdateCartItem(
+                  productMenuId: item.productId,
+                  name: item.productName,
+                  quantity: item.quantity,
+                  actualPrice: item.actualPrice.toInt(),
+                  imageURL: item.imageURL,
+                  note: item.note,
+                ))
+            .toList(),
+      );
+
+      // Call API to create cart
+      final updatedCart = await CartApi.updateCart(cart);
+
+      _fetchCart();
+      notifyListeners();
+
+      // Return the created order
+      return updatedCart;
+    } catch (e) {
+      // Handle errors appropriately
+      checkLog.e('Failed to call update cart: $e');
+      rethrow;
+    }
+  }
+
+  void saveCart() async {
+    var checkFetchCart = await CartApi.fetchCart();
+    if (_items.isNotEmpty && checkFetchCart == null) {
+      checkLog.d("Call api create cart");
+      createCart();
+    }
+    if (_items.isNotEmpty && checkFetchCart != null) {
+      checkLog.d("Call api update cart");
+      updateCart();
+    }
+    notifyListeners();
+  }
+
+  void removeFromCart(ProductInCartModel item) async {
     _items.remove(item);
+    if (_items.isEmpty) {
+      await CartApi.deleteCart();
+      checkLog.d("Cart list is empty, call delete cart api success");
+    }
     notifyListeners();
   }
 
   void clearCart() {
     _items.clear();
+    name = '';
+    phoneNumber = '';
+    pickUpTime = DateTime.now();
+    arrivalTime = '';
+    stationId = '';
+    storeId = '';
+    cartIdMongo = '';
     notifyListeners();
   }
 
