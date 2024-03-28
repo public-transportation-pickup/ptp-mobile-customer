@@ -82,7 +82,7 @@ class _CartPageState extends State<CartPage> {
                             ),
                           if (_storeDetails != null && items.isNotEmpty)
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 const Padding(
                                   padding: EdgeInsets.symmetric(
@@ -95,12 +95,20 @@ class _CartPageState extends State<CartPage> {
                                     ),
                                   ),
                                 ),
-                                ElevatedButton(
+                                ElevatedButton.icon(
                                   onPressed: () {
                                     HapticFeedback.mediumImpact();
                                     cartProvider.saveCart();
                                   },
-                                  child: const Text('Save'),
+                                  icon: const Icon(Icons.save,
+                                      color: Colors.white),
+                                  label: const Text(
+                                    'Lưu',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blue,
+                                  ),
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
@@ -117,7 +125,18 @@ class _CartPageState extends State<CartPage> {
                                               )),
                                     );
                                   },
-                                  child: const Text('Thêm món'),
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty
+                                        .resolveWith<Color?>(
+                                      (Set<MaterialState> states) {
+                                        return const Color(0xFFFBAB40);
+                                      },
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Thêm món',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ),
                               ],
                             ),

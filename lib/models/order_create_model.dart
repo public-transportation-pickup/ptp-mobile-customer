@@ -1,9 +1,8 @@
 class OrderCreateModel {
   String name;
   String phoneNumber;
-  DateTime pickUpTime;
-  double total;
-  String menuId;
+  String pickUpTime;
+  int total;
   String stationId;
   String storeId;
   Payment payment;
@@ -14,7 +13,6 @@ class OrderCreateModel {
     required this.phoneNumber,
     required this.pickUpTime,
     required this.total,
-    required this.menuId,
     required this.stationId,
     required this.storeId,
     required this.payment,
@@ -25,9 +23,8 @@ class OrderCreateModel {
     return OrderCreateModel(
       name: json['name'] ?? '',
       phoneNumber: json['phoneNumber'] ?? '',
-      pickUpTime: DateTime.tryParse(json['pickUpTime'] ?? '') ?? DateTime.now(),
-      total: json['total'] != null ? json['total'].toDouble() : 0.0,
-      menuId: json['menuId'] ?? '',
+      pickUpTime: json['pickUpTime'] ?? '',
+      total: json['total'] != null ? json['total'].toInt() : 0,
       stationId: json['stationId'] ?? '',
       storeId: json['storeId'] ?? '',
       payment: Payment.fromJson(json['payment'] ?? {}),
@@ -40,9 +37,8 @@ class OrderCreateModel {
   Map<String, dynamic> toJson() => {
         'name': name,
         'phoneNumber': phoneNumber,
-        'pickUpTime': pickUpTime.toIso8601String(),
+        'pickUpTime': pickUpTime,
         'total': total,
-        'menuId': menuId,
         'stationId': stationId,
         'storeId': storeId,
         'payment': payment.toJson(),
@@ -51,7 +47,7 @@ class OrderCreateModel {
 }
 
 class Payment {
-  double total;
+  int total;
   String paymentType;
 
   Payment({
@@ -73,7 +69,7 @@ class Payment {
 }
 
 class OrderDetailCreateModel {
-  double actualPrice;
+  int actualPrice;
   int quantity;
   String note;
   String productMenuId;

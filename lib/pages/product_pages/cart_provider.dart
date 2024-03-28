@@ -258,15 +258,15 @@ class CartProvider extends ChangeNotifier {
       final order = OrderCreateModel(
         name: name,
         phoneNumber: phoneNumber ?? '',
-        pickUpTime: pickUpTime,
-        total: initTotal,
-        menuId: '',
+        pickUpTime: DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            .format(pickUpTime.toUtc()),
+        total: initTotal.toInt(),
         stationId: stationId,
         storeId: storeId,
-        payment: Payment(total: initTotal, paymentType: 'Wallet'),
+        payment: Payment(total: initTotal.toInt(), paymentType: 'Wallet'),
         orderDetails: items
             .map((item) => OrderDetailCreateModel(
-                  actualPrice: item.actualPrice,
+                  actualPrice: item.actualPrice.toInt(),
                   quantity: item.quantity,
                   note: item.note,
                   productMenuId: item.productId,
@@ -278,8 +278,11 @@ class CartProvider extends ChangeNotifier {
       final createdOrder = await OrderApi.createOrder(order);
 
       // Clear cart items if order creation is successful
-      _items.clear();
-      notifyListeners();
+      if (createdOrder.hashCode == 201) {
+        await CartApi.deleteCart();
+        _items.clear();
+        notifyListeners();
+      }
 
       // Return the created order
       return createdOrder;

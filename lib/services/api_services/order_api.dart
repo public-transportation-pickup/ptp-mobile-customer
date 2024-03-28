@@ -65,7 +65,7 @@ class OrderApi extends ApiService {
       body: jsonEncode(order.toJson()),
     );
 
-    //ApiService.checkLog.e(jsonEncode(order.toJson()));
+    ApiService.checkLog.e(jsonEncode(order.toJson()));
 
     if (response.statusCode == 201) {
       return true; // Success

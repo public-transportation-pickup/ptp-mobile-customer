@@ -32,7 +32,7 @@ class DialogHelper {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: const Text('Cancel'),
+              child: const Text('Hủy'),
             ),
             TextButton(
               onPressed: () {
@@ -41,7 +41,7 @@ class DialogHelper {
                     .updateNote(product, noteController.text);
                 Navigator.pop(context);
               },
-              child: const Text('Save'),
+              child: const Text('Lưu'),
             ),
           ],
         );
