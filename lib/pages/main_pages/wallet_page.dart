@@ -55,6 +55,10 @@ class _WalletPageState extends State<WalletPage> {
           } else {
             final wallet = snapshot.data!;
             List<Transaction>? transactions = wallet.transactions;
+            transactions
+                .sort((a, b) => a.creationDate.compareTo(b.creationDate));
+            transactions = transactions.reversed.toList();
+
             return SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -206,7 +210,7 @@ class _WalletPageState extends State<WalletPage> {
                       itemCount: transactions.length,
                       itemBuilder: (context, index) {
                         return TransactionCard(
-                            transaction: transactions[index]);
+                            transaction: transactions![index]);
                       },
                     ),
                 ],

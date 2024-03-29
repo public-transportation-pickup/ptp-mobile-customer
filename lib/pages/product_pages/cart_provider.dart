@@ -13,7 +13,7 @@ import '../../services/local_variables.dart';
 class CartProvider extends ChangeNotifier {
   static var checkLog = Logger(printer: PrettyPrinter());
 
-  static String name = 'Customer - ${LocalVariables.displayName} - Order';
+  static String? name = LocalVariables.fullName ?? LocalVariables.displayName;
   static String? phoneNumber = LocalVariables.phoneNumber;
 
   static String arrivalTime = '';
@@ -272,7 +272,7 @@ class CartProvider extends ChangeNotifier {
       // Construct order details
       var initTotal = calculateTotal();
       final order = OrderCreateModel(
-        name: name,
+        name: name!,
         phoneNumber: phoneNumber ?? '',
         pickUpTime: pickUpTime.toIso8601String(),
         total: initTotal.toInt(),

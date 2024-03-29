@@ -87,6 +87,7 @@ class StoreApi extends ApiService {
 
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = json.decode(response.body);
+      //ApiService.checkLog.t(jsonResponse);
       return jsonResponse.map((json) => StoreModel.fromJson(json)).toList();
     } else {
       throw Exception('Failed to load stores: ${response.statusCode}');

@@ -421,6 +421,62 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   ),
                 ],
               ),
+              if (order.canceledReason != null)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Lý do hủy: ',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'Montserrat',
+                        color: Colors.black,
+                      ),
+                    ),
+                    Flexible(
+                      child: Text(
+                        order.canceledReason!,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: 'Montserrat',
+                          color: Colors.grey,
+                        ),
+                        overflow: TextOverflow.clip,
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ],
+                ),
+              if (order.canceledReason != null)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Hoàn tiền: ',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'Montserrat',
+                        color: Colors.black,
+                      ),
+                    ),
+                    Flexible(
+                      child: Text(
+                        order.returnAmount!.toInt().toString(),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: 'Montserrat',
+                          color: Colors.black,
+                        ),
+                        overflow: TextOverflow.clip,
+                        textAlign: TextAlign.right,
+                      ),
+                    ),
+                  ],
+                ),
               const SizedBox(height: 16),
               const Divider(
                 height: 2,
