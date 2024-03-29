@@ -15,10 +15,11 @@ class CartProvider extends ChangeNotifier {
 
   static String name = 'Customer - ${LocalVariables.displayName} - Order';
   static String? phoneNumber = LocalVariables.phoneNumber;
-  static DateTime pickUpTime = DateTime.now();
+
   static String arrivalTime = '';
+  static DateTime pickUpTime = DateTime.now();
+
   static String stationId = '';
-  //static String storeId = '4504b5b5-2a3f-4815-a768-d166faabd33d';
   static String storeId = '';
   static String cartIdMongo = '';
 
@@ -36,7 +37,7 @@ class CartProvider extends ChangeNotifier {
   void addToCart(ProductInCartModel newItem) {
     // Check if the item already exists in the cart
     for (var existingItem in _items) {
-      if (existingItem.productId == newItem.productId) {
+      if (existingItem.productMenuId == newItem.productMenuId) {
         // If the item already exists, update the quantity and notify listeners
         updateQuantity(existingItem, existingItem.quantity + newItem.quantity);
         return;
@@ -63,6 +64,7 @@ class CartProvider extends ChangeNotifier {
         cartIdMongo = cart.id;
         stationId = cart.stationId;
         storeId = cart.storeId;
+
         _items.clear(); // Clear existing items
         for (var item in cart.items) {
           _items.add(ProductInCartModel(
@@ -71,7 +73,7 @@ class CartProvider extends ChangeNotifier {
             quantity: item.quantity,
             imageURL: item.imageURL,
             note: item.note,
-            productId: item.productMenuId,
+            productMenuId: item.productMenuId,
           ));
         }
         // Notify listeners about the changes
@@ -96,16 +98,31 @@ class CartProvider extends ChangeNotifier {
   // Call API to create cart if fetch cart empty
   Future<bool> createCart() async {
     try {
+      // Get the current date
+      DateTime currentDate = DateTime.now();
+// Parse the time string into a DateTime object with the current date
+      DateTime parsedArrivalTime = DateTime(
+        currentDate.year,
+        currentDate.month,
+        currentDate.day,
+        int.parse(arrivalTime.split(':')[0]),
+        int.parse(arrivalTime.split(':')[1]),
+      );
+      parsedArrivalTime.add(const Duration(hours: 1));
+      String formattedPickUpTime =
+          DateFormat('yyyy-MM-ddTHH:mm:ss.SSSZ').format(pickUpTime);
+
+      pickUpTime = DateTime.parse(formattedPickUpTime);
+
       final cart = CreateCartModel(
         stationId: stationId,
         phoneNumber: phoneNumber ?? '',
-        pickUpTime: DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-            .format(pickUpTime.toUtc()),
+        pickUpTime: pickUpTime.toIso8601String(),
         storeId: storeId,
         note: '',
         items: items
             .map((item) => CreateCartItem(
-                  productMenuId: item.productId,
+                  productMenuId: item.productMenuId,
                   name: item.productName,
                   quantity: item.quantity,
                   actualPrice: item.actualPrice.toInt(),
@@ -144,13 +161,12 @@ class CartProvider extends ChangeNotifier {
         total: 0,
         stationId: stationId,
         phoneNumber: phoneNumber ?? '',
-        pickUpTime: DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-            .format(pickUpTime.toUtc()),
+        pickUpTime: pickUpTime.toIso8601String(),
         storeId: storeId,
         note: '',
         items: items
             .map((item) => UpdateCartItem(
-                  productMenuId: item.productId,
+                  productMenuId: item.productMenuId,
                   name: item.productName,
                   quantity: item.quantity,
                   actualPrice: item.actualPrice.toInt(),
@@ -219,7 +235,7 @@ class CartProvider extends ChangeNotifier {
         quantity: newQuantity,
         imageURL: item.imageURL,
         note: item.note,
-        productId: item.productId,
+        productMenuId: item.productMenuId,
       );
       // Replace the item in the list with the updated one
       _items[index] = updatedItem;
@@ -236,7 +252,7 @@ class CartProvider extends ChangeNotifier {
         quantity: item.quantity,
         imageURL: item.imageURL,
         note: newNote,
-        productId: item.productId,
+        productMenuId: item.productMenuId,
       );
       _items[index] = updatedItem;
       notifyListeners();
@@ -258,8 +274,7 @@ class CartProvider extends ChangeNotifier {
       final order = OrderCreateModel(
         name: name,
         phoneNumber: phoneNumber ?? '',
-        pickUpTime: DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-            .format(pickUpTime.toUtc()),
+        pickUpTime: pickUpTime.toIso8601String(),
         total: initTotal.toInt(),
         stationId: stationId,
         storeId: storeId,
@@ -269,7 +284,7 @@ class CartProvider extends ChangeNotifier {
                   actualPrice: item.actualPrice.toInt(),
                   quantity: item.quantity,
                   note: item.note,
-                  productMenuId: item.productId,
+                  productMenuId: item.productMenuId,
                 ))
             .toList(),
       );
@@ -278,7 +293,7 @@ class CartProvider extends ChangeNotifier {
       final createdOrder = await OrderApi.createOrder(order);
 
       // Clear cart items if order creation is successful
-      if (createdOrder.hashCode == 201) {
+      if (createdOrder) {
         await CartApi.deleteCart();
         _items.clear();
         notifyListeners();

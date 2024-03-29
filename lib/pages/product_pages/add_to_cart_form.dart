@@ -107,7 +107,7 @@ class _AddToCartFormState extends State<AddToCartForm> {
               actualPrice: widget.product.salePrice,
               quantity: quantity,
               note: note.isEmpty ? "Không có ghi chú" : note,
-              productId: widget.product.productId,
+              productMenuId: widget.product.id,
               imageURL: widget.product.imageURL,
             );
 

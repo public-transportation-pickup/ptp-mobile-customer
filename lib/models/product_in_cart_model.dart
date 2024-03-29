@@ -3,7 +3,7 @@ class ProductInCartModel {
   final double actualPrice;
   final int quantity;
   final String note;
-  final String productId;
+  final String productMenuId;
   final String imageURL;
 
   ProductInCartModel({
@@ -11,7 +11,7 @@ class ProductInCartModel {
     required this.actualPrice,
     required this.quantity,
     required this.note,
-    required this.productId,
+    required this.productMenuId,
     required this.imageURL,
   });
 }
