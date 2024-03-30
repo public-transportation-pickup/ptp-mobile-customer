@@ -82,7 +82,7 @@ class OrderApi extends ApiService {
 
     final Map<String, dynamic> requestBody = {
       "id": orderId,
-      "canceledReason": "Bố m thích hủy đấy, rồi sao? làm j nhau",
+      "canceledReason": "Người dùng xác nhận hủy đơn",
       "status": "Canceled"
     };
 

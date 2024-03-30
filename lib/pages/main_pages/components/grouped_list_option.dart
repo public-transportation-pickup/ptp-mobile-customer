@@ -1,11 +1,42 @@
+import 'package:capstone_ptp/pages/activity_pages/full_transactions_page.dart';
 import 'package:capstone_ptp/pages/product_pages/cart_page.dart';
 import 'package:capstone_ptp/pages/profile_pages/update_profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:logger/logger.dart';
 
+import '../../../models/transaction_model.dart';
+import '../../../models/wallet_model.dart';
+import '../../../services/api_services/wallet_api.dart';
+import '../../../services/local_variables.dart';
 import '../activity_page.dart';
 
-class GroupedListOption extends StatelessWidget {
+class GroupedListOption extends StatefulWidget {
+  GroupedListOption({Key? key}) : super(key: key);
+  @override
+  _GroupedListOptionState createState() => _GroupedListOptionState();
+}
+
+class _GroupedListOptionState extends State<GroupedListOption> {
+  var checkLog = Logger(printer: PrettyPrinter());
+  late Future<List<Transaction>> _futureTransactions;
+
+  Future<List<Transaction>> _fetchTransactions() async {
+    final String userId = LocalVariables.userGUID!;
+    try {
+      Wallet userWallet = await WalletApi.fetchUserWallet(userId);
+      List<Transaction> listTransactions = userWallet.transactions;
+
+      // Sort transactions by creation date in descending order
+      listTransactions.sort((a, b) => b.creationDate.compareTo(a.creationDate));
+
+      return listTransactions;
+    } catch (error) {
+      checkLog.e('Error fetching transaction: $error');
+      rethrow;
+    }
+  }
+
   final List<Map<String, dynamic>> elements = [
     {
       'name': 'Cập nhật thông tin cá nhân',
@@ -20,7 +51,7 @@ class GroupedListOption extends StatelessWidget {
     {
       'name': 'Lịch sử giao dịch',
       'group': 'Tài khoản của tôi',
-      'page': ActivityPage()
+      'fetchTransactions': true, // Add a flag to indicate to fetch transactions
     },
     {
       'name': 'Liên kết ví',
@@ -34,7 +65,11 @@ class GroupedListOption extends StatelessWidget {
     },
   ];
 
-  GroupedListOption({Key? key}) : super(key: key);
+  @override
+  void initState() {
+    super.initState();
+    _futureTransactions = _fetchTransactions();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +94,30 @@ class GroupedListOption extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
             child: GestureDetector(
               onTap: () {
-                // Handle the click event by navigating to the specified page
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => element['page'],
-                  ),
-                );
+                if (element['fetchTransactions'] != null &&
+                    element['fetchTransactions']) {
+                  // Fetch transactions and navigate to FullTransactionsPage
+                  _futureTransactions.then((transactions) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            FullTransactionsPage(transactions: transactions),
+                      ),
+                    );
+                  }).catchError((error) {
+                    // Handle error
+                    checkLog.e('Error fetching transactions: $error');
+                  });
+                } else {
+                  // Navigate to the specified page
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => element['page'],
+                    ),
+                  );
+                }
               },
               child: SizedBox(
                 child: ListTile(

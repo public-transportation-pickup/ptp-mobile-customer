@@ -1,12 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone_ptp/models/wallet_model.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 import '../../models/transaction_model.dart';
 import '../../services/api_services/wallet_api.dart';
+import '../activity_pages/full_transactions_page.dart';
 import '../activity_pages/transaction_history_tab.dart';
 
 class WalletPage extends StatefulWidget {
@@ -56,8 +56,7 @@ class _WalletPageState extends State<WalletPage> {
             final wallet = snapshot.data!;
             List<Transaction>? transactions = wallet.transactions;
             transactions
-                .sort((a, b) => a.creationDate.compareTo(b.creationDate));
-            transactions = transactions.reversed.toList();
+                .sort((a, b) => b.creationDate.compareTo(a.creationDate));
 
             return SingleChildScrollView(
               child: Column(
@@ -181,12 +180,12 @@ class _WalletPageState extends State<WalletPage> {
                   ),
 
                   // list for history transaction
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           "Lịch sử giao dịch",
                           style: TextStyle(
                             fontSize: 20,
@@ -195,23 +194,47 @@ class _WalletPageState extends State<WalletPage> {
                           ),
                           textAlign: TextAlign.left,
                         ),
-                        Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          color: Colors.black,
-                          size: 20,
+                        InkWell(
+                          onTap: () {
+                            HapticFeedback.mediumImpact();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => FullTransactionsPage(
+                                    transactions: transactions),
+                              ),
+                            );
+                          },
+                          child: const Row(
+                            children: [
+                              Text("Xem thêm"),
+                              Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                color: Colors.black,
+                                size: 20,
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
                   ),
                   if (transactions.isNotEmpty)
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: transactions.length,
-                      itemBuilder: (context, index) {
-                        return TransactionCard(
-                            transaction: transactions![index]);
-                      },
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        color: const Color(0xFFFEEBBB),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount:
+                              transactions.length > 3 ? 3 : transactions.length,
+                          itemBuilder: (context, index) {
+                            return TransactionCard(
+                                transaction: transactions[index]);
+                          },
+                        ),
+                      ),
                     ),
                 ],
               ),

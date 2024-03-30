@@ -47,10 +47,18 @@ class _TransactionHistoryTabState extends State<TransactionHistoryTab> {
         } else {
           List<Transaction>? transactions = snapshot.data;
           if (transactions != null && transactions.isNotEmpty) {
+            // Sort transactions by creation date in descending order
+            transactions
+                .sort((a, b) => b.creationDate.compareTo(a.creationDate));
             return ListView.builder(
               itemCount: transactions.length,
               itemBuilder: (context, index) {
-                return TransactionCard(transaction: transactions[index]);
+                if (transactions[index].transactionType == 'Transfer') {
+                  return TransactionCard(transaction: transactions[index]);
+                } else {
+                  return const SizedBox
+                      .shrink(); // Return an empty SizedBox if not a transfer
+                }
               },
             );
           } else {
@@ -113,7 +121,12 @@ class TransactionCard extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text('Hình thức: Chuyển khoản'),
+                        Text(
+                          'Hình thức: Thanh toán ví',
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
                       ],
                     ),
                   if (transaction.transactionType == "Receive")
@@ -126,7 +139,12 @@ class TransactionCard extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text('Hình thức: Hoàn tiền'),
+                        Text(
+                          'Hình thức: Hoàn tiền',
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
                       ],
                     ),
                   Text(formatDate(transaction.creationDate)),
