@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -185,29 +186,52 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SvgPicture.asset(
-                    iconPath,
-                    height: 64,
-                    width: 64,
-                  ),
-                  const SizedBox(width: 16),
-                  Flexible(
-                    child: Text(
-                      order.storeName,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: 'Montserrat',
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
+              SizedBox(
+                height: 70,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SvgPicture.asset(
+                      iconPath,
+                      height: 64,
+                      width: 64,
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Flexible(
+                            flex: 1,
+                            child: Text(
+                              order.storeName,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Montserrat',
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            "Liên hệ cửa hàng:   ${order.storePhoneNumber}",
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Montserrat',
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
+
               const SizedBox(height: 8),
               const Divider(
                 height: 2,
@@ -434,19 +458,34 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         color: Colors.black,
                       ),
                     ),
-                    Flexible(
-                      child: Text(
-                        order.canceledReason!,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: 'Montserrat',
-                          color: Colors.grey,
+                    if (order.canceledReason != 'Pick up time out!')
+                      Flexible(
+                        child: Text(
+                          order.canceledReason!,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Montserrat',
+                            color: Colors.red,
+                          ),
+                          overflow: TextOverflow.clip,
+                          textAlign: TextAlign.right,
                         ),
-                        overflow: TextOverflow.clip,
-                        textAlign: TextAlign.right,
                       ),
-                    ),
+                    if (order.canceledReason == 'Pick up time out!')
+                      const Flexible(
+                        child: Text(
+                          "Quá thời gian nhận đơn",
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Montserrat',
+                            color: Colors.red,
+                          ),
+                          overflow: TextOverflow.clip,
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
                   ],
                 ),
               if (order.canceledReason != null)
@@ -464,7 +503,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     ),
                     Flexible(
                       child: Text(
-                        order.returnAmount!.toInt().toString(),
+                        NumberFormat('#,###', 'vi_VN')
+                            .format(order.returnAmount!.toInt()),
+                        // order.returnAmount!.toInt().toString(),
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
@@ -498,8 +539,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   ),
                   RichText(
                     text: TextSpan(
-                      text:
-                          '${NumberFormat('#,###', 'vi_VN').format(order.total.toInt())}',
+                      text: NumberFormat('#,###', 'vi_VN')
+                          .format(order.total.toInt()),
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
