@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:animations/animations.dart';
 
 import '../route_pages/list_routes_page.dart';
 import '../store_pages/store_detail_page.dart';
@@ -438,10 +439,21 @@ class HomePage extends StatelessWidget {
                             backgroundColor: Colors.white,
                             mini: true,
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MapPage()),
+                              Navigator.of(context).push(
+                                PageRouteBuilder(
+                                  transitionDuration:
+                                      const Duration(milliseconds: 500),
+                                  pageBuilder:
+                                      (_, animation, secondaryAnimation) {
+                                    return SharedAxisTransition(
+                                      animation: animation,
+                                      secondaryAnimation: secondaryAnimation,
+                                      transitionType:
+                                          SharedAxisTransitionType.scaled,
+                                      child: MapPage(),
+                                    );
+                                  },
+                                ),
                               );
                             },
                             child: const Icon(
@@ -452,7 +464,7 @@ class HomePage extends StatelessWidget {
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

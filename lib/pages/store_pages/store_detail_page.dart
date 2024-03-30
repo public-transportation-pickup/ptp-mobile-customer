@@ -62,6 +62,15 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
         //title: const Text('Thông tin cửa hàng'),
         backgroundColor: Colors.transparent,
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios_new_outlined,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: FutureBuilder(
         future: _storeFuture,

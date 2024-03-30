@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:capstone_ptp/pages/route_pages/route_detail_page.dart';
 import 'package:capstone_ptp/services/api_services/route_api.dart';
 import 'package:flutter/material.dart';
@@ -69,6 +70,15 @@ class _ListRoutePageState extends State<ListRoutePage> {
         ),
         centerTitle: true,
         elevation: 4,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios_new_outlined,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Column(
         children: [
@@ -102,9 +112,19 @@ class _ListRoutePageState extends State<ListRoutePage> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => RouteDetailPage(
-                                  routeId: _displayedRoutes[index].id),
+                            PageRouteBuilder(
+                              transitionDuration:
+                                  const Duration(milliseconds: 500),
+                              pageBuilder: (_, animation, secondaryAnimation) {
+                                return SharedAxisTransition(
+                                  animation: animation,
+                                  secondaryAnimation: secondaryAnimation,
+                                  transitionType:
+                                      SharedAxisTransitionType.horizontal,
+                                  child: RouteDetailPage(
+                                      routeId: _displayedRoutes[index].id),
+                                );
+                              },
                             ),
                           );
                         },

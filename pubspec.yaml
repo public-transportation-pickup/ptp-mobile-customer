@@ -50,6 +50,7 @@ dependencies:
   flutter_riverpod: ^2.3.3
   flutter_rating_bar: ^4.0.1
   badges: ^3.1.2
+  animations: ^2.0.11
   # Package for decode, encode, format
   crypto: ^3.0.2
   intl: ^0.18.1

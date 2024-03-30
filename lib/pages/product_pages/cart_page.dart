@@ -56,6 +56,15 @@ class _CartPageState extends State<CartPage> {
         appBar: AppBar(
           title: const Text('Giỏ hàng của bạn'),
           centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios_new_outlined,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -218,7 +227,12 @@ class _CartPageState extends State<CartPage> {
                                                       children: [
                                                         Expanded(
                                                           child: Text(
-                                                            items[index].note,
+                                                            items[index]
+                                                                    .note
+                                                                    .isEmpty
+                                                                ? "Thêm ghi chú"
+                                                                : items[index]
+                                                                    .note,
                                                             overflow:
                                                                 TextOverflow
                                                                     .ellipsis,

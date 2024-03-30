@@ -58,6 +58,15 @@ class _RouteDetailPageState extends State<RouteDetailPage> {
         appBar: AppBar(
           title: const Text('Chi tiết chuyến'),
           centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back_ios_new_outlined,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         ),
         body: FutureBuilder(
             future: _routeDetail,
