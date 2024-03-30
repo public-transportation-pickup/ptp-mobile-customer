@@ -76,6 +76,19 @@ class _ListProductComponentState extends State<ListProductComponent> {
         } else if (snapshot.hasError) {
           return Center(
               child: Text('Có lỗi xảy ra vui lòng thử lại: ${snapshot.error}'));
+        } else if (!snapshot.hasData ||
+            snapshot.data!.productInMenus!.isEmpty) {
+          return const Center(
+            child: Text(
+              'Cửa hàng hiện tại đã đóng cửa.\nHoặc không cung cấp thực đơn trong thời điểm hiện tại.\nVui lòng quay lại sau!',
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          );
         } else {
           Menu menu = snapshot.data!;
           return Column(
