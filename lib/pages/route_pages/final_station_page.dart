@@ -7,6 +7,8 @@ import 'components/card_component.dart';
 import 'components/search_bar_by_station_name.dart';
 
 class FinalStationPage extends StatefulWidget {
+  final String? initialValue;
+  FinalStationPage({this.initialValue});
   @override
   _FinalStationPageState createState() => _FinalStationPageState();
 }
@@ -14,12 +16,21 @@ class FinalStationPage extends StatefulWidget {
 class _FinalStationPageState extends State<FinalStationPage> {
   var checkLog = Logger(printer: PrettyPrinter());
   final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocusNode = FocusNode();
   List<RouteModel> _routes = [];
   bool _isLoading = false;
 
   @override
+  void initState() {
+    super.initState();
+    _searchController.text = widget.initialValue ?? '';
+    _searchFocusNode.requestFocus();
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -62,6 +73,7 @@ class _FinalStationPageState extends State<FinalStationPage> {
         children: [
           SearchBarByStationNameComponent(
             routeName: _searchController,
+            focusNode: _searchFocusNode,
             onFilter: () => _searchRoutes(_searchController.text),
           ),
           if (_isLoading)

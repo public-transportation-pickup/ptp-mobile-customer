@@ -1,17 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class SearchBarByStationNameComponent extends StatelessWidget {
+class SearchBarByStationNameComponent extends StatefulWidget {
   final TextEditingController routeName;
   final Function() onFilter;
+  final FocusNode focusNode;
 
   SearchBarByStationNameComponent({
     required this.routeName,
     required this.onFilter,
+    required this.focusNode,
   });
 
   @override
+  State<SearchBarByStationNameComponent> createState() =>
+      _SearchBarByStationNameComponentState();
+}
+
+class _SearchBarByStationNameComponentState
+    extends State<SearchBarByStationNameComponent> {
+  bool _hasFocusRequested = false;
+
+  @override
   Widget build(BuildContext context) {
+    if (!_hasFocusRequested) {
+      _hasFocusRequested = true;
+      FocusScope.of(context).requestFocus(widget.focusNode);
+    }
+
     return Padding(
       padding:
           const EdgeInsets.only(top: 0, right: 8.0, bottom: 8.0, left: 8.0),
@@ -44,11 +60,17 @@ class SearchBarByStationNameComponent extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.12,
                   height: 50,
                   child: Center(
-                    child: SvgPicture.asset(
-                      'lib/assets/icons/search_icon.svg',
-                      width: 32,
-                      height: 32,
-                      color: Colors.black,
+                    child: GestureDetector(
+                      onTap: () {
+                        // Call onFilter function when the icon is tapped
+                        widget.onFilter();
+                      },
+                      child: SvgPicture.asset(
+                        'lib/assets/icons/search_icon.svg',
+                        width: 32,
+                        height: 32,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
@@ -65,8 +87,9 @@ class SearchBarByStationNameComponent extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: TextField(
-                      controller: routeName,
-                      onChanged: (_) => onFilter(),
+                      controller: widget.routeName,
+                      focusNode: widget.focusNode,
+                      onChanged: (_) => widget.onFilter(),
                       decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Tìm tuyến đi qua trạm bạn muốn đến.',

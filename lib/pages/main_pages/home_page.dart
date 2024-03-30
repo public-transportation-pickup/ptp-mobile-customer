@@ -13,7 +13,20 @@ import 'components/carousel_slider.dart';
 import 'components/notify_topic_component.dart';
 import 'profile_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,32 +91,60 @@ class HomePage extends StatelessWidget {
                           ),
                           // Centered Search Bar
                           Center(
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.85,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFFEFC8),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                  hintText: 'Đi đến trạm...',
-                                  hintStyle: const TextStyle(
-                                    color: Color(0xFFB1B1B1),
-                                    fontSize: 16,
-                                    fontFamily: 'Montserrat',
-                                    fontWeight: FontWeight.w300,
-                                    height: 0,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => FinalStationPage(
+                                      initialValue: _searchController
+                                          .text, // Pass the value of the text field
+                                    ),
                                   ),
-                                  border: InputBorder.none,
-                                  contentPadding: const EdgeInsets.only(
-                                      top: 4, bottom: 8, left: 20),
-                                  suffixIcon: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: SvgPicture.asset(
-                                      'lib/assets/icons/tabler_search.svg',
-                                      height: 24,
-                                      width: 24,
+                                );
+                              },
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.85,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFFEFC8),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: TextField(
+                                  controller: _searchController,
+                                  decoration: InputDecoration(
+                                    hintText: 'Đi đến trạm...',
+                                    hintStyle: const TextStyle(
+                                      color: Color(0xFFB1B1B1),
+                                      fontSize: 16,
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.w300,
+                                      height: 0,
+                                    ),
+                                    border: InputBorder.none,
+                                    contentPadding: const EdgeInsets.only(
+                                        top: 4, bottom: 8, left: 20),
+                                    suffixIcon: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                FinalStationPage(
+                                              initialValue: _searchController
+                                                  .text, // Pass the value of the text field
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: SvgPicture.asset(
+                                          'lib/assets/icons/tabler_search.svg',
+                                          height: 24,
+                                          width: 24,
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
