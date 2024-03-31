@@ -78,87 +78,89 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             return const Center(child: Text('Có lỗi xảy ra vui lòng thử lại!'));
           } else {
             // Display the order details once fetched
-            return Column(
-              children: [
-                buildOrderDetails(snapshot.data!),
-                const SizedBox(height: 8),
-                if (snapshot.data?.status.toLowerCase() == 'waiting' ||
-                    snapshot.data?.status.toLowerCase() == 'preparing')
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        HapticFeedback.mediumImpact();
-                        // Handle cancel button tap
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: AlertDialog(
-                                backgroundColor: Colors.white,
-                                contentPadding: EdgeInsets.zero,
-                                content: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.bottomCenter,
-                                        end: Alignment.topCenter,
-                                        colors: [
-                                          Color(0xFFFCCF59),
-                                          Color.fromRGBO(255, 255, 255, 0),
-                                        ],
-                                        stops: [0.0126, 0.6296],
-                                        transform: GradientRotation(
-                                            178.52 * (3.141592653589793 / 180)),
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  buildOrderDetails(snapshot.data!),
+                  const SizedBox(height: 8),
+                  if (snapshot.data?.status.toLowerCase() == 'waiting' ||
+                      snapshot.data?.status.toLowerCase() == 'preparing')
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          HapticFeedback.mediumImpact();
+                          // Handle cancel button tap
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: AlertDialog(
+                                  backgroundColor: Colors.white,
+                                  contentPadding: EdgeInsets.zero,
+                                  content: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.bottomCenter,
+                                          end: Alignment.topCenter,
+                                          colors: [
+                                            Color(0xFFFCCF59),
+                                            Color.fromRGBO(255, 255, 255, 0),
+                                          ],
+                                          stops: [0.0126, 0.6296],
+                                          transform: GradientRotation(178.52 *
+                                              (3.141592653589793 / 180)),
+                                        ),
                                       ),
-                                    ),
-                                    child: ConfirmCancelOrderCard(
-                                      onCancel: () async {
-                                        HapticFeedback.mediumImpact();
-                                        // Call the function to cancel order
-                                        bool cancellationSuccessful =
-                                            await OrderApi.cancelOrder(
-                                                widget.orderUuid);
-                                        Navigator.pop(context);
-                                        if (cancellationSuccessful) {
-                                          // return page before
+                                      child: ConfirmCancelOrderCard(
+                                        onCancel: () async {
+                                          HapticFeedback.mediumImpact();
+                                          // Call the function to cancel order
+                                          bool cancellationSuccessful =
+                                              await OrderApi.cancelOrder(
+                                                  widget.orderUuid);
                                           Navigator.pop(context);
-                                          widget.refreshCallback?.call();
-                                          globalMessage.showSuccessMessage(
-                                            "Hủy đơn thành công!",
-                                          );
-                                        } else {
-                                          globalMessage.showErrorMessage(
-                                            "Hủy đơn thất bại!",
-                                          );
-                                        }
-                                      },
+                                          if (cancellationSuccessful) {
+                                            // return page before
+                                            Navigator.pop(context);
+                                            widget.refreshCallback?.call();
+                                            globalMessage.showSuccessMessage(
+                                              "Hủy đơn thành công!",
+                                            );
+                                          } else {
+                                            globalMessage.showErrorMessage(
+                                              "Hủy đơn thất bại!",
+                                            );
+                                          }
+                                        },
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.red),
-                      ),
-                      child: const Text(
-                        'Hủy đơn',
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: 'Montserrat',
-                            color: Colors.white),
+                              );
+                            },
+                          );
+                        },
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.red),
+                        ),
+                        child: const Text(
+                          'Hủy đơn',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'Montserrat',
+                              color: Colors.white),
+                        ),
                       ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             );
           }
         },
@@ -173,6 +175,15 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     for (var detail in order.orderDetails) {
       numberOfProducts += detail.quantity;
     }
+
+    DateTime oneHourBeforePickUpTime =
+        order.pickUpTime.subtract(const Duration(hours: 1));
+
+    String formattedPickUpTime =
+        DateFormat('HH:mm dd/MM/yyyy').format(order.pickUpTime);
+    String formattedOneHourBeforePickUpTime =
+        DateFormat('HH:mm dd/MM/yyyy').format(oneHourBeforePickUpTime);
+
     // Build the UI for displaying order details
     return Padding(
       padding: const EdgeInsets.all(6.0),
@@ -287,7 +298,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               ),
               const SizedBox(height: 8),
               Text(
-                DateFormat('HH:mm dd/MM/yyyy').format(order.pickUpTime),
+                '$formattedOneHourBeforePickUpTime  -  $formattedPickUpTime',
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
@@ -445,7 +456,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   ),
                 ],
               ),
-              if (order.canceledReason != null)
+              if (order.canceledReason != null && order.canceledReason != "")
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -488,7 +499,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       ),
                   ],
                 ),
-              if (order.canceledReason != null)
+              if (order.canceledReason != null && order.canceledReason != "")
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

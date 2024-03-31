@@ -52,6 +52,14 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
     }
     GlobalMessage globalMessage = GlobalMessage(context);
 
+    DateTime oneHourBeforePickUpTime =
+        order.pickUpTime.subtract(const Duration(hours: 1));
+
+    String formattedPickUpTime =
+        DateFormat('HH:mm dd/MM/yyyy').format(order.pickUpTime);
+    String formattedOneHourBeforePickUpTime =
+        DateFormat('HH:mm dd/MM/yyyy').format(oneHourBeforePickUpTime);
+
     return Card(
       surfaceTintColor: Colors.white,
       elevation: 5,
@@ -162,7 +170,7 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
             ),
             const SizedBox(height: 8),
             Text(
-              DateFormat('HH:mm dd/MM/yyyy').format(order.pickUpTime),
+              '$formattedOneHourBeforePickUpTime  -  $formattedPickUpTime',
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
