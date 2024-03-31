@@ -27,6 +27,7 @@ class _MapWithTripComponentState extends State<MapWithTripComponent> {
   LocationData? _currentLocation;
   bool _isLoading = true;
   bool _showMarkers = true;
+  bool _showPolyline = false;
   // CHECK LOG
   var checkLog = Logger(printer: PrettyPrinter());
   // MARKERS VALUE
@@ -199,22 +200,23 @@ class _MapWithTripComponentState extends State<MapWithTripComponent> {
                   maxZoom: 16,
                   minZoom: 12,
                 ),
-                TappablePolylineLayer(
-                  // Will only render visible polylines, increasing performance
-                  polylineCulling: true,
-                  pointerDistanceTolerance: 20,
-                  polylines: [
-                    TaggedPolyline(
-                      tag: 'My Polyline',
-                      // An optional tag to distinguish polylines in callback
-                      points: _listPointPolylines,
-                      color: Colors.lightBlue.shade900,
-                      strokeWidth: 5.0,
-                    ),
-                  ],
-                  onTap: (polylines, tapPosition) => checkLog.i(
-                      'Tapped: ${polylines.map((polyline) => polyline.tag).join(',')} at ${tapPosition.globalPosition}'),
-                ),
+                if (_showPolyline)
+                  TappablePolylineLayer(
+                    // Will only render visible polylines, increasing performance
+                    polylineCulling: true,
+                    pointerDistanceTolerance: 20,
+                    polylines: [
+                      TaggedPolyline(
+                        tag: 'My Polyline',
+                        // An optional tag to distinguish polylines in callback
+                        points: _listPointPolylines,
+                        color: const Color(0xFF1152F5),
+                        strokeWidth: 5.0,
+                      ),
+                    ],
+                    onTap: (polylines, tapPosition) => checkLog.i(
+                        'Tapped: ${polylines.map((polyline) => polyline.tag).join(',')} at ${tapPosition.globalPosition}'),
+                  ),
                 PopupMarkerLayer(
                   options: PopupMarkerLayerOptions(
                     markers: _markers ?? [],
@@ -352,7 +354,7 @@ class _MapWithTripComponentState extends State<MapWithTripComponent> {
               shape: const CircleBorder(),
               mini: true,
               backgroundColor: Colors.white,
-              child: const Icon(Icons.my_location, color: Color(0xFFFBAB40)),
+              child: const Icon(Icons.my_location, color: Colors.black),
             ),
           ),
           Positioned(
@@ -374,8 +376,27 @@ class _MapWithTripComponentState extends State<MapWithTripComponent> {
               shape: const CircleBorder(),
               mini: true,
               backgroundColor: Colors.white,
-              child: const Icon(Icons.bus_alert_outlined,
-                  color: Color(0xFFFBAB40)),
+              child: const Icon(Icons.bus_alert_outlined, color: Colors.black),
+            ),
+          ),
+          // Add button to show/hide polyline
+          Positioned(
+            top: 200,
+            right: 16,
+            child: FloatingActionButton(
+              heroTag: null,
+              onPressed: () {
+                setState(() {
+                  _showPolyline = !_showPolyline;
+                });
+              },
+              shape: const CircleBorder(),
+              mini: true,
+              backgroundColor: Colors.white,
+              child: Icon(
+                _showPolyline ? Icons.visibility_off : Icons.visibility,
+                color: Colors.grey,
+              ),
             ),
           ),
         ],

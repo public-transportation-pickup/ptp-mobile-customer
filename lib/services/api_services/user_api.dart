@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:capstone_ptp/services/local_variables.dart';
 import 'package:http/http.dart' as http;
 
+import '../../models/predict_location_model.dart';
 import 'api_services.dart';
 
 class UserApi extends ApiService {
@@ -73,6 +74,34 @@ class UserApi extends ApiService {
       ApiService.checkLog
           .e('Failed to get user details: ${response.statusCode}');
       throw Exception('Failed to get user details: ${response.statusCode}');
+    }
+  }
+
+  // PREDICT TRIP BASE ON USER LOCATION
+  static Future<Trip> predictTripOnLocation(
+      double latitude, double longitude, String routeVarId) async {
+    final Uri apiUrl =
+        Uri.parse('${ApiService.baseUrl}/users/trips/coordinate');
+
+    final Map<String, dynamic> requestData = {
+      'routeVarId': routeVarId,
+      'latitude': latitude,
+      'longitude': longitude,
+    };
+
+    final http.Response response = await http.post(
+      apiUrl,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(requestData),
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+      return Trip.fromJson(jsonResponse);
+    } else {
+      throw Exception('Failed to predict location: ${response.statusCode}');
     }
   }
 }

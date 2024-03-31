@@ -1,5 +1,6 @@
 import 'package:capstone_ptp/pages/activity_pages/full_transactions_page.dart';
 import 'package:capstone_ptp/pages/product_pages/cart_page.dart';
+import 'package:capstone_ptp/pages/profile_pages/update_password_page.dart';
 import 'package:capstone_ptp/pages/profile_pages/update_profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_list/grouped_list.dart';
@@ -44,6 +45,11 @@ class _GroupedListOptionState extends State<GroupedListOption> {
       'page': UpdateProfilePage()
     },
     {
+      'name': 'Thay đổi mật khẩu',
+      'group': 'Tài khoản của tôi',
+      'page': UpdatePasswordPage()
+    },
+    {
       'name': 'Giỏ hàng của tôi',
       'group': 'Tài khoản của tôi',
       'page': CartPage()
@@ -51,12 +57,7 @@ class _GroupedListOptionState extends State<GroupedListOption> {
     {
       'name': 'Lịch sử giao dịch',
       'group': 'Tài khoản của tôi',
-      'fetchTransactions': true, // Add a flag to indicate to fetch transactions
-    },
-    {
-      'name': 'Liên kết ví',
-      'group': 'Tài khoản của tôi',
-      'page': ActivityPage()
+      'fetchTransactions': true,
     },
     {
       'name': 'Thông tin ứng dụng',

@@ -85,6 +85,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
         _hideLoading();
 
         LocalVariables.phoneNumber = phoneNumber;
+        LocalVariables.fullName = fullName;
         LocalVariables.dateOfBirth = dateOfBirth.toString();
       });
       globalMessage.showSuccessMessage("Cập nhật thành công.");

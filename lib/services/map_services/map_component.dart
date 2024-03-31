@@ -302,7 +302,7 @@ class _MapComponentState extends State<MapComponent> {
               backgroundColor: Colors.white,
               child: const Icon(
                 Icons.my_location,
-                color: Color(0xFFFBAB40),
+                color: Colors.black,
               ),
             ),
           ),
@@ -326,7 +326,7 @@ class _MapComponentState extends State<MapComponent> {
                   backgroundColor: Colors.white,
                   child: const Icon(
                     Icons.add,
-                    color: Color(0xFFFBAB40),
+                    color: Colors.black,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -344,7 +344,7 @@ class _MapComponentState extends State<MapComponent> {
                   backgroundColor: Colors.white,
                   child: const Icon(
                     Icons.remove,
-                    color: Color(0xFFFBAB40),
+                    color: Colors.black,
                   ),
                 ),
               ],

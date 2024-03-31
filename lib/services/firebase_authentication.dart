@@ -146,6 +146,20 @@ class FirebaseAuthentication {
     }
   }
 
+  Future<void> updatePassword(String newPassword) async {
+    try {
+      User? user = _auth.currentUser;
+      if (user != null) {
+        await user.updatePassword(newPassword);
+      } else {
+        throw 'No user currently signed in.';
+      }
+    } catch (error) {
+      checkLog.e("Error during password update: $error");
+      rethrow;
+    }
+  }
+
   Future<void> signOut() async {
     await _googleSignIn.signOut();
     await _auth.signOut();

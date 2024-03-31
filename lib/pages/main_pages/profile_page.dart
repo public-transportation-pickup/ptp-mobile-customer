@@ -137,7 +137,16 @@ class ProfilePage extends StatelessWidget {
                                   Column(
                                     children: [
                                       Text(
-                                        LocalVariables.displayName ?? '',
+                                        (LocalVariables.fullName != null &&
+                                                LocalVariables
+                                                    .fullName!.isNotEmpty)
+                                            ? LocalVariables.fullName!
+                                            : (LocalVariables.displayName !=
+                                                        null &&
+                                                    LocalVariables.displayName!
+                                                        .isNotEmpty)
+                                                ? LocalVariables.displayName!
+                                                : 'Chưa cập nhật',
                                         textAlign: TextAlign.center,
                                         style: const TextStyle(
                                           color: Color(0xFF353434),
