@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../models/product_in_cart_model.dart';
 import '../../services/api_services/store_api.dart';
 import '../../utils/global_message.dart';
+import '../main_pages/components/confirm_create_order_card.dart';
 import '../store_pages/components/store_detail_card.dart';
 import '../store_pages/store_detail_page.dart';
 import 'cart_provider.dart';
@@ -390,17 +391,54 @@ class _CartPageState extends State<CartPage> {
                       ElevatedButton(
                         onPressed: () async {
                           HapticFeedback.mediumImpact();
-                          // Handle creating order
-                          bool orderCreated =
-                              await cartProvider.createOrderAndClearCart();
-                          if (orderCreated) {
-                            setState(() {});
-                            globalMessage
-                                .showSuccessMessage("Tạo đơn hàng thành công!");
-                          } else {
-                            globalMessage
-                                .showErrorMessage("Tạo đơn hàng thất bại!");
-                          }
+                          // Handle confirm button tap
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: AlertDialog(
+                                  backgroundColor: Colors.white,
+                                  contentPadding: EdgeInsets.zero,
+                                  content: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.bottomCenter,
+                                          end: Alignment.topCenter,
+                                          colors: [
+                                            Color(0xFFFCCF59),
+                                            Color.fromRGBO(255, 255, 255, 0),
+                                          ],
+                                          stops: [0.0126, 0.6296],
+                                          transform: GradientRotation(178.52 *
+                                              (3.141592653589793 / 180)),
+                                        ),
+                                      ),
+                                      child: ConfirmCreateOrderCard(
+                                        onConfirm: () async {
+                                          HapticFeedback.mediumImpact();
+                                          // Handle creating order
+                                          bool orderCreated = await cartProvider
+                                              .createOrderAndClearCart();
+                                          Navigator.pop(context);
+                                          if (orderCreated) {
+                                            setState(() {});
+                                            globalMessage.showSuccessMessage(
+                                                "Tạo đơn hàng thành công!");
+                                          } else {
+                                            globalMessage.showErrorMessage(
+                                                "Tạo đơn hàng thất bại!");
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFFBAB40),
