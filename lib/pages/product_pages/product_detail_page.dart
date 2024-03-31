@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../models/product_in_cart_model.dart';
 import '../../services/api_services/product_api.dart';
 import '../../services/local_variables.dart';
+import '../../utils/global_message.dart';
 import '../profile_pages/update_profile_page.dart';
 import 'add_to_cart_form.dart';
 import 'cart_page.dart';
@@ -112,6 +113,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   Widget _buildProductDetail(ProductInMenu product) {
+    GlobalMessage globalMessage = GlobalMessage(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -326,10 +328,20 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             onAddToCart: (ProductInCartModel productInCart) {
                               // Here you can add the productInCart to the cart
                               // using CartProvider
-                              Provider.of<CartProvider>(context, listen: false)
+                              var success = Provider.of<CartProvider>(context,
+                                      listen: false)
                                   .addToCart(productInCart);
                               // Set Value cart
-                              //CartProvider.menuId = product.menuId;
+                              print(success);
+                              if (success) {
+                                Navigator.pop(context);
+                                globalMessage.showSuccessMessage(
+                                    "Đã thêm vào giỏ hàng!");
+                              } else {
+                                Navigator.pop(context);
+                                globalMessage.showWarnMessage(
+                                    "Số lượng sản phẩm đã đạt giới hạn!");
+                              }
                             },
                           );
                         }

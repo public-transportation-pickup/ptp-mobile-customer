@@ -34,18 +34,25 @@ class CartProvider extends ChangeNotifier {
 
   int get itemCount => _items.length;
 
-  void addToCart(ProductInCartModel newItem) {
+  bool addToCart(ProductInCartModel newItem) {
     // Check if the item already exists in the cart
     for (var existingItem in _items) {
       if (existingItem.productMenuId == newItem.productMenuId) {
         // If the item already exists, update the quantity and notify listeners
-        updateQuantity(existingItem, existingItem.quantity + newItem.quantity);
-        return;
+        if ((existingItem.quantity + newItem.quantity) <=
+            existingItem.maxQuantity!) {
+          updateQuantity(
+              existingItem, existingItem.quantity + newItem.quantity);
+          return true;
+        } else {
+          return false;
+        }
       }
     }
     // If the item doesn't exist, add it to the cart
     _items.add(newItem);
     notifyListeners();
+    return true;
   }
 
   Future<void> _fetchCart() async {
@@ -233,6 +240,7 @@ class CartProvider extends ChangeNotifier {
         productName: item.productName,
         actualPrice: item.actualPrice,
         quantity: newQuantity,
+        maxQuantity: item.maxQuantity,
         imageURL: item.imageURL,
         note: item.note,
         productMenuId: item.productMenuId,

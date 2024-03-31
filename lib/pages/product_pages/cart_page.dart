@@ -312,14 +312,22 @@ class _CartPageState extends State<CartPage> {
                                                           color:
                                                               Color(0xFFFBAB40),
                                                         ),
-                                                        onPressed: () {
-                                                          cartProvider
-                                                              .updateQuantity(
-                                                                  items[index],
-                                                                  items[index]
-                                                                          .quantity +
-                                                                      1);
-                                                        },
+                                                        onPressed: items[index]
+                                                                        .maxQuantity !=
+                                                                    null &&
+                                                                items[index]
+                                                                        .quantity <
+                                                                    items[index]
+                                                                        .maxQuantity!
+                                                            ? () {
+                                                                cartProvider.updateQuantity(
+                                                                    items[
+                                                                        index],
+                                                                    items[index]
+                                                                            .quantity +
+                                                                        1);
+                                                              }
+                                                            : null,
                                                       ),
                                                     ],
                                                   ),

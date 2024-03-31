@@ -5,6 +5,7 @@ class ProductInCartModel {
   final String note;
   final String productMenuId;
   final String imageURL;
+  final int? maxQuantity;
 
   ProductInCartModel({
     required this.productName,
@@ -13,5 +14,6 @@ class ProductInCartModel {
     required this.note,
     required this.productMenuId,
     required this.imageURL,
+    this.maxQuantity,
   });
 }
