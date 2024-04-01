@@ -19,6 +19,7 @@ class OrderModel {
   final String stationAddress;
   final String storeId;
   final String storeName;
+  final String storeAddress;
   final String storePhoneNumber;
   final String paymentId;
   final String paymentType;
@@ -40,6 +41,7 @@ class OrderModel {
     required this.stationAddress,
     required this.storeId,
     required this.storeName,
+    required this.storeAddress,
     required this.storePhoneNumber,
     required this.paymentId,
     required this.paymentType,

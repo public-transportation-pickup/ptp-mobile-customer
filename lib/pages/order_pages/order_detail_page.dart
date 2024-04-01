@@ -197,24 +197,23 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 70,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SvgPicture.asset(
-                      iconPath,
-                      height: 64,
-                      width: 64,
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Flexible(
-                            flex: 1,
-                            child: Text(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SvgPicture.asset(
+                        iconPath,
+                        height: 64,
+                        width: 64,
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
                               order.storeName,
                               style: const TextStyle(
                                 fontSize: 16,
@@ -224,23 +223,34 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
                             ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            "Liên hệ cửa hàng:   ${order.storePhoneNumber}",
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: 'Montserrat',
+                            const SizedBox(height: 4),
+                            Text(
+                              order.storeAddress,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Montserrat',
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
                             ),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                          ),
-                        ],
+                            const SizedBox(height: 2),
+                            Text(
+                              "Liên hệ:  ${order.storePhoneNumber}",
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Montserrat',
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+                ],
               ),
 
               const SizedBox(height: 8),
