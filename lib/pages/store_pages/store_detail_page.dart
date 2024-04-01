@@ -1,6 +1,7 @@
 import 'package:capstone_ptp/models/product_in_menu_model.dart';
 import 'package:capstone_ptp/pages/product_pages/cart_provider.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:capstone_ptp/services/api_services/cart_api.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone_ptp/models/store_model.dart';
 import 'package:flutter/services.dart';
@@ -41,7 +42,78 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
     _storeFuture = StoreApi.getStoreById(widget.storeId);
     CartProvider.stationId = widget.stationId;
     CartProvider.arrivalTime = widget.arrivalTime;
-    CartProvider.storeId = widget.storeId;
+    // CartProvider.storeId = widget.storeId;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      checkSameStore(widget.storeId);
+    });
+  }
+
+  void checkSameStore(String storeId) {
+    if (CartProvider.storeId == "") {
+      CartProvider.storeId = storeId;
+    } else {
+      if (storeId != CartProvider.storeId) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return WillPopScope(
+              onWillPop: () async {
+                // Handle tapping outside the dialog
+                Navigator.of(context).pop(); // Close dialog
+                Navigator.of(context).pop(); // Close current page
+                return true; // Prevent dialog from closing automatically
+              },
+              child: AlertDialog(
+                title: const Text(
+                  "Bạn muốn đặt món ở cửa hàng này?",
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                content: const Text(
+                  "Bạn có thể tiếp tục đặt món ở cửa hàng này, nhưng những món bạn đã chọn từ cửa hàng trước sẽ bị xóa khỏi giỏ hàng nhé.",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                  textAlign: TextAlign.center,
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close dialog
+                      Navigator.of(context).pop(); // Close current page
+                    },
+                    child: const Text(
+                      'Không',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.red),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      CartProvider.storeId = storeId;
+                      // clear cart
+                      Provider.of<CartProvider>(context, listen: false)
+                          .clearCart();
+                      CartApi.deleteCart();
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(
+                      'Tiếp tục',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.green),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      } else {
+        return;
+      }
+    }
   }
 
   void updateCategories(List<CategoryModel>? categories) {

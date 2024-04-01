@@ -59,6 +59,8 @@ class _PredictTripMapComponentState extends State<PredictTripMapComponent> {
             _currentLocation!.latitude ?? 0,
             _currentLocation!.longitude ?? 0,
             widget.routeVarId);
+        // Trip tripFromApi = await UserApi.predictTripOnLocation(
+        //     10.770986, 106.704073, widget.routeVarId);
         List<Schedule> stationsFromApi = tripFromApi.schedules
             .map((schedule) => Schedule(
                   index: schedule.index,
