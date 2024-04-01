@@ -1,16 +1,15 @@
-import 'package:capstone_ptp/models/station_model.dart';
+import 'package:capstone_ptp/models/predict_location_model.dart';
 import 'package:capstone_ptp/models/store_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_svg/svg.dart';
 
-class MarkerPopup extends StatelessWidget {
+class MarkerPredictPopup extends StatelessWidget {
   final Marker marker;
-  final StationModel station;
+  final Schedule station;
   final StoreModel store;
 
-  const MarkerPopup({
+  const MarkerPredictPopup({
     Key? key,
     required this.marker,
     required this.station,
@@ -38,6 +37,8 @@ class MarkerPopup extends StatelessWidget {
   }
 
   Widget _cardDescription() {
+    // Parse the time using a custom method
+    String formattedTime = _parseTime(station.arrivalTime!);
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Container(
@@ -48,11 +49,9 @@ class MarkerPopup extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text(
-              station.name != "N/A"
-                  ? "[${station.code}] ${station.name!}"
+              station.stationName != "N/A"
+                  ? "[${station.index}] ${station.stationName}"
                   : store.name!,
-              //overflow: TextOverflow.ellipsis,
-              //softWrap: false,
               style: const TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 14.0,
@@ -61,12 +60,8 @@ class MarkerPopup extends StatelessWidget {
             const Padding(padding: EdgeInsets.symmetric(vertical: 4.0)),
             Flexible(
               child: Text(
-                station.address != "N/A"
-                    ? station.address!
-                    : "${store.addressNo} ${store.street}, ${store.ward}, ${store.zone}",
+                "Dự kiến đến trạm lúc: $formattedTime",
                 style: const TextStyle(fontSize: 12.0),
-                //overflow: TextOverflow.ellipsis,
-                //softWrap: false,
               ),
             ),
           ],
@@ -74,4 +69,24 @@ class MarkerPopup extends StatelessWidget {
       ),
     );
   }
+}
+
+String _parseTime(String timeString) {
+  // Split the time string into components
+  List<String> components = timeString.split(':');
+
+  // Ensure that there are enough components
+  if (components.length < 2) {
+    return 'Invalid time format';
+  }
+
+  // Extract hours and minutes
+  int hours = int.parse(components[0]);
+  int minutes = int.parse(components[1]);
+
+  // Construct the formatted time string
+  String formattedTime =
+      '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
+
+  return formattedTime;
 }

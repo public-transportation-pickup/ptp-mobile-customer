@@ -21,7 +21,7 @@ StoreModel _$StoreModelFromJson(Map<String, dynamic> json) => StoreModel(
       street: json['street'] as String,
       zone: json['zone'] as String,
       ward: json['ward'] as String,
-      activationDate: json['activationDate'] as String,
+      activationDate: json['activationDate'] as String?,
       imageName: json['imageName'] as String,
       imageURL: json['imageURL'] as String,
       userId: json['userId'] as String,

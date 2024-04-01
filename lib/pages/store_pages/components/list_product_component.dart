@@ -49,7 +49,7 @@ class _ListProductComponentState extends State<ListProductComponent> {
       widget.updateProductsInMenu(menu.productInMenus);
 
       // Update CartProvider
-      CartProvider.storeId = widget.storeId;
+      // CartProvider.storeId = widget.storeId;
       DateTime current = DateTime.now();
       DateTime formatedTime = DateTime(
           current.year,

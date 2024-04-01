@@ -6,53 +6,53 @@ part 'store_model.g.dart';
 class StoreModel {
   String id;
   @JsonKey(name: 'creationDate')
-  String creationDate;
-  String name;
-  String description;
+  String? creationDate;
+  String? name;
+  String? description;
   @JsonKey(name: 'phoneNumber')
-  String phoneNumber;
-  String status;
+  String? phoneNumber;
+  String? status;
   @JsonKey(name: 'openedTime')
-  String openedTime;
+  String? openedTime;
   @JsonKey(name: 'closedTime')
-  String closedTime;
+  String? closedTime;
   double latitude;
   double longitude;
   @JsonKey(name: 'addressNo')
-  String addressNo;
-  String street;
-  String zone;
-  String ward;
+  String? addressNo;
+  String? street;
+  String? zone;
+  String? ward;
   @JsonKey(name: 'activationDate')
-  String activationDate;
+  String? activationDate;
   @JsonKey(name: 'imageName')
-  String imageName;
+  String? imageName;
   @JsonKey(name: 'imageURL')
-  String imageURL;
+  String? imageURL;
   @JsonKey(name: 'userId')
-  String userId;
+  String? userId;
   String? email;
   String? password;
 
   StoreModel(
       {required this.id,
-      required this.creationDate,
-      required this.name,
-      required this.description,
-      required this.phoneNumber,
-      required this.status,
-      required this.openedTime,
-      required this.closedTime,
+      this.creationDate,
+      this.name,
+      this.description,
+      this.phoneNumber,
+      this.status,
+      this.openedTime,
+      this.closedTime,
       required this.latitude,
       required this.longitude,
-      required this.addressNo,
-      required this.street,
-      required this.zone,
-      required this.ward,
-      required this.activationDate,
-      required this.imageName,
-      required this.imageURL,
-      required this.userId,
+      this.addressNo,
+      this.street,
+      this.zone,
+      this.ward,
+      this.activationDate,
+      this.imageName,
+      this.imageURL,
+      this.userId,
       this.email,
       this.password});
 

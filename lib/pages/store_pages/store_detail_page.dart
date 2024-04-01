@@ -41,6 +41,7 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
     _storeFuture = StoreApi.getStoreById(widget.storeId);
     CartProvider.stationId = widget.stationId;
     CartProvider.arrivalTime = widget.arrivalTime;
+    CartProvider.storeId = widget.storeId;
   }
 
   void updateCategories(List<CategoryModel>? categories) {
@@ -161,7 +162,7 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
                             bottomRight: Radius.circular(20.0),
                           ),
                           child: Image.network(
-                            store.imageURL,
+                            store.imageURL!,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -172,13 +173,13 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.all(16.0),
                           child: StoreDetailCard(
-                            storeName: store.name,
-                            description: store.description,
-                            phone: store.phoneNumber,
+                            storeName: store.name!,
+                            description: store.description!,
+                            phone: store.phoneNumber!,
                             fullAddress:
                                 "${store.addressNo} ${store.street}, ${store.ward}, ${store.zone}",
-                            openTime: store.openedTime,
-                            closeTime: store.closedTime,
+                            openTime: store.openedTime!,
+                            closeTime: store.closedTime!,
                           ),
                         ),
                       ),

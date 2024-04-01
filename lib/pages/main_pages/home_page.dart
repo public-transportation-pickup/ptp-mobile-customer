@@ -1,12 +1,14 @@
 import 'package:capstone_ptp/pages/map_pages/map_page.dart';
 import 'package:capstone_ptp/pages/route_pages/final_station_page.dart';
 import 'package:capstone_ptp/services/map_services/mini_map_box.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:animations/animations.dart';
 
+import '../predict_trip_pages/list_route_page_predict.dart';
 import '../route_pages/list_routes_page.dart';
 import '../store_pages/store_detail_page.dart';
 import 'components/carousel_slider.dart';
@@ -355,89 +357,99 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                       const SizedBox(width: 16),
-                      Column(
-                        children: [
-                          Container(
-                            width: 100,
-                            height: 50,
-                            decoration: const ShapeDecoration(
-                              color: Colors.red,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                ),
-                              ),
-                              shadows: [
-                                BoxShadow(
-                                  color: Color(0xFF909090),
-                                  blurRadius: 10,
-                                  offset: Offset(0, 4),
-                                  spreadRadius: -3,
-                                ),
-                              ],
-                            ),
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                              child: Image.asset(
-                                'lib/assets/images/cafe.jpg',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: 100,
-                            height: 65,
-                            decoration: const ShapeDecoration(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(20),
-                                  bottomRight: Radius.circular(20),
-                                ),
-                              ),
-                              shadows: [
-                                BoxShadow(
-                                  color: Color(0xFF909090),
-                                  blurRadius: 10,
-                                  offset: Offset(0, 4),
-                                  spreadRadius: -3,
-                                ),
-                              ],
-                            ),
-                            child: const Padding(
-                              padding: EdgeInsets.fromLTRB(8, 4, 0, 4),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'COFFEE',
-                                    style: TextStyle(
-                                      color: Color(0xFF353434),
-                                      fontSize: 14,
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w700,
-                                      height: 0,
-                                    ),
+                      GestureDetector(
+                        onTap: () {
+                          HapticFeedback.mediumImpact();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ListRoutePredictPage()),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 100,
+                              height: 50,
+                              decoration: const ShapeDecoration(
+                                color: Colors.red,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20),
                                   ),
-                                  Text(
-                                    'Tìm coffee gần bạn',
-                                    style: TextStyle(
-                                      color: Color(0xFF353434),
-                                      fontSize: 12,
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w300,
-                                      height: 0,
-                                    ),
+                                ),
+                                shadows: [
+                                  BoxShadow(
+                                    color: Color(0xFF909090),
+                                    blurRadius: 10,
+                                    offset: Offset(0, 4),
+                                    spreadRadius: -3,
                                   ),
                                 ],
                               ),
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                ),
+                                child: Image.asset(
+                                  'lib/assets/images/cafe.jpg',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
+                            Container(
+                              width: 100,
+                              height: 65,
+                              decoration: const ShapeDecoration(
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(20),
+                                    bottomRight: Radius.circular(20),
+                                  ),
+                                ),
+                                shadows: [
+                                  BoxShadow(
+                                    color: Color(0xFF909090),
+                                    blurRadius: 10,
+                                    offset: Offset(0, 4),
+                                    spreadRadius: -3,
+                                  ),
+                                ],
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.fromLTRB(8, 4, 0, 4),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'VỊ TRÍ',
+                                      style: TextStyle(
+                                        color: Color(0xFF353434),
+                                        fontSize: 14,
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w700,
+                                        height: 0,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Định vị chuyến xe bạn đang đi',
+                                      style: TextStyle(
+                                        color: Color(0xFF353434),
+                                        fontSize: 12,
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w300,
+                                        height: 0,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
