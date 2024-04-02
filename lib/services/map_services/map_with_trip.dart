@@ -144,13 +144,6 @@ class _MapWithTripComponentState extends State<MapWithTripComponent> {
         _currentLocation = currentLocation;
         _isLoading = false;
       });
-
-      if (_currentLocation != null) {
-        _mapController.move(
-          LatLng(_currentLocation!.latitude!, _currentLocation!.longitude!),
-          15.0,
-        );
-      }
     } catch (e) {
       setState(() {
         _isLoading = false;
