@@ -1,3 +1,4 @@
+import 'package:capstone_ptp/services/api_services/station_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,11 +19,13 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   dynamic _storeDetails;
+  dynamic _stationDetails;
 
   @override
   void initState() {
     super.initState();
     _fetchStoreDetails();
+    _fetchStationDetails();
   }
 
   void _fetchStoreDetails() async {
@@ -32,6 +35,18 @@ class _CartPageState extends State<CartPage> {
       final storeDetails = await StoreApi.getStoreById(CartProvider.storeId);
       setState(() {
         _storeDetails = storeDetails;
+      });
+    }
+  }
+
+  void _fetchStationDetails() async {
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
+    //await cartProvider.fetchCart();
+    if (cartProvider.items.isNotEmpty) {
+      final stationDetails =
+          await StationApi.getStationById(CartProvider.stationId);
+      setState(() {
+        _stationDetails = stationDetails;
       });
     }
   }
@@ -51,6 +66,13 @@ class _CartPageState extends State<CartPage> {
     final double totalPrice = cartProvider.calculateTotal();
 
     GlobalMessage globalMessage = GlobalMessage(context);
+
+    DateTime oneHourBeforePickUpTime =
+        CartProvider.pickUpTime.subtract(const Duration(hours: 1));
+    String formattedPickUpTime =
+        DateFormat('HH:mm dd/MM/yyyy').format(CartProvider.pickUpTime);
+    String formattedOneHourBeforePickUpTime =
+        DateFormat('HH:mm dd/MM/yyyy').format(oneHourBeforePickUpTime);
 
     return SafeArea(
       child: Scaffold(
@@ -160,7 +182,7 @@ class _CartPageState extends State<CartPage> {
                               ),
                             ),
                           // ===========================================
-                          if (_storeDetails != null && items.isNotEmpty)
+                          if (_stationDetails != null && items.isNotEmpty)
                             Card(
                               color: Colors.white,
                               elevation: 2.0,
@@ -189,9 +211,9 @@ class _CartPageState extends State<CartPage> {
                                       ],
                                     ),
                                     const SizedBox(height: 8),
-                                    const Text(
-                                      'Trạm thủ đức - TEST',
-                                      style: TextStyle(
+                                    Text(
+                                      _stationDetails.address,
+                                      style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                         fontFamily: 'Montserrat',
@@ -217,9 +239,9 @@ class _CartPageState extends State<CartPage> {
                                       ],
                                     ),
                                     const SizedBox(height: 8),
-                                    const Text(
-                                      '8:00 21/12/2023 - 12:00 11/11/2024',
-                                      style: TextStyle(
+                                    Text(
+                                      '$formattedOneHourBeforePickUpTime  -  $formattedPickUpTime',
+                                      style: const TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400,
                                         fontFamily: 'Montserrat',
@@ -453,12 +475,9 @@ class _CartPageState extends State<CartPage> {
                                                               Color(0xFFFBAB40),
                                                         ),
                                                         onPressed: items[index]
-                                                                        .maxQuantity !=
-                                                                    null &&
+                                                                    .quantity <
                                                                 items[index]
-                                                                        .quantity <
-                                                                    items[index]
-                                                                        .maxQuantity!
+                                                                    .maxQuantity
                                                             ? () {
                                                                 cartProvider.updateQuantity(
                                                                     items[

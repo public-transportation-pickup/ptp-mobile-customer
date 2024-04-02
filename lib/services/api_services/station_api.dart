@@ -57,4 +57,28 @@ class StationApi extends ApiService {
       throw Exception('Failed to load stations: ${response.statusCode}');
     }
   }
+
+  //GET STORE BY STORE ID
+  static Future<StationModel> getStationById(String stationId) async {
+    final Uri stationUri =
+        Uri.parse('${ApiService.baseUrl}/stations/$stationId');
+    try {
+      final response = await http.get(
+        stationUri,
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonResponse = json.decode(response.body);
+        // ApiService.checkLog.t(jsonResponse);
+        return StationModel.fromJson(jsonResponse);
+      } else {
+        ApiService.checkLog.e('Failed to load station: ${response.statusCode}');
+        throw Exception('Failed to load station: ${response.statusCode}');
+      }
+    } catch (e) {
+      ApiService.checkLog.e('Error while fetching station: $e');
+      throw Exception('Error while fetching station: $e');
+    }
+  }
 }

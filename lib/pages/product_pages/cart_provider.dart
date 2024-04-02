@@ -13,8 +13,12 @@ import '../../services/local_variables.dart';
 class CartProvider extends ChangeNotifier {
   static var checkLog = Logger(printer: PrettyPrinter());
 
-  static String? name = LocalVariables.fullName ?? LocalVariables.displayName;
-  static String? phoneNumber = LocalVariables.phoneNumber;
+  // String name = LocalVariables.fullName?.isNotEmpty == true
+  //     ? LocalVariables.fullName!
+  //     : LocalVariables.displayName!;
+
+  // String phoneNumber =
+  //     LocalVariables.phoneNumber == "" ? "" : LocalVariables.phoneNumber!;
 
   static String arrivalTime = '';
   static DateTime pickUpTime = DateTime.now();
@@ -41,7 +45,7 @@ class CartProvider extends ChangeNotifier {
       if (existingItem.productMenuId == newItem.productMenuId) {
         // If the item already exists, update the quantity and notify listeners
         if ((existingItem.quantity + newItem.quantity) <=
-            existingItem.maxQuantity!) {
+            existingItem.maxQuantity) {
           updateQuantity(
               existingItem, existingItem.quantity + newItem.quantity);
           saveCart();
@@ -76,6 +80,7 @@ class CartProvider extends ChangeNotifier {
         stationId = cart.stationId;
         stationAddr = cart.stationAddr;
         storeId = cart.storeId;
+        pickUpTime = DateTime.parse(cart.pickUpTime);
 
         // Convert pickUpTime string to DateTime object
         DateTime pickUpDateTime = DateTime.parse(cart.pickUpTime);
@@ -138,7 +143,7 @@ class CartProvider extends ChangeNotifier {
       final cart = CreateCartModel(
         stationId: stationId,
         stationAddr: stationAddr,
-        phoneNumber: phoneNumber ?? '',
+        phoneNumber: LocalVariables.phoneNumber!,
         pickUpTime: pickUpTime.toIso8601String(),
         storeId: storeId,
         note: '',
@@ -147,7 +152,7 @@ class CartProvider extends ChangeNotifier {
                   productMenuId: item.productMenuId,
                   name: item.productName,
                   quantity: item.quantity,
-                  maxQuantity: item.maxQuantity!,
+                  maxQuantity: item.maxQuantity,
                   actualPrice: item.actualPrice.toInt(),
                   imageURL: item.imageURL,
                   note: item.note,
@@ -184,7 +189,7 @@ class CartProvider extends ChangeNotifier {
         total: 0,
         stationId: stationId,
         stationAddr: stationAddr,
-        phoneNumber: phoneNumber ?? '',
+        phoneNumber: LocalVariables.phoneNumber!,
         pickUpTime: pickUpTime.toIso8601String(),
         storeId: storeId,
         note: '',
@@ -193,7 +198,7 @@ class CartProvider extends ChangeNotifier {
                   productMenuId: item.productMenuId,
                   name: item.productName,
                   quantity: item.quantity,
-                  maxQuantity: item.maxQuantity!,
+                  maxQuantity: item.maxQuantity,
                   actualPrice: item.actualPrice.toInt(),
                   imageURL: item.imageURL,
                   note: item.note,
@@ -240,8 +245,8 @@ class CartProvider extends ChangeNotifier {
 
   void clearCart() {
     _items.clear();
-    name = '';
-    phoneNumber = '';
+    // name = '';
+    // phoneNumber = '';
     pickUpTime = DateTime.now();
     arrivalTime = '';
     stationId = '';
@@ -276,6 +281,7 @@ class CartProvider extends ChangeNotifier {
         productName: item.productName,
         actualPrice: item.actualPrice,
         quantity: item.quantity,
+        maxQuantity: item.maxQuantity,
         imageURL: item.imageURL,
         note: newNote,
         productMenuId: item.productMenuId,
@@ -297,9 +303,14 @@ class CartProvider extends ChangeNotifier {
     try {
       // Construct order details
       var initTotal = calculateTotal();
+      // Check if fullName is null or empty, use displayName instead
+      var name = LocalVariables.fullName!;
+      if (name == "") {
+        name = LocalVariables.displayName!;
+      }
       final order = OrderCreateModel(
-        name: name!,
-        phoneNumber: phoneNumber ?? '',
+        name: name,
+        phoneNumber: LocalVariables.phoneNumber!,
         pickUpTime: pickUpTime.toIso8601String(),
         total: initTotal.toInt(),
         stationId: stationId,
