@@ -22,8 +22,15 @@ class DialogHelper {
           ),
           content: TextField(
             controller: noteController,
+            maxLength: 100,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
+              hintText: 'Không bắt buộc',
+              hintStyle: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.grey),
+              contentPadding: EdgeInsets.fromLTRB(12, 20, 12, 20),
             ),
             maxLines: null, // Allow multiple lines
           ),

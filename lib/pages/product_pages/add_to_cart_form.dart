@@ -45,6 +45,7 @@ class _AddToCartFormState extends State<AddToCartForm> {
                   color: Colors.black),
             ),
             TextFormField(
+              maxLength: 100,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Không bắt buộc',

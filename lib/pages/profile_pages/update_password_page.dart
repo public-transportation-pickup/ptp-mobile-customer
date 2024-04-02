@@ -104,6 +104,7 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
               TextFormField(
                 controller: _newPasswordController,
                 obscureText: _isObscureNewPassword,
+                maxLength: 30,
                 decoration: InputDecoration(
                   labelText: 'Nhập mật khẩu mới',
                   suffixIcon: IconButton(
@@ -125,6 +126,7 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
               TextFormField(
                 controller: _confirmPasswordController,
                 obscureText: _isObscureConfirmPassword,
+                maxLength: 30,
                 decoration: InputDecoration(
                   labelText: 'Nhập lại mật khẩu mới',
                   suffixIcon: IconButton(
