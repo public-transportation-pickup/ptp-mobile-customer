@@ -89,11 +89,13 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
                   ),
                   TextButton(
                     onPressed: () {
-                      CartProvider.storeId = storeId;
                       // clear cart
                       Provider.of<CartProvider>(context, listen: false)
                           .clearCart();
                       CartApi.deleteCart();
+                      CartProvider.storeId = storeId;
+                      CartProvider.stationId = widget.stationId;
+                      CartProvider.arrivalTime = widget.arrivalTime;
                       Navigator.of(context).pop();
                     },
                     child: const Text(

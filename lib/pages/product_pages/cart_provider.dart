@@ -134,9 +134,10 @@ class CartProvider extends ChangeNotifier {
         int.parse(arrivalTime.split(':')[0]),
         int.parse(arrivalTime.split(':')[1]),
       );
-      parsedArrivalTime.add(const Duration(hours: 1));
+      var arrivalTimeAddOneHour =
+          parsedArrivalTime.add(const Duration(hours: 1));
       String formattedPickUpTime =
-          DateFormat('yyyy-MM-ddTHH:mm:ss.SSSZ').format(pickUpTime);
+          DateFormat('yyyy-MM-ddTHH:mm:ss.SSSZ').format(arrivalTimeAddOneHour);
 
       pickUpTime = DateTime.parse(formattedPickUpTime);
 
@@ -159,7 +160,6 @@ class CartProvider extends ChangeNotifier {
                 ))
             .toList(),
       );
-
       // Call API to create cart
       final createdCart = await CartApi.createCart(cart);
 
