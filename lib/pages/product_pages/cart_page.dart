@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../models/product_in_cart_model.dart';
 import '../../services/api_services/store_api.dart';
 import '../../utils/global_message.dart';
 import '../main_pages/components/confirm_create_order_card.dart';
-import '../store_pages/components/store_detail_card.dart';
 import '../store_pages/store_detail_page.dart';
 import 'cart_provider.dart';
 import 'components/edit_note_form.dart';
@@ -63,6 +63,9 @@ class _CartPageState extends State<CartPage> {
               color: Colors.black,
             ),
             onPressed: () {
+              if (_storeDetails != null && items.isNotEmpty) {
+                cartProvider.saveCart();
+              }
               Navigator.pop(context);
             },
           ),
@@ -81,15 +84,152 @@ class _CartPageState extends State<CartPage> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           if (_storeDetails != null && items.isNotEmpty)
-                            StoreDetailCard(
-                              storeName: _storeDetails.name,
-                              description: _storeDetails.description,
-                              phone: _storeDetails.phoneNumber,
-                              fullAddress:
-                                  "${_storeDetails.addressNo} ${_storeDetails.street}, ${_storeDetails.ward}, ${_storeDetails.zone}",
-                              openTime: _storeDetails.openedTime,
-                              closeTime: _storeDetails.closedTime,
+                            Card(
+                              color: Colors.white,
+                              elevation: 2.0,
+                              margin: const EdgeInsets.all(10.0),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      "Đơn hàng được đặt tại cửa hàng:",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Montserrat',
+                                        color: Colors.brown,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4.0),
+                                    Text(
+                                      _storeDetails.name,
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w700,
+                                        fontFamily: 'Montserrat',
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4.0),
+                                    Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                          'lib/assets/icons/subway_location_icon.svg',
+                                          width: 20.0,
+                                          height: 20.0,
+                                        ),
+                                        const SizedBox(width: 12.0),
+                                        Expanded(
+                                          child: Text(
+                                            "${_storeDetails.addressNo} ${_storeDetails.street}, ${_storeDetails.ward}, ${_storeDetails.zone}",
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: 'Montserrat',
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8.0),
+                                    Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                          'lib/assets/icons/store_phone_icon.svg',
+                                          width: 20.0,
+                                          height: 20.0,
+                                          color: Colors.blueAccent,
+                                        ),
+                                        const SizedBox(width: 12.0),
+                                        Expanded(
+                                          child: Text(
+                                            _storeDetails.phoneNumber,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: 'Montserrat',
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8.0),
+                                  ],
+                                ),
+                              ),
                             ),
+                          // ===========================================
+                          if (_storeDetails != null && items.isNotEmpty)
+                            Card(
+                              color: Colors.white,
+                              elevation: 2.0,
+                              margin: const EdgeInsets.all(10.0),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                          'lib/assets/icons/bus_stop_icon.svg',
+                                          height: 24,
+                                          width: 24,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        const Text(
+                                          'Trạm đến:',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w700,
+                                            fontFamily: 'Montserrat',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    const Text(
+                                      'Trạm thủ đức - TEST',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Montserrat',
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        SvgPicture.asset(
+                                          'lib/assets/icons/clock_get_product_icon.svg',
+                                          height: 24,
+                                          width: 24,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        const Text(
+                                          'Thời gian có thể đến lấy hàng:',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w700,
+                                            fontFamily: 'Montserrat',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    const Text(
+                                      '8:00 21/12/2023 - 12:00 11/11/2024',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: 'Montserrat',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          // =====================================================
                           if (_storeDetails != null && items.isNotEmpty)
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -20,6 +20,7 @@ class CartProvider extends ChangeNotifier {
   static DateTime pickUpTime = DateTime.now();
 
   static String stationId = '';
+  static String stationAddr = '';
   static String storeId = '';
   static String cartIdMongo = '';
 
@@ -43,6 +44,7 @@ class CartProvider extends ChangeNotifier {
             existingItem.maxQuantity!) {
           updateQuantity(
               existingItem, existingItem.quantity + newItem.quantity);
+          saveCart();
           return true;
         } else {
           return false;
@@ -51,6 +53,7 @@ class CartProvider extends ChangeNotifier {
     }
     // If the item doesn't exist, add it to the cart
     _items.add(newItem);
+    saveCart();
     notifyListeners();
     return true;
   }
@@ -66,11 +69,21 @@ class CartProvider extends ChangeNotifier {
   // Method to fetch the user's cart from the API
   Future<List<ProductInCartModel>> fetchCart() async {
     try {
+      checkLog.d("Call api fetch cart");
       Cart? cart = await CartApi.fetchCart();
       if (cart != null) {
         cartIdMongo = cart.id;
         stationId = cart.stationId;
+        stationAddr = cart.stationAddr;
         storeId = cart.storeId;
+
+        // Convert pickUpTime string to DateTime object
+        DateTime pickUpDateTime = DateTime.parse(cart.pickUpTime);
+        // Subtract one hour from pickUpDateTime
+        DateTime arrivalDateTime =
+            pickUpDateTime.subtract(const Duration(hours: 1));
+        // Format arrivalDateTime to HH:mm string format
+        arrivalTime = DateFormat.Hm().format(arrivalDateTime);
 
         _items.clear(); // Clear existing items
         for (var item in cart.items) {
@@ -78,6 +91,7 @@ class CartProvider extends ChangeNotifier {
             productName: item.name,
             actualPrice: item.actualPrice.toDouble(),
             quantity: item.quantity,
+            maxQuantity: item.maxQuantity,
             imageURL: item.imageURL,
             note: item.note,
             productMenuId: item.productMenuId,
@@ -123,6 +137,7 @@ class CartProvider extends ChangeNotifier {
 
       final cart = CreateCartModel(
         stationId: stationId,
+        stationAddr: stationAddr,
         phoneNumber: phoneNumber ?? '',
         pickUpTime: pickUpTime.toIso8601String(),
         storeId: storeId,
@@ -132,6 +147,7 @@ class CartProvider extends ChangeNotifier {
                   productMenuId: item.productMenuId,
                   name: item.productName,
                   quantity: item.quantity,
+                  maxQuantity: item.maxQuantity!,
                   actualPrice: item.actualPrice.toInt(),
                   imageURL: item.imageURL,
                   note: item.note,
@@ -167,6 +183,7 @@ class CartProvider extends ChangeNotifier {
         id: cartIdMongo,
         total: 0,
         stationId: stationId,
+        stationAddr: stationAddr,
         phoneNumber: phoneNumber ?? '',
         pickUpTime: pickUpTime.toIso8601String(),
         storeId: storeId,
@@ -176,6 +193,7 @@ class CartProvider extends ChangeNotifier {
                   productMenuId: item.productMenuId,
                   name: item.productName,
                   quantity: item.quantity,
+                  maxQuantity: item.maxQuantity!,
                   actualPrice: item.actualPrice.toInt(),
                   imageURL: item.imageURL,
                   note: item.note,

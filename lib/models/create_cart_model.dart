@@ -12,6 +12,7 @@ class CreateCartRequest {
 
 class CreateCartModel {
   late String stationId;
+  late String stationAddr;
   late String phoneNumber;
   late String storeId;
   late String note;
@@ -20,6 +21,7 @@ class CreateCartModel {
 
   CreateCartModel(
       {required this.stationId,
+      required this.stationAddr,
       required this.phoneNumber,
       required this.note,
       required this.pickUpTime,
@@ -29,6 +31,7 @@ class CreateCartModel {
   Map<String, dynamic> toJson() {
     return {
       'stationId': stationId,
+      'stationAddr': stationAddr,
       'phoneNumber': phoneNumber,
       'note': note,
       'pickUpTime': pickUpTime,
@@ -42,6 +45,7 @@ class CreateCartItem {
   late String productMenuId;
   late String name;
   late int quantity;
+  late int maxQuantity;
   late int actualPrice;
   late String imageURL;
   late String note;
@@ -50,6 +54,7 @@ class CreateCartItem {
     required this.productMenuId,
     required this.name,
     required this.quantity,
+    required this.maxQuantity,
     required this.actualPrice,
     required this.imageURL,
     required this.note,
@@ -60,6 +65,7 @@ class CreateCartItem {
       'productMenuId': productMenuId,
       'name': name,
       'quantity': quantity,
+      'maxQuantity': maxQuantity,
       'actualPrice': actualPrice,
       'imageURL': imageURL,
       'note': note,
@@ -71,6 +77,7 @@ class CreateCartItem {
       productMenuId: json['productMenuId'],
       name: json['name'],
       quantity: json['quantity'],
+      maxQuantity: json['maxQuantity'],
       actualPrice: json['actualPrice'],
       imageURL: json['imageURL'],
       note: json['note'],

@@ -42,7 +42,6 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
     _storeFuture = StoreApi.getStoreById(widget.storeId);
     CartProvider.stationId = widget.stationId;
     CartProvider.arrivalTime = widget.arrivalTime;
-    // CartProvider.storeId = widget.storeId;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       checkSameStore(widget.storeId);
     });
