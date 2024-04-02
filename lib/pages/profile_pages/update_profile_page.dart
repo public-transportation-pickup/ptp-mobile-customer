@@ -72,27 +72,53 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
   }
 
   Future<void> updateUserProfile() async {
-    try {
-      _showLoading();
-      // Update user profile using the provided data
-      await UserApi.updateUserProfile(
-        userId: userId,
-        fullName: fullName,
-        phoneNumber: phoneNumber,
-        dateOfBirth: dateOfBirth,
-      );
-      setState(() {
-        _hideLoading();
+    if (_validateInputs()) {
+      try {
+        _showLoading();
+        // Update user profile using the provided data
+        await UserApi.updateUserProfile(
+          userId: userId,
+          fullName: fullName,
+          phoneNumber: phoneNumber,
+          dateOfBirth: dateOfBirth,
+        );
+        setState(() {
+          _hideLoading();
 
-        LocalVariables.phoneNumber = phoneNumber;
-        LocalVariables.fullName = fullName;
-        LocalVariables.dateOfBirth = dateOfBirth.toString();
-      });
-      globalMessage.showSuccessMessage("Cập nhật thành công.");
-    } catch (e) {
-      _hideLoading();
-      globalMessage.showErrorMessage("Cập nhật thất bại.");
+          LocalVariables.phoneNumber = phoneNumber;
+          LocalVariables.fullName = fullName;
+          LocalVariables.dateOfBirth = dateOfBirth.toString();
+        });
+        globalMessage.showSuccessMessage("Cập nhật thành công.");
+      } catch (e) {
+        _hideLoading();
+        globalMessage.showErrorMessage("Cập nhật thất bại.");
+      }
     }
+  }
+
+  bool _validateInputs() {
+    // if (fullName.isEmpty) {
+    //   globalMessage.showErrorMessage("Vui lòng nhập họ và tên.");
+    //   return false;
+    // }
+    if (phoneNumber.isEmpty) {
+      globalMessage.showErrorMessage("Vui lòng nhập số điện thoại.");
+      return false;
+    } else {
+      if (!isValidPhoneNumber(phoneNumber) || phoneNumber.length < 10) {
+        globalMessage.showErrorMessage("Số điện thoại không hợp lệ.");
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  bool isValidPhoneNumber(String value) {
+    // Regular expression to match phone number starting with 0 and containing exactly 10 digits
+    RegExp regex = RegExp(r'^0\d{9}$');
+    return regex.hasMatch(value);
   }
 
   @override
@@ -131,9 +157,12 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                     const Text('Họ và tên'),
                     TextField(
                       onChanged: (value) {
-                        fullName = value;
+                        if (value.length <= 20) {
+                          fullName = value;
+                        }
                       },
                       controller: TextEditingController(text: fullName),
+                      maxLength: 20,
                       decoration: InputDecoration(
                         hintText: fullName.isEmpty ? 'Chưa cập nhật' : null,
                       ),
@@ -145,9 +174,15 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                         phoneNumber = value;
                       },
                       controller: TextEditingController(text: phoneNumber),
+                      maxLength: 10,
                       decoration: InputDecoration(
-                        hintText: phoneNumber == "" ? 'Chưa cập nhật' : null,
+                        hintText: phoneNumber.isEmpty ? 'Chưa cập nhật' : null,
+                        errorText: phoneNumber.isNotEmpty &&
+                                !isValidPhoneNumber(phoneNumber)
+                            ? 'Số điện thoại không hợp lệ'
+                            : null,
                       ),
+                      keyboardType: TextInputType.number,
                     ),
                     const SizedBox(height: 20.0),
                     const Text('Ngày sinh'),
@@ -157,8 +192,8 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                         final selectedDate = await showDatePicker(
                           context: context,
                           initialDate: dateOfBirth,
-                          firstDate: DateTime(1900),
-                          lastDate: DateTime.now(),
+                          firstDate: DateTime(1970),
+                          lastDate: DateTime(2008),
                         );
                         if (selectedDate != null) {
                           setState(() {

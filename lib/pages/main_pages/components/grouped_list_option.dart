@@ -10,7 +10,7 @@ import '../../../models/transaction_model.dart';
 import '../../../models/wallet_model.dart';
 import '../../../services/api_services/wallet_api.dart';
 import '../../../services/local_variables.dart';
-import '../activity_page.dart';
+import '../../profile_pages/app_info_page.dart';
 
 class GroupedListOption extends StatefulWidget {
   GroupedListOption({Key? key}) : super(key: key);
@@ -62,7 +62,7 @@ class _GroupedListOptionState extends State<GroupedListOption> {
     {
       'name': 'Thông tin ứng dụng',
       'group': 'Trung tâm trợ giúp',
-      'page': ActivityPage()
+      'page': AppInfoPage()
     },
   ];
 

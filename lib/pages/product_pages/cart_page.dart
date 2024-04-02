@@ -6,8 +6,10 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../models/product_in_cart_model.dart';
 import '../../services/api_services/store_api.dart';
+import '../../services/local_variables.dart';
 import '../../utils/global_message.dart';
 import '../main_pages/components/confirm_create_order_card.dart';
+import '../profile_pages/update_profile_page.dart';
 import '../store_pages/store_detail_page.dart';
 import 'cart_provider.dart';
 import 'components/edit_note_form.dart';
@@ -558,54 +560,96 @@ class _CartPageState extends State<CartPage> {
                       ElevatedButton(
                         onPressed: () async {
                           HapticFeedback.mediumImpact();
-                          // Handle confirm button tap
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: AlertDialog(
-                                  backgroundColor: Colors.white,
-                                  contentPadding: EdgeInsets.zero,
-                                  content: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: Container(
-                                      decoration: const BoxDecoration(
-                                        gradient: LinearGradient(
-                                          begin: Alignment.bottomCenter,
-                                          end: Alignment.topCenter,
-                                          colors: [
-                                            Color(0xFFFCCF59),
-                                            Color.fromRGBO(255, 255, 255, 0),
-                                          ],
-                                          stops: [0.0126, 0.6296],
-                                          transform: GradientRotation(178.52 *
-                                              (3.141592653589793 / 180)),
+                          if (LocalVariables.phoneNumber == null ||
+                              LocalVariables.phoneNumber == "") {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text(
+                                    'Chưa cập nhật số điện thoại!',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                  content: const Text(
+                                      'Bạn cần phải cập nhật số điện thoại để có thể tiếp tục mua sắm.'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text('Hủy'),
+                                      onPressed: () {
+                                        HapticFeedback.mediumImpact();
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: const Text('Cập nhật'),
+                                      onPressed: () {
+                                        HapticFeedback.mediumImpact();
+                                        Navigator.of(context)
+                                            .pop(); // Close the current dialog
+                                        // Navigate to the update profile page
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  UpdateProfilePage()),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else {
+                            // Handle confirm button tap
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: AlertDialog(
+                                    backgroundColor: Colors.white,
+                                    contentPadding: EdgeInsets.zero,
+                                    content: ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          gradient: LinearGradient(
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                            colors: [
+                                              Color(0xFFFCCF59),
+                                              Color.fromRGBO(255, 255, 255, 0),
+                                            ],
+                                            stops: [0.0126, 0.6296],
+                                            transform: GradientRotation(178.52 *
+                                                (3.141592653589793 / 180)),
+                                          ),
                                         ),
-                                      ),
-                                      child: ConfirmCreateOrderCard(
-                                        onConfirm: () async {
-                                          HapticFeedback.mediumImpact();
-                                          // Handle creating order
-                                          bool orderCreated = await cartProvider
-                                              .createOrderAndClearCart();
-                                          Navigator.pop(context);
-                                          if (orderCreated) {
-                                            setState(() {});
-                                            globalMessage.showSuccessMessage(
-                                                "Tạo đơn hàng thành công!");
-                                          } else {
-                                            globalMessage.showErrorMessage(
-                                                "Tạo đơn hàng thất bại!");
-                                          }
-                                        },
+                                        child: ConfirmCreateOrderCard(
+                                          onConfirm: () async {
+                                            HapticFeedback.mediumImpact();
+                                            // Handle creating order
+                                            bool orderCreated =
+                                                await cartProvider
+                                                    .createOrderAndClearCart();
+                                            Navigator.pop(context);
+                                            if (orderCreated) {
+                                              setState(() {});
+                                              globalMessage.showSuccessMessage(
+                                                  "Tạo đơn hàng thành công!");
+                                            } else {
+                                              globalMessage.showErrorMessage(
+                                                  "Tạo đơn hàng thất bại!");
+                                            }
+                                          },
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
-                          );
+                                );
+                              },
+                            );
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFFBAB40),
