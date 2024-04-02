@@ -238,6 +238,7 @@ class CartProvider extends ChangeNotifier {
     _items.remove(item);
     if (_items.isEmpty) {
       await CartApi.deleteCart();
+      clearCart();
       checkLog.d("Cart list is empty, call delete cart api success");
     }
     notifyListeners();
@@ -332,7 +333,7 @@ class CartProvider extends ChangeNotifier {
       // Clear cart items if order creation is successful
       if (createdOrder) {
         await CartApi.deleteCart();
-        _items.clear();
+        clearCart();
         notifyListeners();
       }
 

@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../models/product_in_cart_model.dart';
 import '../../services/api_services/store_api.dart';
+import '../../services/api_services/wallet_api.dart';
 import '../../services/local_variables.dart';
 import '../../utils/global_message.dart';
 import '../main_pages/components/confirm_create_order_card.dart';
@@ -22,12 +23,36 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   dynamic _storeDetails;
   dynamic _stationDetails;
+  String currentMoney = "0";
+  int currentIntMoney = 0;
 
   @override
   void initState() {
     super.initState();
     _fetchStoreDetails();
     _fetchStationDetails();
+    _fetchUserWallet();
+  }
+
+  String formatPrice(num price) {
+    final format = NumberFormat("#,##0", "en_US");
+    String formattedPrice = format.format(price);
+    return formattedPrice.replaceAll(',', '.');
+  }
+
+  // Function to fetch user wallet details
+  Future<void> _fetchUserWallet() async {
+    try {
+      final wallet = await WalletApi.fetchUserWallet(LocalVariables.userGUID!);
+      setState(() {
+        currentMoney = formatPrice(wallet.amount);
+        currentIntMoney = wallet.amount.toInt();
+      });
+    } catch (error) {
+      // Handle error
+      print('Error fetching user wallet: $error');
+      // You might want to show an error message to the user or handle the error appropriately
+    }
   }
 
   void _fetchStoreDetails() async {
@@ -51,12 +76,6 @@ class _CartPageState extends State<CartPage> {
         _stationDetails = stationDetails;
       });
     }
-  }
-
-  String formatPrice(double price) {
-    final format = NumberFormat("#,##0", "en_US");
-    String formattedPrice = format.format(price);
-    return formattedPrice.replaceAll(',', '.');
   }
 
   @override
@@ -531,13 +550,27 @@ class _CartPageState extends State<CartPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Text(
-                        '*Lấy hàng tại cửa hàng',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          fontStyle: FontStyle.italic,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            '*Nhận đơn tại cửa hàng',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              fontStyle: FontStyle.italic,
+                              color: Colors.red,
+                            ),
+                          ),
+                          Text(
+                            'Số dư ví: $currentMoney',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -627,19 +660,29 @@ class _CartPageState extends State<CartPage> {
                                         ),
                                         child: ConfirmCreateOrderCard(
                                           onConfirm: () async {
-                                            HapticFeedback.mediumImpact();
-                                            // Handle creating order
-                                            bool orderCreated =
-                                                await cartProvider
-                                                    .createOrderAndClearCart();
-                                            Navigator.pop(context);
-                                            if (orderCreated) {
-                                              setState(() {});
-                                              globalMessage.showSuccessMessage(
-                                                  "Tạo đơn hàng thành công!");
+                                            // Check số dư ví đủ hay ko
+                                            int totalPriceInt =
+                                                totalPrice.toInt();
+                                            if (currentIntMoney >=
+                                                totalPriceInt) {
+                                              HapticFeedback.mediumImpact();
+                                              // Handle creating order
+                                              bool orderCreated =
+                                                  await cartProvider
+                                                      .createOrderAndClearCart();
+                                              Navigator.pop(context);
+                                              if (orderCreated) {
+                                                setState(() {});
+                                                globalMessage.showSuccessMessage(
+                                                    "Tạo đơn hàng thành công!");
+                                              } else {
+                                                globalMessage.showErrorMessage(
+                                                    "Tạo đơn hàng thất bại!");
+                                              }
                                             } else {
-                                              globalMessage.showErrorMessage(
-                                                  "Tạo đơn hàng thất bại!");
+                                              Navigator.pop(context);
+                                              globalMessage.showWarnMessage(
+                                                  "Số dư trong ví không đủ để thanh toán!");
                                             }
                                           },
                                         ),
