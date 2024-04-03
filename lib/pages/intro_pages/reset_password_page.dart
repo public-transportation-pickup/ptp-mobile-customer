@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../services/firebase_authentication.dart';
@@ -14,8 +14,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   final FirebaseAuthentication _auth = FirebaseAuthentication();
 
   String _resetPasswordMessage = '';
-
   bool isLoading = false;
+  int requestCount = 0;
+  Timer? cooldownTimer;
+  late DateTime lastRequestTime;
 
   void _showLoading() {
     setState(() {
@@ -30,6 +32,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   }
 
   Future<void> _resetPassword() async {
+    final now = DateTime.now();
+    final difference = now.difference(lastRequestTime);
+    if (difference.inSeconds < 60 && requestCount >= 3) {
+      _showResetLimitMessage(difference);
+      return;
+    }
     _showLoading();
     String email = _emailController.text.trim();
 
@@ -39,10 +47,27 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         setState(() {
           _resetPasswordMessage =
               'Email xác thực đã được gửi.\nVui lòng kiểm tra hòm thư Email để tiến hành khôi phục mật khẩu.';
+          requestCount++;
+          lastRequestTime = DateTime.now();
+          if (requestCount == 3) {
+            cooldownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+              setState(() {
+                final remainingTime = 60 - timer.tick;
+                if (remainingTime <= 0) {
+                  timer.cancel();
+                  requestCount = 0;
+                  cooldownTimer = null; // Reset cooldown timer
+                  _resetPasswordMessage = '';
+                } else {
+                  _resetPasswordMessage =
+                      'Bạn đã vượt quá số lần yêu cầu.\nVui lòng thử lại sau $remainingTime giây.';
+                }
+              });
+            });
+          }
         });
       } catch (error) {
         setState(() {
-          // _resetPasswordMessage = 'Error: $error';
           _resetPasswordMessage = 'Email không hợp lệ!';
         });
       } finally {
@@ -54,6 +79,30 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         _resetPasswordMessage = 'Vui lòng nhập email.';
       });
     }
+  }
+
+  void _showResetLimitMessage(Duration difference) {
+    final remainingTime = 60 - difference.inSeconds;
+    setState(() {
+      if (remainingTime == 0 || remainingTime <= 1) {
+        _resetPasswordMessage = '';
+      } else {
+        _resetPasswordMessage =
+            'Bạn đã vượt quá số lần yêu cầu.\nVui lòng thử lại sau $remainingTime giây.';
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    lastRequestTime = DateTime.now();
+  }
+
+  @override
+  void dispose() {
+    cooldownTimer?.cancel();
+    super.dispose();
   }
 
   @override
