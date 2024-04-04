@@ -70,7 +70,7 @@ dependencies:
   google_sign_in: ^6.1.0
   # Package for api, json
   json_annotation: ^4.8.0
-  http: ^1.0.0
+  
   # Package for map, location, marker
   location: ^5.0.3
   geolocator: ^10.1.0
@@ -79,10 +79,16 @@ dependencies:
   flutter_map_marker_popup: ^6.1.2
   flutter_map_tappable_polyline: ^6.0.0
   syncfusion_flutter_maps: ^25.1.35
+  # Package for payment third service
+  flutter_paypal_checkout: ^1.0.1
+  webview_flutter: ^3.0.4
   
   # google_maps_flutter: ^2.0.10
   # mapbox_maps_flutter: ^0.4.4
   # flutter_osm_plugin: ^0.70.4
+
+dependency_overrides:
+  http: ^1.0.0
 
 dev_dependencies:
   flutter_test:

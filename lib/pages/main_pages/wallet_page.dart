@@ -1,6 +1,9 @@
+import 'package:capstone_ptp/services/paypal_services/menu_bank_deposit.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone_ptp/models/wallet_model.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
@@ -164,16 +167,38 @@ class _WalletPageState extends State<WalletPage> {
                           ),
                         ),
                       ),
-                      const Positioned(
+                      Positioned(
                         top: 160,
                         right: 40,
-                        child: Text(
-                          "Nạp tiền >",
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white),
-                          textAlign: TextAlign.right,
+                        child: GestureDetector(
+                          onTap: () async {
+                            HapticFeedback.mediumImpact();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MenuBankDeposit(
+                                  onDepositSuccess: (bool success) {
+                                    if (success) {
+                                      // Reload the wallet page
+                                      setState(() {
+                                        _walletFuture =
+                                            WalletApi.fetchUserWallet(
+                                                widget.userId);
+                                      });
+                                    }
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            "Nạp tiền >",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white),
+                            textAlign: TextAlign.right,
+                          ),
                         ),
                       ),
                     ]),

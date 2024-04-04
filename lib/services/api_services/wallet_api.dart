@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:capstone_ptp/models/wallet_model.dart';
+import 'package:capstone_ptp/services/local_variables.dart';
 import 'package:http/http.dart' as http;
 import 'package:capstone_ptp/services/api_services/api_services.dart';
 
@@ -27,6 +28,43 @@ class WalletApi extends ApiService {
     } catch (e) {
       ApiService.checkLog.e('Error while fetching user wallet: $e');
       throw Exception('Error while fetching user wallet: $e');
+    }
+  }
+
+  // Function to deposit money into wallet
+  static Future<bool> depositMoney(int amount) async {
+    final Uri depositUrl = Uri.parse('${ApiService.baseUrl}/wallets');
+
+    // Prepare the request body
+    Map<String, dynamic> requestBody = {
+      "amount": amount,
+      "source": "Paypal",
+      "type": "Deposit"
+    };
+
+    try {
+      final response = await http.post(
+        depositUrl,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${LocalVariables.jwtToken}',
+        },
+        body: json.encode(requestBody),
+      );
+
+      if (response.statusCode == 201) {
+        // Deposit successful
+        print("Nạp tiền thành công!");
+        return true;
+      } else {
+        // Deposit failed
+        print("Nạp tiền thất bại!");
+        return false;
+      }
+    } catch (e) {
+      // Error handling
+      ApiService.checkLog.e('Error while depositing money: $e');
+      throw Exception('Error while depositing money: $e');
     }
   }
 }
