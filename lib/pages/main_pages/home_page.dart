@@ -1,17 +1,14 @@
 import 'package:capstone_ptp/pages/map_pages/map_page.dart';
 import 'package:capstone_ptp/pages/route_pages/final_station_page.dart';
 import 'package:capstone_ptp/services/map_services/mini_map_box.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:animations/animations.dart';
 
 import '../predict_trip_pages/list_route_page_predict.dart';
 import '../route_pages/list_routes_page.dart';
 import '../store_pages/store_detail_page.dart';
-import 'components/carousel_slider.dart';
 import 'components/notify_topic_component.dart';
 import 'profile_page.dart';
 
@@ -191,7 +188,7 @@ class _HomePageState extends State<HomePage> {
                               width: 100,
                               height: 50, // 50% of 131 (total height)
                               decoration: const ShapeDecoration(
-                                color: Colors.red,
+                                color: Color(0xFFFFEFC8),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(20),
@@ -207,14 +204,16 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ],
                               ),
-                              child: ClipRRect(
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                ),
-                                child: Image.asset(
-                                  'lib/assets/images/bus.jpg',
-                                  fit: BoxFit.cover,
+                              child: Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20),
+                                  ),
+                                  child: Image.asset(
+                                    'lib/assets/images/store_icon.png',
+                                  ),
                                 ),
                               ),
                             ),
@@ -239,13 +238,12 @@ class _HomePageState extends State<HomePage> {
                                 ],
                               ),
                               child: const Padding(
-                                padding: EdgeInsets.fromLTRB(8, 4, 0,
-                                    4), // Left: 8, Top: 4, Right: 0, Bottom: 4
+                                padding: EdgeInsets.fromLTRB(8, 4, 0, 4),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'XE BUÝT',
+                                      'CỬA HÀNG',
                                       style: TextStyle(
                                         color: Color(0xFF353434),
                                         fontSize: 14,
@@ -255,7 +253,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ),
                                     Text(
-                                      'Tìm trạm xe gần bạn',
+                                      'Các cửa hàng đang hoạt động',
                                       style: TextStyle(
                                         color: Color(0xFF353434),
                                         fontSize: 12,
@@ -278,7 +276,7 @@ class _HomePageState extends State<HomePage> {
                             width: 100,
                             height: 50, // 50% of 131 (total height)
                             decoration: const ShapeDecoration(
-                              color: Colors.red,
+                              color: Color(0xFFFFEFC8),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(20),
@@ -300,8 +298,9 @@ class _HomePageState extends State<HomePage> {
                                 topRight: Radius.circular(20),
                               ),
                               child: Image.asset(
-                                'lib/assets/images/banhmi.jpg',
-                                fit: BoxFit.cover,
+                                'lib/assets/images/combo_chart_icon.png',
+                                height: 20,
+                                //fit: BoxFit.cover,
                               ),
                             ),
                           ),
@@ -331,7 +330,7 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'ĐỒ ĂN',
+                                    'CHI TIÊU',
                                     style: TextStyle(
                                       color: Color(0xFF353434),
                                       fontSize: 14,
@@ -341,7 +340,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                   Text(
-                                    'Tìm món ăn gần bạn',
+                                    'Thống kê chi tiêu, giao dịch',
                                     style: TextStyle(
                                       color: Color(0xFF353434),
                                       fontSize: 12,
@@ -372,7 +371,7 @@ class _HomePageState extends State<HomePage> {
                               width: 100,
                               height: 50,
                               decoration: const ShapeDecoration(
-                                color: Colors.red,
+                                color: Color(0xFFFFEFC8),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(20),
@@ -393,9 +392,11 @@ class _HomePageState extends State<HomePage> {
                                   topLeft: Radius.circular(20),
                                   topRight: Radius.circular(20),
                                 ),
-                                child: Image.asset(
-                                  'lib/assets/images/cafe.jpg',
-                                  fit: BoxFit.cover,
+                                child: SvgPicture.asset(
+                                  'lib/assets/images/detect_trip_icon.svg',
+                                  color: Colors.blueGrey,
+                                  //height: 20,
+                                  //fit: BoxFit.cover,
                                 ),
                               ),
                             ),
@@ -732,38 +733,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(height: 32),
-
-            // SLIDER "Gợi ý cho bạn"
-            Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Gợi ý cho bạn',
-                    style: TextStyle(
-                      color: Color(0xFF353434),
-                      fontSize: 20,
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.w700,
-                      height: 0,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: CustomCarouselSlider(),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
 
             // Infomation Notifycation Topic
             Container(
