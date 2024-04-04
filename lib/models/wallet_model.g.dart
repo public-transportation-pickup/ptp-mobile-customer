@@ -15,6 +15,9 @@ Wallet _$WalletFromJson(Map<String, dynamic> json) => Wallet(
       transactions: (json['transactions'] as List<dynamic>)
           .map((e) => Transaction.fromJson(e as Map<String, dynamic>))
           .toList(),
+      walletLogs: (json['walletLogs'] as List<dynamic>)
+          .map((e) => WalletLog.fromJson(e as Map<String, dynamic>))
+          .toList(),
       storeId: json['storeId'] as String?,
     );
 
@@ -26,4 +29,5 @@ Map<String, dynamic> _$WalletToJson(Wallet instance) => <String, dynamic>{
       'userId': instance.userId,
       'storeId': instance.storeId,
       'transactions': instance.transactions,
+      'walletLogs': instance.walletLogs,
     };

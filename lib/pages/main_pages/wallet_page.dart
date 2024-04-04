@@ -1,3 +1,4 @@
+import 'package:capstone_ptp/models/wallet_log_model.dart';
 import 'package:capstone_ptp/services/paypal_services/menu_bank_deposit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +59,13 @@ class _WalletPageState extends State<WalletPage> {
           } else {
             final wallet = snapshot.data!;
             List<Transaction>? transactions = wallet.transactions;
-            transactions
+            List<WalletLog>? walletLogs = wallet.walletLogs;
+            // transactions
+            //     .sort((a, b) => b.creationDate.compareTo(a.creationDate));
+            // Combine transactions and walletLogs into one list
+            List<dynamic> combinedList = [...transactions, ...walletLogs];
+            // Sort the combined list based on creationDate
+            combinedList
                 .sort((a, b) => b.creationDate.compareTo(a.creationDate));
 
             return SingleChildScrollView(
@@ -226,7 +233,7 @@ class _WalletPageState extends State<WalletPage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => FullTransactionsPage(
-                                    transactions: transactions),
+                                    transactions: combinedList),
                               ),
                             );
                           },

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../models/transaction_model.dart';
 import 'transaction_history_tab.dart';
 
 class FullTransactionsPage extends StatelessWidget {
-  final List<Transaction>? transactions;
+  final List<dynamic>? transactions;
 
   FullTransactionsPage({required this.transactions});
 

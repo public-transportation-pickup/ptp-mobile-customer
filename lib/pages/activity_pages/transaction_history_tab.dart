@@ -71,7 +71,7 @@ class _TransactionHistoryTabState extends State<TransactionHistoryTab> {
 }
 
 class TransactionCard extends StatelessWidget {
-  final Transaction transaction;
+  final dynamic transaction;
 
   TransactionCard({required this.transaction});
 
@@ -97,14 +97,33 @@ class TransactionCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Align(
-              alignment: Alignment.center,
-              child: Icon(
-                Icons.attach_money,
-                size: 36,
-                color: Colors.green,
+            if (transaction.transactionType == "Transfer")
+              const Align(
+                alignment: Alignment.center,
+                child: Icon(
+                  Icons.attach_money,
+                  size: 36,
+                  color: Colors.redAccent,
+                ),
               ),
-            ),
+            if (transaction.transactionType == "Receive")
+              const Align(
+                alignment: Alignment.center,
+                child: Icon(
+                  Icons.payments_outlined,
+                  size: 36,
+                  color: Colors.green,
+                ),
+              ),
+            if (transaction.transactionType == "")
+              const Align(
+                alignment: Alignment.center,
+                child: Icon(
+                  Icons.paypal,
+                  size: 36,
+                  color: Colors.blue,
+                ),
+              ),
             const SizedBox(width: 16),
             Expanded(
               flex: 3,
@@ -147,6 +166,25 @@ class TransactionCard extends StatelessWidget {
                         ),
                       ],
                     ),
+                  if (transaction.transactionType == "" ||
+                      transaction.transactionType == null)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Nạp tiền vào ví",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'Nguồn: ${transaction.source}',
+                          style: const TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
                   Text(formatDate(transaction.creationDate)),
                 ],
               ),
@@ -155,7 +193,8 @@ class TransactionCard extends StatelessWidget {
               flex: 2,
               child: Align(
                 alignment: Alignment.bottomRight,
-                child: transaction.transactionType == "Receive"
+                child: (transaction.transactionType == "Receive" ||
+                        transaction.transactionType == "")
                     ? Text(
                         "+ ${formatPrice(transaction.amount.toDouble())}",
                         style: const TextStyle(
