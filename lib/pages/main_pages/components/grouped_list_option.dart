@@ -7,6 +7,7 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:logger/logger.dart';
 
 import '../../../models/transaction_model.dart';
+import '../../../models/wallet_log_model.dart';
 import '../../../models/wallet_model.dart';
 import '../../../services/api_services/wallet_api.dart';
 import '../../../services/local_variables.dart';
@@ -20,18 +21,22 @@ class GroupedListOption extends StatefulWidget {
 
 class _GroupedListOptionState extends State<GroupedListOption> {
   var checkLog = Logger(printer: PrettyPrinter());
-  late Future<List<Transaction>> _futureTransactions;
+  late Future<List<dynamic>> _futureTransactions;
 
-  Future<List<Transaction>> _fetchTransactions() async {
+  Future<List<dynamic>> _fetchTransactions() async {
     final String userId = LocalVariables.userGUID!;
     try {
       Wallet userWallet = await WalletApi.fetchUserWallet(userId);
       List<Transaction> listTransactions = userWallet.transactions;
+      List<WalletLog>? walletLogs = userWallet.walletLogs;
 
       // Sort transactions by creation date in descending order
-      listTransactions.sort((a, b) => b.creationDate.compareTo(a.creationDate));
+      // Combine transactions and walletLogs into one list
+      List<dynamic> combinedList = [...listTransactions, ...walletLogs];
+      // Sort the combined list based on creationDate
+      combinedList.sort((a, b) => b.creationDate.compareTo(a.creationDate));
 
-      return listTransactions;
+      return combinedList;
     } catch (error) {
       checkLog.e('Error fetching transaction: $error');
       rethrow;

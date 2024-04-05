@@ -7,7 +7,7 @@ class PaypalCheckoutService {
   static Future<bool> initiatePaypalCheckout(
     BuildContext context, {
     required String orderName,
-    required int amount,
+    required double amount,
   }) async {
     Completer<bool> completer = Completer<bool>();
 

@@ -260,10 +260,10 @@ class _WalletPageState extends State<WalletPage> {
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount:
-                              transactions.length > 3 ? 3 : transactions.length,
+                              combinedList.length > 3 ? 3 : combinedList.length,
                           itemBuilder: (context, index) {
                             return TransactionCard(
-                                transaction: transactions[index]);
+                                transaction: combinedList[index]);
                           },
                         ),
                       ),
