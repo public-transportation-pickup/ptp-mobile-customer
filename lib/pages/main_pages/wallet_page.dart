@@ -251,7 +251,7 @@ class _WalletPageState extends State<WalletPage> {
                       ],
                     ),
                   ),
-                  if (transactions.isNotEmpty)
+                  if (combinedList.isNotEmpty)
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Card(

@@ -47,20 +47,31 @@ class _SpendingStatisticsPageState extends State<SpendingStatisticsPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text('Hiển thị theo: '),
-                DropdownButton<String>(
-                  value: selectedTimePeriod,
-                  onChanged: (newValue) {
-                    setState(() {
-                      selectedTimePeriod = newValue!;
-                    });
-                  },
-                  items: <String>['Week', 'Month']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: value == 'Week' ? Text('Tuần') : Text('Tháng'),
-                    );
-                  }).toList(),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20)),
+                  child: DropdownButton<String>(
+                    value: selectedTimePeriod,
+                    onChanged: (newValue) {
+                      setState(() {
+                        selectedTimePeriod = newValue!;
+                      });
+                    },
+                    items: <String>['Week', 'Month']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: value == 'Week' ? Text('Tuần') : Text('Tháng'),
+                      );
+                    }).toList(),
+                    icon: const Icon(Icons.arrow_drop_down),
+                    iconSize: 30,
+                    dropdownColor: Colors.white,
+                    underline: const SizedBox(),
+                  ),
                 )
               ],
             ),

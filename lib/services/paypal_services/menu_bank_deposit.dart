@@ -101,7 +101,20 @@ class _MenuBankDepositState extends State<MenuBankDeposit> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             RadioListTile(
-              title: const Text('PayPal'),
+              title: Row(
+                children: [
+                  Image.asset(
+                    'lib/assets/images/paypal_logo.png',
+                    width: 36,
+                    height: 36,
+                  ),
+                  const SizedBox(width: 16),
+                  const Text(
+                    'PayPal',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ],
+              ),
               value: 'PayPal',
               groupValue: selectedOption,
               onChanged: (value) {
@@ -112,7 +125,20 @@ class _MenuBankDepositState extends State<MenuBankDeposit> {
               selected: selectedOption == 'PayPal',
             ),
             RadioListTile(
-              title: const Text('Mastercard'),
+              title: Row(
+                children: [
+                  Image.asset(
+                    'lib/assets/images/mastercard_logo.png',
+                    width: 36,
+                    height: 36,
+                  ),
+                  const SizedBox(width: 16),
+                  const Text(
+                    'Mastercard',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ],
+              ),
               value: 'Mastercard',
               groupValue: selectedOption,
               onChanged: (value) {
