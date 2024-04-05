@@ -88,7 +88,7 @@ class _SpendingStatisticsPageState extends State<SpendingStatisticsPage> {
                               data.timePeriod,
                           yValueMapper: (TransactionData data, _) =>
                               data.amount,
-                          name: 'Tiền ra',
+                          name: 'Tiền chi tiêu',
                         ),
                         ColumnSeries<WalletLogData, String>(
                           dataSource: calculateWalletLogData(
@@ -96,7 +96,7 @@ class _SpendingStatisticsPageState extends State<SpendingStatisticsPage> {
                           xValueMapper: (WalletLogData data, _) =>
                               data.timePeriod,
                           yValueMapper: (WalletLogData data, _) => data.amount,
-                          name: 'Tiền vào',
+                          name: 'Tiền nạp vào',
                         ),
                       ],
                     );
@@ -122,8 +122,15 @@ class _SpendingStatisticsPageState extends State<SpendingStatisticsPage> {
       double amount = transaction.amount.toDouble();
 
       dailyTransactionAmounts[formattedDate] ??= 0;
-      dailyTransactionAmounts[formattedDate] =
-          dailyTransactionAmounts[formattedDate]! + amount; // Added null check
+      if (transaction.transactionType == "Receive") {
+        dailyTransactionAmounts[formattedDate] =
+            dailyTransactionAmounts[formattedDate]! -
+                amount; // Added null check
+      } else {
+        dailyTransactionAmounts[formattedDate] =
+            dailyTransactionAmounts[formattedDate]! +
+                amount; // Added null check
+      }
     }
 
     List<TransactionData> result = [];
@@ -186,6 +193,7 @@ class _SpendingStatisticsPageState extends State<SpendingStatisticsPage> {
       double amount = log.amount.toDouble();
 
       dailyWalletLogAmounts[formattedDate] ??= 0;
+
       dailyWalletLogAmounts[formattedDate] =
           dailyWalletLogAmounts[formattedDate]! + amount; // Added null check
     }
