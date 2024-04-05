@@ -159,14 +159,14 @@ class _PredictTripMapComponentState extends State<PredictTripMapComponent> {
 
     var nextStationMarkers = _nextStation != null
         ? Marker(
-            height: 24,
-            width: 24,
+            height: 26,
+            width: 26,
             point: LatLng(_nextStation!.latitude, _nextStation!.longitude),
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.green, width: 2),
+                border: Border.all(color: Colors.green, width: 3),
               ),
               child: _nextStation!.index != -1
                   ? Align(

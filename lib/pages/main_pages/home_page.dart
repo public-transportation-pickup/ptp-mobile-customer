@@ -3,9 +3,11 @@ import 'package:capstone_ptp/pages/route_pages/final_station_page.dart';
 import 'package:capstone_ptp/services/map_services/mini_map_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:animations/animations.dart';
 
+import '../chart_pages/statistic_page.dart';
 import '../predict_trip_pages/list_route_page_predict.dart';
 import '../route_pages/list_routes_page.dart';
 import '../store_pages/store_detail_page.dart';
@@ -270,90 +272,100 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       const SizedBox(width: 16),
-                      Column(
-                        children: [
-                          Container(
-                            width: 100,
-                            height: 50, // 50% of 131 (total height)
-                            decoration: const ShapeDecoration(
-                              color: Color(0xFFFFEFC8),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20),
-                                  topRight: Radius.circular(20),
-                                ),
-                              ),
-                              shadows: [
-                                BoxShadow(
-                                  color: Color(0xFF909090),
-                                  blurRadius: 10,
-                                  offset: Offset(0, 4),
-                                  spreadRadius: -3,
-                                ),
-                              ],
-                            ),
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                              child: Image.asset(
-                                'lib/assets/images/combo_chart_icon.png',
-                                height: 20,
-                                //fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: 100,
-                            height: 65, // 50% of 131 (total height)
-                            decoration: const ShapeDecoration(
-                              color: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(20),
-                                  bottomRight: Radius.circular(20),
-                                ),
-                              ),
-                              shadows: [
-                                BoxShadow(
-                                  color: Color(0xFF909090),
-                                  blurRadius: 10,
-                                  offset: Offset(0, 4),
-                                  spreadRadius: -3,
-                                ),
-                              ],
-                            ),
-                            child: const Padding(
-                              padding: EdgeInsets.fromLTRB(8, 4, 0, 4),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'CHI TIÊU',
-                                    style: TextStyle(
-                                      color: Color(0xFF353434),
-                                      fontSize: 14,
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w700,
-                                      height: 0,
-                                    ),
+                      GestureDetector(
+                        onTap: () {
+                          HapticFeedback.mediumImpact();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SpendingStatisticsPage()),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 100,
+                              height: 50, // 50% of 131 (total height)
+                              decoration: const ShapeDecoration(
+                                color: Color(0xFFFFEFC8),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20),
                                   ),
-                                  Text(
-                                    'Thống kê chi tiêu, giao dịch',
-                                    style: TextStyle(
-                                      color: Color(0xFF353434),
-                                      fontSize: 12,
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w300,
-                                      height: 0,
-                                    ),
+                                ),
+                                shadows: [
+                                  BoxShadow(
+                                    color: Color(0xFF909090),
+                                    blurRadius: 10,
+                                    offset: Offset(0, 4),
+                                    spreadRadius: -3,
                                   ),
                                 ],
                               ),
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(20),
+                                ),
+                                child: Image.asset(
+                                  'lib/assets/images/combo_chart_icon.png',
+                                  height: 20,
+                                  //fit: BoxFit.cover,
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
+                            Container(
+                              width: 100,
+                              height: 65, // 50% of 131 (total height)
+                              decoration: const ShapeDecoration(
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(20),
+                                    bottomRight: Radius.circular(20),
+                                  ),
+                                ),
+                                shadows: [
+                                  BoxShadow(
+                                    color: Color(0xFF909090),
+                                    blurRadius: 10,
+                                    offset: Offset(0, 4),
+                                    spreadRadius: -3,
+                                  ),
+                                ],
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.fromLTRB(8, 4, 0, 4),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'CHI TIÊU',
+                                      style: TextStyle(
+                                        color: Color(0xFF353434),
+                                        fontSize: 14,
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w700,
+                                        height: 0,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Thống kê chi tiêu, giao dịch',
+                                      style: TextStyle(
+                                        color: Color(0xFF353434),
+                                        fontSize: 12,
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w300,
+                                        height: 0,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       const SizedBox(width: 16),
                       GestureDetector(
