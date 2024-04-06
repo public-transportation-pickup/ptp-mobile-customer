@@ -5,10 +5,14 @@ import 'package:provider/provider.dart';
 
 import 'routes/routes.dart';
 import './themes/theme.dart';
+import 'services/firebase_message.dart';
+
+final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FirebaseMessageService().initNotifications();
   runApp(const MyApp());
 }
 
@@ -26,6 +30,7 @@ class MyApp extends StatelessWidget {
         initialRoute: "/",
         routes: appRoutes,
         debugShowCheckedModeBanner: false,
+        navigatorKey: navigatorKey,
       ),
     );
   }
