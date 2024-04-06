@@ -8,14 +8,18 @@ class AuthenticationApi extends ApiService {
   // Authentication
   static Future<Map<String, dynamic>> login(String token) async {
     final Uri loginUrl = Uri.parse('${ApiService.baseUrl}/auth');
-    final Map<String, String> body = {'token': token, 'role': 'customer'};
+    final Map<String, String> body = {
+      'token': token,
+      'role': 'customer',
+      'fcmToken': '${LocalVariables.fcmToken}'
+    };
 
     final response = await http.post(
       loginUrl,
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(body),
     );
-
+    print("Hello: ${LocalVariables.fcmToken}");
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseBody = json.decode(response.body);
       LocalVariables.jwtToken = responseBody['token'];

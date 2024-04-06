@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:capstone_ptp/services/local_variables.dart';
 import 'package:capstone_ptp/pages/main_pages/notification_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -76,6 +77,7 @@ class FirebaseMessageService {
     await _firebaseMessaging.requestPermission();
     final fcmToken = await _firebaseMessaging.getToken();
     print("FCM Token: ${fcmToken} ");
+    LocalVariables.fcmToken = fcmToken;
     initPustNotifications();
     initLocalNotifications();
   }

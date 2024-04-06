@@ -5,6 +5,7 @@ class LocalVariables {
   static String? currentEmail = '';
   static String? photoURL = '';
   static String? uid = '';
+  static String? fcmToken = '';
   // System Data
   static String? jwtToken = '';
   static String? phoneNumber = '';
