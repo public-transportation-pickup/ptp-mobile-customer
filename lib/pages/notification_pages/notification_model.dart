@@ -1,15 +1,19 @@
 class NotificationItem {
+  final String id;
   final String title;
-  final String imageURL;
   final String content;
+  final bool isSeen;
+  final String? imageURL;
+  final int source;
   final String createdDate;
-  final bool isRead;
 
   NotificationItem({
+    required this.id,
     required this.title,
     required this.content,
-    required this.imageURL,
+    required this.isSeen,
+    this.imageURL,
+    required this.source,
     required this.createdDate,
-    required this.isRead,
   });
 }

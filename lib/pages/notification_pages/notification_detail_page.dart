@@ -1,10 +1,31 @@
 import 'package:flutter/material.dart';
+import '../../services/api_services/notification_api.dart';
 import '../notification_pages/notification_model.dart';
 
-class NotificationDetailPage extends StatelessWidget {
+class NotificationDetailPage extends StatefulWidget {
   final NotificationItem notification;
+  final VoidCallback reloadCallback;
 
-  NotificationDetailPage({required this.notification});
+  NotificationDetailPage(
+      {required this.notification, required this.reloadCallback, Key? key})
+      : super(key: key);
+
+  @override
+  _NotificationDetailPageState createState() => _NotificationDetailPageState();
+}
+
+class _NotificationDetailPageState extends State<NotificationDetailPage> {
+  void _updateNotification() async {
+    if (widget.notification.isSeen == false) {
+      await NotificationApi.updateNotification(widget.notification);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _updateNotification();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +47,7 @@ class NotificationDetailPage extends StatelessWidget {
             color: Colors.white,
           ),
           onPressed: () {
+            widget.reloadCallback();
             Navigator.pop(context);
           },
         ),
@@ -43,7 +65,7 @@ class NotificationDetailPage extends StatelessWidget {
             ),
             // Title
             Text(
-              notification.title,
+              widget.notification.title,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
@@ -52,13 +74,13 @@ class NotificationDetailPage extends StatelessWidget {
             const SizedBox(height: 10),
             // Content
             Text(
-              notification.content,
+              widget.notification.content,
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 10),
             // Create Date
             Text(
-              'Created on: ${notification.createdDate}',
+              'Created on: ${widget.notification.createdDate}',
               style: const TextStyle(fontSize: 14, color: Colors.grey),
             ),
           ],
