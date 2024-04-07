@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:capstone_ptp/services/local_variables.dart';
 import 'package:http/http.dart' as http;
 
+import '../shared_preferences.dart';
 import 'api_services.dart';
 
 class AuthenticationApi extends ApiService {
@@ -19,7 +20,7 @@ class AuthenticationApi extends ApiService {
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(body),
     );
-    print("Hello: ${LocalVariables.fcmToken}");
+    print("FCM Token: ${LocalVariables.fcmToken}");
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseBody = json.decode(response.body);
       LocalVariables.jwtToken = responseBody['token'];
@@ -29,6 +30,7 @@ class AuthenticationApi extends ApiService {
       LocalVariables.dateOfBirth = responseBody['user']['dateOfBirth'];
       ApiService.checkLog.i('System JWT: ${LocalVariables.jwtToken}');
       ApiService.checkLog.t(responseBody);
+      await SharedRef.saveToken(LocalVariables.jwtToken!);
       return responseBody;
     } else {
       ApiService.checkLog.e('Failed to login: ${response.statusCode}');

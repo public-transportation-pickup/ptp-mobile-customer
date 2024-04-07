@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../main.dart';
+import 'api_services/notification_api.dart';
 
 class FirebaseMessageService {
   final _firebaseMessaging = FirebaseMessaging.instance;
@@ -24,6 +25,8 @@ class FirebaseMessageService {
       NotificationPage.route,
       arguments: message,
     );
+    // Call your API to create a notification
+    _createNotificationFromMessage(message);
   }
 
   Future initLocalNotifications() async {
@@ -43,7 +46,7 @@ class FirebaseMessageService {
     await platform?.createNotificationChannel(_androidChannel);
   }
 
-  Future initPustNotifications() async {
+  Future initPushNotifications() async {
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
       alert: true,
@@ -78,7 +81,7 @@ class FirebaseMessageService {
     final fcmToken = await _firebaseMessaging.getToken();
     print("FCM Token: ${fcmToken} ");
     LocalVariables.fcmToken = fcmToken;
-    initPustNotifications();
+    initPushNotifications();
     initLocalNotifications();
   }
 }
@@ -87,4 +90,26 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
   print("Title: ${message.notification?.title} ");
   print("Body: ${message.notification?.body} ");
   print("Payload: ${message.data} ");
+  // Call your API to create a notification
+  _createNotificationFromMessage(message);
+}
+
+Future<void> _createNotificationFromMessage(RemoteMessage message) async {
+  try {
+    // Extract necessary information from the FCM message
+    final notification = message.notification;
+    if (notification == null) return;
+
+    // Create a notification using the API
+    await NotificationApi.createNotification(
+      title: notification.title ?? "",
+      content: notification.body ?? "",
+      imageURL: "",
+      source: 1,
+    );
+
+    print('Notification created successfully from FCM message');
+  } catch (e) {
+    print('Failed to create notification from FCM message: $e');
+  }
 }
