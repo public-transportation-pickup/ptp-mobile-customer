@@ -19,14 +19,15 @@ class FirebaseMessageService {
   );
   final _localNotifications = FlutterLocalNotificationsPlugin();
 
-  void handleMessage(RemoteMessage? message) {
+  void handleTapMessage(RemoteMessage? message) {
     if (message == null) return;
     navigatorKey.currentState?.pushNamed(
       NotificationPage.route,
-      arguments: message,
+      // arguments: message,
     );
+    print("Handle tap message have been called");
     // Call your API to create a notification
-    _createNotificationFromMessage(message);
+    // _createNotificationFromMessage(message);
   }
 
   void handleForegroundMessage(RemoteMessage message) {
@@ -48,6 +49,7 @@ class FirebaseMessageService {
       ),
       payload: jsonEncode(message.toMap()),
     );
+    print("Handle Foreground message have been called");
     // Call your API to create a notification
     _createNotificationFromMessage(message);
   }
@@ -61,7 +63,7 @@ class FirebaseMessageService {
       onSelectNotification: (payload) {
         final message =
             RemoteMessage.fromMap(jsonEncode(payload!) as Map<String, dynamic>);
-        handleMessage(message);
+        handleTapMessage(message);
       },
     );
     final platform = _localNotifications.resolvePlatformSpecificImplementation<
@@ -78,11 +80,10 @@ class FirebaseMessageService {
     );
     // Handle message when the app is in the foreground
     FirebaseMessaging.onMessage.listen((message) {
-      print("HELP: $message");
       handleForegroundMessage(message);
     });
-    FirebaseMessaging.instance.getInitialMessage().then(handleMessage);
-    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
+    FirebaseMessaging.instance.getInitialMessage().then(handleTapMessage);
+    FirebaseMessaging.onMessageOpenedApp.listen(handleTapMessage);
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
     FirebaseMessaging.onMessage.listen((message) {
       final notification = message.notification;
@@ -119,6 +120,7 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
   print("Body: ${message.notification?.body} ");
   print("Payload: ${message.data} ");
   // Call your API to create a notification
+  print("Handle Background message have been called");
   _createNotificationFromMessage(message);
 }
 
