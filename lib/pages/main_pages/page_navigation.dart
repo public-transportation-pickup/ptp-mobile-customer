@@ -14,13 +14,17 @@ import 'activity_page.dart';
 import 'home_page.dart';
 
 class PageNavigation extends StatefulWidget {
+  final int initialPageIndex;
+
+  PageNavigation({this.initialPageIndex = 0});
+
   @override
   _PageNavigation createState() => _PageNavigation();
 }
 
 class _PageNavigation extends State<PageNavigation> {
   int _currentIndex = 0;
-  final PageController _pageController = PageController(initialPage: 0);
+  late PageController _pageController;
   late CartProvider _cartProvider;
 
   @override
@@ -28,6 +32,7 @@ class _PageNavigation extends State<PageNavigation> {
     super.initState();
     _cartProvider = Provider.of<CartProvider>(context, listen: false);
     _cartProvider.fetchCart();
+    _pageController = PageController(initialPage: widget.initialPageIndex);
   }
 
   void _navigateToPage(int pageIndex) {

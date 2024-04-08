@@ -10,6 +10,7 @@ import '../../services/api_services/wallet_api.dart';
 import '../../services/local_variables.dart';
 import '../../utils/global_message.dart';
 import '../main_pages/components/confirm_create_order_card.dart';
+import '../main_pages/page_navigation.dart';
 import '../profile_pages/update_profile_page.dart';
 import '../store_pages/store_detail_page.dart';
 import 'cart_provider.dart';
@@ -673,6 +674,16 @@ class _CartPageState extends State<CartPage> {
                                               Navigator.pop(context);
                                               if (orderCreated) {
                                                 setState(() {});
+                                                // Navigate to HomePage and close all previous pages
+                                                Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          PageNavigation(
+                                                              initialPageIndex:
+                                                                  4)),
+                                                  (route) => false,
+                                                );
                                                 globalMessage.showSuccessMessage(
                                                     "Tạo đơn hàng thành công!");
                                               } else {
