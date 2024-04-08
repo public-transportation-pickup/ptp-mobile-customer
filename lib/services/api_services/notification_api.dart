@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:capstone_ptp/services/local_variables.dart';
+import 'package:intl/intl.dart';
 
 import '../../pages/notification_pages/notification_model.dart';
 import '../shared_preferences.dart';
@@ -16,15 +17,18 @@ class NotificationApi extends ApiService {
     required int source,
   }) async {
     final Uri apiUrl = Uri.parse('${ApiService.baseUrl}/notifications');
+    var now = DateFormat("yyyy-MM-ddTHH:mm:ss.SSSZ").format(DateTime.now());
     final List<Map<String, dynamic>> body = [
       {
         "title": title,
         "content": content,
         "imageURL": imageURL,
         "source": source,
-        "isSeen": false
+        "isSeen": false,
+        "createDate": now
       }
     ];
+    ApiService.checkLog.t(body);
     String? savedToken = await SharedRef.getToken();
 
     final response = await http.post(
@@ -68,7 +72,7 @@ class NotificationApi extends ApiService {
           isSeen: item['isSeen'],
           imageURL: item['imageURL'],
           source: item['source'],
-          createdDate: '2024-03-26 00:06:05.9327006',
+          createdDate: item['createDate'],
         );
       }).toList();
       return notifications;
@@ -87,7 +91,8 @@ class NotificationApi extends ApiService {
       "isSeen": true,
       "content": notification.content,
       "imageURL": notification.imageURL ?? "",
-      "source": notification.source
+      "source": notification.source,
+      "createDate": notification.createdDate
     };
 
     final response = await http.put(

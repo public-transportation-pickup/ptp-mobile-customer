@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../services/api_services/notification_api.dart';
 import '../notification_pages/notification_model.dart';
 
@@ -29,6 +30,11 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Parse createdDate string into a DateTime object
+    DateTime parsedDate = DateTime.parse(widget.notification.createdDate);
+
+    // Format createdDate to desired format
+    String formattedDate = DateFormat('dd/MM/yyyy | HH:mm').format(parsedDate);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -63,6 +69,13 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
               width: double.infinity,
               fit: BoxFit.cover,
             ),
+            const SizedBox(height: 10),
+            // Create Date
+            Text(
+              formattedDate,
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+            const SizedBox(height: 10),
             // Title
             Text(
               widget.notification.title,
@@ -76,12 +89,6 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
             Text(
               widget.notification.content,
               style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 10),
-            // Create Date
-            Text(
-              'Created on: ${widget.notification.createdDate}',
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
             ),
           ],
         ),

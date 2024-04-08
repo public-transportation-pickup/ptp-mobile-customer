@@ -29,6 +29,29 @@ class FirebaseMessageService {
     _createNotificationFromMessage(message);
   }
 
+  void handleForegroundMessage(RemoteMessage message) {
+    final notification = message.notification;
+    if (notification == null) return;
+
+    // Show local notification when the app is in the foreground
+    _localNotifications.show(
+      notification.hashCode,
+      notification.title,
+      notification.body,
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          _androidChannel.id,
+          _androidChannel.name,
+          channelDescription: _androidChannel.description,
+          icon: '@drawable/ic_launcher',
+        ),
+      ),
+      payload: jsonEncode(message.toMap()),
+    );
+    // Call your API to create a notification
+    _createNotificationFromMessage(message);
+  }
+
   Future initLocalNotifications() async {
     // const iOS = IOSInitializationSettings();
     const android = AndroidInitializationSettings('@drawable/ic_launcher');
@@ -53,6 +76,11 @@ class FirebaseMessageService {
       badge: true,
       sound: true,
     );
+    // Handle message when the app is in the foreground
+    FirebaseMessaging.onMessage.listen((message) {
+      print("HELP: $message");
+      handleForegroundMessage(message);
+    });
     FirebaseMessaging.instance.getInitialMessage().then(handleMessage);
     FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
