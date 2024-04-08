@@ -32,6 +32,7 @@ class _PageNavigation extends State<PageNavigation> {
     super.initState();
     _cartProvider = Provider.of<CartProvider>(context, listen: false);
     _cartProvider.fetchCart();
+    _currentIndex = widget.initialPageIndex;
     _pageController = PageController(initialPage: widget.initialPageIndex);
   }
 

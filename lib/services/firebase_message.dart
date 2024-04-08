@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:capstone_ptp/pages/intro_pages/login_page.dart';
 import 'package:capstone_ptp/services/local_variables.dart';
-import 'package:capstone_ptp/pages/main_pages/notification_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import '../main.dart';
+import '../pages/main_pages/page_navigation.dart';
 import 'api_services/notification_api.dart';
 
 class FirebaseMessageService {
@@ -21,13 +23,22 @@ class FirebaseMessageService {
 
   void handleTapMessage(RemoteMessage? message) {
     if (message == null) return;
-    navigatorKey.currentState?.pushNamed(
-      NotificationPage.route,
-      // arguments: message,
-    );
+    if (LocalVariables.jwtToken == '') {
+      navigatorKey.currentState?.pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => LoginPage(),
+        ),
+        (route) => false,
+      );
+    } else {
+      navigatorKey.currentState?.pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => PageNavigation(initialPageIndex: 1),
+        ),
+        (route) => false,
+      );
+    }
     print("Handle tap message have been called");
-    // Call your API to create a notification
-    // _createNotificationFromMessage(message);
   }
 
   void handleForegroundMessage(RemoteMessage message) {
