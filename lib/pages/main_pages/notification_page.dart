@@ -1,4 +1,5 @@
 // import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:capstone_ptp/utils/custom_page_route.dart';
 import 'package:flutter/material.dart';
 
 import '../../services/api_services/notification_api.dart';
@@ -66,7 +67,7 @@ class _NotificationPageState extends State<NotificationPage> {
                               onTap: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(
+                                  SlideLeftPageRoute(
                                     builder: (context) =>
                                         NotificationDetailPage(
                                       notification: notifications[index],
@@ -115,7 +116,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                       onPressed: () {
                                         Navigator.push(
                                           context,
-                                          MaterialPageRoute(
+                                          SlideLeftPageRoute(
                                             builder: (context) =>
                                                 NotificationDetailPage(
                                               notification:

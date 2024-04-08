@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../services/api_services/notification_api.dart';
+import '../../utils/custom_page_route.dart';
+import '../main_pages/page_navigation.dart';
 import '../notification_pages/notification_model.dart';
 
 class NotificationDetailPage extends StatefulWidget {
@@ -54,7 +56,14 @@ class _NotificationDetailPageState extends State<NotificationDetailPage> {
           ),
           onPressed: () {
             widget.reloadCallback();
-            Navigator.pop(context);
+            // Navigator.pop(context);
+            Navigator.pushAndRemoveUntil(
+              context,
+              SlideRightPageRoute(
+                builder: (context) => PageNavigation(initialPageIndex: 1),
+              ),
+              (route) => false,
+            );
           },
         ),
       ),
