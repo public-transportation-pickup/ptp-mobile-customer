@@ -125,138 +125,240 @@ class _SpendingStatisticsPageState extends State<SpendingStatisticsPage> {
 
   List<TransactionData> calculateTransactionData(
       List<Transaction> transactions, String selectedPeriod) {
-    Map<DateTime, double> dailyTransactionAmounts = {};
+    // If the selected period is "Tháng" (Month)
+    if (selectedPeriod == 'Month') {
+      DateTime now = DateTime.now();
+      int daysInMonth = DateTime(now.year, now.month + 1, 0).day;
 
-    for (var transaction in transactions) {
-      DateTime date = DateTime.parse(transaction.creationDate);
-      DateTime formattedDate = DateTime(date.year, date.month, date.day);
-      double amount = transaction.amount.toDouble();
+      // Calculate the start dates for each weekly interval
+      List<DateTime> startDates = [
+        DateTime(now.year, now.month, 1),
+        DateTime(now.year, now.month, 8),
+        DateTime(now.year, now.month, 15),
+        DateTime(now.year, now.month, 22),
+      ];
 
-      dailyTransactionAmounts[formattedDate] ??= 0;
-      if (transaction.transactionType == "Receive") {
-        dailyTransactionAmounts[formattedDate] =
-            dailyTransactionAmounts[formattedDate]! -
-                amount; // Added null check
-      } else {
-        dailyTransactionAmounts[formattedDate] =
-            dailyTransactionAmounts[formattedDate]! +
-                amount; // Added null check
+      // Process transactions for each weekly interval
+      List<TransactionData> result = [];
+      for (int i = 0; i < startDates.length; i++) {
+        DateTime startDate = startDates[i];
+        DateTime endDate = i == startDates.length - 1
+            ? DateTime(now.year, now.month, daysInMonth)
+            : startDates[i + 1].subtract(Duration(days: 1));
+
+        double totalAmount = 0;
+        for (var transaction in transactions) {
+          DateTime transactionDate = DateTime.parse(transaction.creationDate);
+          if (transactionDate
+                  .isAfter(startDate.subtract(const Duration(days: 1))) &&
+              transactionDate.isBefore(endDate.add(const Duration(days: 1)))) {
+            if (transaction.transactionType == "Receive") {
+              totalAmount -= transaction.amount.toDouble();
+            } else {
+              totalAmount += transaction.amount.toDouble();
+            }
+          }
+        }
+
+        String timePeriod = '${startDate.day.toString().padLeft(2, '0')}/'
+            '${startDate.month.toString().padLeft(2, '0')}\n- '
+            '${endDate.day.toString().padLeft(2, '0')}/'
+            '${endDate.month.toString().padLeft(2, '0')}';
+        result.add(TransactionData(timePeriod, totalAmount));
       }
-    }
 
-    List<TransactionData> result = [];
-    dailyTransactionAmounts.forEach((date, amount) {
-      String formattedDateString =
-          '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}';
-      result.add(TransactionData(formattedDateString, amount));
-    });
+      return result;
+    } else {
+      // Retrieve the start date of the week (7 days ago from today)
+      DateTime startDate = DateTime.now().subtract(const Duration(days: 6));
 
-    // Sort the result by date and month
-    result.sort((a, b) {
-      var dateA = a.timePeriod.split('/');
-      var dateB = b.timePeriod.split('/');
-      var dayA = int.parse(dateA[0]);
-      var dayB = int.parse(dateB[0]);
-      var monthA = int.parse(dateA[1]);
-      var monthB = int.parse(dateB[1]);
-
-      if (monthA != monthB) {
-        return monthA.compareTo(monthB);
-      } else {
-        return dayA.compareTo(dayB);
-      }
-    });
-
-    if (selectedPeriod == 'Week') {
-      // Add weekday abbreviations
-      final weekdayAbbreviations = {
-        1: 'T2', // Monday
-        2: 'T3', // Tuesday
-        3: 'T4', // Wednesday
-        4: 'T5', // Thursday
-        5: 'T6', // Friday
-        6: 'T7', // Saturday
-        7: 'CN', // Sunday
-      };
-      result = result.map((data) {
-        var dateParts = data.timePeriod.split('/');
-        var day = int.parse(dateParts[0]);
-        var month = int.parse(dateParts[1]);
-        // Use the year from the 'date' object
-        var year = DateTime.now().year;
-        var weekdayAbbreviation =
-            weekdayAbbreviations[DateTime(year, month, day).weekday];
-        var newTimePeriod = '$weekdayAbbreviation\n${data.timePeriod}';
-        return TransactionData(newTimePeriod, data.amount);
+      // Filter transactions for the last 7 days
+      List<Transaction> filteredTransactions =
+          transactions.where((transaction) {
+        DateTime date = DateTime.parse(transaction.creationDate);
+        return date.isAfter(startDate);
       }).toList();
-    }
 
-    return result;
+      Map<DateTime, double> dailyTransactionAmounts = {};
+
+      for (var transaction in filteredTransactions) {
+        DateTime date = DateTime.parse(transaction.creationDate);
+        DateTime formattedDate = DateTime(date.year, date.month, date.day);
+        double amount = transaction.amount.toDouble();
+
+        dailyTransactionAmounts[formattedDate] ??= 0;
+        if (transaction.transactionType == "Receive") {
+          dailyTransactionAmounts[formattedDate] =
+              dailyTransactionAmounts[formattedDate]! -
+                  amount; // Added null check
+        } else {
+          dailyTransactionAmounts[formattedDate] =
+              dailyTransactionAmounts[formattedDate]! +
+                  amount; // Added null check
+        }
+      }
+
+      List<TransactionData> result = [];
+      dailyTransactionAmounts.forEach((date, amount) {
+        String formattedDateString =
+            '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}';
+        result.add(TransactionData(formattedDateString, amount));
+      });
+
+      // Sort the result by date and month
+      result.sort((a, b) {
+        var dateA = a.timePeriod.split('/');
+        var dateB = b.timePeriod.split('/');
+        var dayA = int.parse(dateA[0]);
+        var dayB = int.parse(dateB[0]);
+        var monthA = int.parse(dateA[1]);
+        var monthB = int.parse(dateB[1]);
+
+        if (monthA != monthB) {
+          return monthA.compareTo(monthB);
+        } else {
+          return dayA.compareTo(dayB);
+        }
+      });
+
+      if (selectedPeriod == 'Week') {
+        // Add weekday abbreviations
+        final weekdayAbbreviations = {
+          1: 'T2', // Monday
+          2: 'T3', // Tuesday
+          3: 'T4', // Wednesday
+          4: 'T5', // Thursday
+          5: 'T6', // Friday
+          6: 'T7', // Saturday
+          7: 'CN', // Sunday
+        };
+        result = result.map((data) {
+          var dateParts = data.timePeriod.split('/');
+          var day = int.parse(dateParts[0]);
+          var month = int.parse(dateParts[1]);
+          // Use the year from the 'date' object
+          var year = DateTime.now().year;
+          var weekdayAbbreviation =
+              weekdayAbbreviations[DateTime(year, month, day).weekday];
+          var newTimePeriod = '$weekdayAbbreviation\n${data.timePeriod}';
+          return TransactionData(newTimePeriod, data.amount);
+        }).toList();
+      }
+
+      return result;
+    }
   }
 
   List<WalletLogData> calculateWalletLogData(
       List<WalletLog> walletLogs, String selectedPeriod) {
-    Map<DateTime, double> dailyWalletLogAmounts = {};
+    if (selectedPeriod == 'Month') {
+      DateTime now = DateTime.now();
+      int daysInMonth = DateTime(now.year, now.month + 1, 0).day;
 
-    for (var log in walletLogs) {
-      DateTime date = DateTime.parse(log.creationDate);
-      DateTime formattedDate = DateTime(date.year, date.month, date.day);
-      double amount = log.amount.toDouble();
+      // Calculate the start dates for each weekly interval
+      List<DateTime> startDates = [
+        DateTime(now.year, now.month, 1),
+        DateTime(now.year, now.month, 8),
+        DateTime(now.year, now.month, 15),
+        DateTime(now.year, now.month, 22),
+      ];
 
-      dailyWalletLogAmounts[formattedDate] ??= 0;
+      // Process wallet logs for each weekly interval
+      List<WalletLogData> result = [];
+      for (int i = 0; i < startDates.length; i++) {
+        DateTime startDate = startDates[i];
+        DateTime endDate = i == startDates.length - 1
+            ? DateTime(now.year, now.month, daysInMonth)
+            : startDates[i + 1].subtract(const Duration(days: 1));
 
-      dailyWalletLogAmounts[formattedDate] =
-          dailyWalletLogAmounts[formattedDate]! + amount; // Added null check
-    }
+        double totalAmount = 0;
+        for (var log in walletLogs) {
+          DateTime logDate = DateTime.parse(log.creationDate);
+          if (logDate.isAfter(startDate.subtract(const Duration(days: 1))) &&
+              logDate.isBefore(endDate.add(const Duration(days: 1)))) {
+            totalAmount += log.amount.toDouble();
+          }
+        }
 
-    List<WalletLogData> result = [];
-    dailyWalletLogAmounts.forEach((date, amount) {
-      String formattedDateString =
-          '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}';
-      result.add(WalletLogData(formattedDateString, amount));
-    });
-
-    // Sort the result by date and month
-    result.sort((a, b) {
-      var dateA = a.timePeriod.split('/');
-      var dateB = b.timePeriod.split('/');
-      var dayA = int.parse(dateA[0]);
-      var dayB = int.parse(dateB[0]);
-      var monthA = int.parse(dateA[1]);
-      var monthB = int.parse(dateB[1]);
-
-      if (monthA != monthB) {
-        return monthA.compareTo(monthB);
-      } else {
-        return dayA.compareTo(dayB);
+        String timePeriod = '${startDate.day.toString().padLeft(2, '0')}/'
+            '${startDate.month.toString().padLeft(2, '0')}\n- '
+            '${endDate.day.toString().padLeft(2, '0')}/'
+            '${endDate.month.toString().padLeft(2, '0')}';
+        result.add(WalletLogData(timePeriod, totalAmount));
       }
-    });
 
-    if (selectedPeriod == 'Week') {
-      // Add weekday abbreviations
-      final weekdayAbbreviations = {
-        1: 'T2', // Monday
-        2: 'T3', // Tuesday
-        3: 'T4', // Wednesday
-        4: 'T5', // Thursday
-        5: 'T6', // Friday
-        6: 'T7', // Saturday
-        7: 'CN', // Sunday
-      };
-      result = result.map((data) {
-        var dateParts = data.timePeriod.split('/');
-        var day = int.parse(dateParts[0]);
-        var month = int.parse(dateParts[1]);
-        // Use the year from the 'date' object
-        var year = DateTime.now().year;
-        var weekdayAbbreviation =
-            weekdayAbbreviations[DateTime(year, month, day).weekday];
-        var newTimePeriod = '$weekdayAbbreviation\n${data.timePeriod}';
-        return WalletLogData(newTimePeriod, data.amount);
+      return result;
+    } else {
+      // Retrieve the start date of the week (7 days ago from today)
+      DateTime startDate = DateTime.now().subtract(const Duration(days: 6));
+
+      // Filter wallet logs for the last 7 days
+      List<WalletLog> filteredWalletLogs = walletLogs.where((log) {
+        DateTime date = DateTime.parse(log.creationDate);
+        return date.isAfter(startDate);
       }).toList();
-    }
+      Map<DateTime, double> dailyWalletLogAmounts = {};
 
-    return result;
+      for (var log in filteredWalletLogs) {
+        DateTime date = DateTime.parse(log.creationDate);
+        DateTime formattedDate = DateTime(date.year, date.month, date.day);
+        double amount = log.amount.toDouble();
+
+        dailyWalletLogAmounts[formattedDate] ??= 0;
+
+        dailyWalletLogAmounts[formattedDate] =
+            dailyWalletLogAmounts[formattedDate]! + amount; // Added null check
+      }
+
+      List<WalletLogData> result = [];
+      dailyWalletLogAmounts.forEach((date, amount) {
+        String formattedDateString =
+            '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}';
+        result.add(WalletLogData(formattedDateString, amount));
+      });
+
+      // Sort the result by date and month
+      result.sort((a, b) {
+        var dateA = a.timePeriod.split('/');
+        var dateB = b.timePeriod.split('/');
+        var dayA = int.parse(dateA[0]);
+        var dayB = int.parse(dateB[0]);
+        var monthA = int.parse(dateA[1]);
+        var monthB = int.parse(dateB[1]);
+
+        if (monthA != monthB) {
+          return monthA.compareTo(monthB);
+        } else {
+          return dayA.compareTo(dayB);
+        }
+      });
+
+      if (selectedPeriod == 'Week') {
+        // Add weekday abbreviations
+        final weekdayAbbreviations = {
+          1: 'T2', // Monday
+          2: 'T3', // Tuesday
+          3: 'T4', // Wednesday
+          4: 'T5', // Thursday
+          5: 'T6', // Friday
+          6: 'T7', // Saturday
+          7: 'CN', // Sunday
+        };
+        result = result.map((data) {
+          var dateParts = data.timePeriod.split('/');
+          var day = int.parse(dateParts[0]);
+          var month = int.parse(dateParts[1]);
+          // Use the year from the 'date' object
+          var year = DateTime.now().year;
+          var weekdayAbbreviation =
+              weekdayAbbreviations[DateTime(year, month, day).weekday];
+          var newTimePeriod = '$weekdayAbbreviation\n${data.timePeriod}';
+          return WalletLogData(newTimePeriod, data.amount);
+        }).toList();
+      }
+
+      return result;
+    }
   }
 }
 
