@@ -1,5 +1,6 @@
 import 'package:capstone_ptp/pages/product_pages/cart_provider.dart';
 import 'package:capstone_ptp/utils/noti_count.dart';
+import 'package:capstone_ptp/utils/order_count.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => NotificationCountNotifier()),
+        ChangeNotifierProvider(create: (_) => OrderCountNotifier()),
       ],
       child: MaterialApp(
         themeMode: ThemeMode.system,

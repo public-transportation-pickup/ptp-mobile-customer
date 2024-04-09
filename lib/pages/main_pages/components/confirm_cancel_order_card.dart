@@ -4,8 +4,10 @@ import 'package:flutter/services.dart';
 class ConfirmCancelOrderCard extends StatelessWidget {
   final VoidCallback onCancel;
 
-  const ConfirmCancelOrderCard({Key? key, required this.onCancel})
-      : super(key: key);
+  const ConfirmCancelOrderCard({
+    Key? key,
+    required this.onCancel,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

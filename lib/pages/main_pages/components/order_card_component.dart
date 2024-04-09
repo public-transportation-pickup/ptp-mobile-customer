@@ -3,9 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../../../models/order_model.dart';
 import '../../../services/api_services/order_api.dart';
 import '../../../utils/global_message.dart';
+import '../../../utils/order_count.dart';
 import '../../order_pages/order_detail_page.dart';
 import 'confirm_cancel_order_card.dart';
 
@@ -359,6 +361,14 @@ class _OrderCardComponentState extends State<OrderCardComponent> {
                                                 order.id);
                                         Navigator.pop(context);
                                         if (cancellationSuccessful) {
+                                          // Notify OrderCountNotifier that an order has been canceled
+                                          context
+                                              .read<OrderCountNotifier>()
+                                              .setOrderCount(context
+                                                      .read<
+                                                          OrderCountNotifier>()
+                                                      .orderCount -
+                                                  1);
                                           setState(() {});
                                           globalMessage.showSuccessMessage(
                                             "Hủy đơn thành công!",
