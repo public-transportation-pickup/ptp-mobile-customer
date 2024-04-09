@@ -5,9 +5,11 @@ import 'package:capstone_ptp/services/local_variables.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
 
 import '../main.dart';
 import '../pages/main_pages/page_navigation.dart';
+import '../utils/noti_count.dart';
 import 'api_services/notification_api.dart';
 
 class FirebaseMessageService {
@@ -132,6 +134,7 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
   print("Payload: ${message.data} ");
   // Call your API to create a notification
   print("Handle Background message have been called");
+  // Call _createNotificationFromMessage with both arguments
   _createNotificationFromMessage(message);
 }
 
@@ -148,6 +151,13 @@ Future<void> _createNotificationFromMessage(RemoteMessage message) async {
       imageURL: "",
       source: 1,
     );
+    // Increment the notification count
+    final BuildContext context = navigatorKey.currentContext!;
+    final NotificationCountNotifier notifier =
+        context.read<NotificationCountNotifier>();
+    int count = Provider.of<NotificationCountNotifier>(context, listen: false)
+        .notificationCount;
+    notifier.setNotificationCount(count + 1);
 
     print('Notification created successfully from FCM message');
   } catch (e) {

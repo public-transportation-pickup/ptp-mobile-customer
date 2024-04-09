@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:provider/provider.dart';
 
 import '../pages/notification_pages/notification_model.dart';
 import '../services/api_services/notification_api.dart';
+import 'noti_count.dart';
 
 class AppFooter extends StatefulWidget {
   final int currentIndex;
@@ -23,21 +25,28 @@ class AppFooter extends StatefulWidget {
 
 class _AppFooterState extends State<AppFooter> {
   int notificationCount = 0;
+  late NotificationCountNotifier _notifier;
 
   @override
   void initState() {
     super.initState();
     // Call the API to get the number of notifications
     _fetchNotifications();
+    _notifier = context.read<NotificationCountNotifier>();
   }
 
   Future<void> _fetchNotifications() async {
     try {
       List<NotificationItem> notifications =
           await NotificationApi.getNotifications();
+      int newNotificationCount =
+          notifications.where((notification) => !notification.isSeen).length;
+
+      // Update the notification count using the notifier
+      _notifier.setNotificationCount(newNotificationCount);
+
       setState(() {
-        notificationCount =
-            notifications.where((notification) => !notification.isSeen).length;
+        notificationCount = newNotificationCount;
       });
     } catch (e) {
       print('Error fetching notifications: $e');
@@ -121,52 +130,54 @@ class _AppFooterState extends State<AppFooter> {
     final themeData = Theme.of(context);
     final labelStyle = themeData.textTheme.bodySmall?.copyWith(color: color);
 
-    return InkWell(
-      onTap: () {
-        HapticFeedback.mediumImpact();
-        widget.onTap(index);
-        widget.pageController.animateToPage(
-          index,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.bounceIn,
-        );
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              SvgPicture.asset(
-                iconPath,
-                width: 24,
-                height: 24,
-                color: color,
-              ),
-              if (notificationCount > 0)
-                Positioned(
-                  right: 0,
-                  child: badges.Badge(
-                    badgeContent: Text(
-                      notificationCount.toString(),
-                      style: const TextStyle(
-                        fontSize: 8,
-                        color: Colors.white,
+    return Consumer<NotificationCountNotifier>(
+      builder: (context, notifier, _) => InkWell(
+        onTap: () {
+          HapticFeedback.mediumImpact();
+          widget.onTap(index);
+          widget.pageController.animateToPage(
+            index,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.bounceIn,
+          );
+        },
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                SvgPicture.asset(
+                  iconPath,
+                  width: 24,
+                  height: 24,
+                  color: color,
+                ),
+                if (notifier.notificationCount > 0)
+                  Positioned(
+                    right: 0,
+                    child: badges.Badge(
+                      badgeContent: Text(
+                        notifier.notificationCount.toString(),
+                        style: const TextStyle(
+                          fontSize: 8,
+                          color: Colors.white,
+                        ),
+                      ),
+                      position: badges.BadgePosition.topEnd(top: -10, end: -12),
+                      child: Container(
+                        width: 16,
+                        height: 16,
+                        color: Colors.transparent,
                       ),
                     ),
-                    position: badges.BadgePosition.topEnd(top: -10, end: -12),
-                    child: Container(
-                      width: 16,
-                      height: 16,
-                      color: Colors.transparent,
-                    ),
                   ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          Text(label, style: labelStyle),
-        ],
+              ],
+            ),
+            const SizedBox(height: 4),
+            Text(label, style: labelStyle),
+          ],
+        ),
       ),
     );
   }
