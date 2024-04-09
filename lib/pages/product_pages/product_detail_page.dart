@@ -204,6 +204,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
         ),
 
+        // Divider
+        const SizedBox(height: 8),
+        const Divider(
+          color: Color.fromARGB(255, 214, 214, 214),
+          thickness: 5,
+          height: 16.0,
+        ),
         const SizedBox(height: 8),
         // Product Preparing Time
         Padding(

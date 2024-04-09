@@ -37,4 +37,28 @@ class AuthenticationApi extends ApiService {
       throw Exception('Failed to login: ${response.statusCode}');
     }
   }
+
+  // REFRESH TOKEN
+  static Future<Map<String, dynamic>> refreshToken(String oldToken) async {
+    final Uri refreshTokenUrl =
+        Uri.parse('${ApiService.baseUrl}/auth/refresh-token');
+    final String body = oldToken;
+
+    final response = await http.post(
+      refreshTokenUrl,
+      headers: {'Content-Type': 'application/json'},
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseBody = json.decode(response.body);
+      // Update your local variables with the new token
+      LocalVariables.jwtToken = responseBody['token'];
+      ApiService.checkLog.d("Refresh new token: ${LocalVariables.jwtToken}");
+      return responseBody;
+    } else {
+      ApiService.checkLog.e('Failed to refresh token: ${response.statusCode}');
+      throw Exception('Failed to refresh token: ${response.statusCode}');
+    }
+  }
 }
