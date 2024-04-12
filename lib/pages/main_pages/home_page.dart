@@ -10,7 +10,7 @@ import 'package:animations/animations.dart';
 import '../chart_pages/statistic_page.dart';
 import '../predict_trip_pages/list_route_page_predict.dart';
 import '../route_pages/list_routes_page.dart';
-import '../store_pages/store_detail_page.dart';
+import '../store_pages/list_stores_page.dart';
 import 'components/notify_topic_component.dart';
 import 'profile_page.dart';
 
@@ -175,13 +175,7 @@ class _HomePageState extends State<HomePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => StoreDetailPage(
-                                      storeId:
-                                          '4504b5b5-2a3f-4815-a768-d166faabd33d',
-                                      arrivalTime: "16:00",
-                                      stationId:
-                                          'd92acefd-04e1-4806-92d5-dc79402be22f',
-                                    )),
+                                builder: (context) => ListStoresPage()),
                           );
                         },
                         child: Column(
