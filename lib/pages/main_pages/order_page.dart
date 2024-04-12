@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Import HapticFeedback
+import 'package:flutter/services.dart';
 import 'package:capstone_ptp/pages/main_pages/components/list_orders_tab.dart';
+
+import '../../utils/order_count.dart';
 
 class OrderPage extends StatefulWidget {
   @override
@@ -11,11 +13,13 @@ class _OrderPageState extends State<OrderPage>
     with SingleTickerProviderStateMixin {
   //CLASS VARIABLES
   late TabController _tabController;
+  late OrderCountNotifier _orderCountNotifier;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    _orderCountNotifier = OrderCountNotifier(); // Initialize the notifier
   }
 
   //  handle tab click
@@ -23,6 +27,8 @@ class _OrderPageState extends State<OrderPage>
     HapticFeedback.mediumImpact();
     // Switch to the selected tab
     _tabController.animateTo(index);
+    // Decrement order count when a tab is clicked
+    _orderCountNotifier.setOrderCount(_orderCountNotifier.orderCount - 1);
   }
 
   @override
@@ -82,9 +88,15 @@ class _OrderPageState extends State<OrderPage>
             child: TabBarView(
               controller: _tabController,
               children: [
-                OrderListTab(orderStatus: 'Waiting'),
-                OrderListTab(orderStatus: 'Preparing'),
-                OrderListTab(orderStatus: 'Prepared'),
+                OrderListTab(
+                    orderStatus: 'Waiting',
+                    orderCountNotifier: _orderCountNotifier),
+                OrderListTab(
+                    orderStatus: 'Preparing',
+                    orderCountNotifier: _orderCountNotifier),
+                OrderListTab(
+                    orderStatus: 'Prepared',
+                    orderCountNotifier: _orderCountNotifier),
               ],
             ),
           ),

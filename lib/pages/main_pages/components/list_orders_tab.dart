@@ -1,15 +1,19 @@
-import 'package:capstone_ptp/pages/main_pages/components/order_card_component.dart';
-import 'package:capstone_ptp/services/api_services/order_api.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
 import 'package:signalr_netcore/signalr_client.dart' as signalr;
 
 import '../../../models/order_model.dart';
+import '../../../services/api_services/order_api.dart';
+
+import '../../../utils/order_count.dart';
+import '../components/order_card_component.dart';
 
 class OrderListTab extends StatefulWidget {
   final String orderStatus;
+  final OrderCountNotifier orderCountNotifier;
 
-  OrderListTab({required this.orderStatus});
+  OrderListTab({required this.orderStatus, required this.orderCountNotifier});
 
   @override
   _OrderListTabState createState() => _OrderListTabState();
@@ -42,8 +46,25 @@ class _OrderListTabState extends State<OrderListTab> {
     // Handle real-time order update
     checkLog.d('Hub Update Orders');
     setState(() {
-      // update order list here based on the received update
-      _fetchOrders();
+      // Fetch orders
+      _fetchOrders().then((orders) {
+        // Check if there are any orders with statuses "waiting", "preparing", or "prepared"
+        bool hasAnyOrders = orders.any((order) =>
+            order.status == 'Waiting' ||
+            order.status == 'Preparing' ||
+            order.status == 'Prepared');
+
+        // If no such orders exist, decrement the order count
+        if (!hasAnyOrders) {
+          print("Remove quantity order notifier");
+          context
+              .read<OrderCountNotifier>()
+              .setOrderCount(context.read<OrderCountNotifier>().orderCount - 1);
+        }
+      }).catchError((error) {
+        // Handle error fetching orders
+        checkLog.e('Error fetching orders: $error');
+      });
     });
   }
 
@@ -66,40 +87,41 @@ class _OrderListTabState extends State<OrderListTab> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<OrderModel>>(
-        future: _fetchOrders(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return const Center(child: Text('Có lỗi xảy ra vui lòng thử lại!'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+      future: _fetchOrders(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return const Center(child: Text('Có lỗi xảy ra vui lòng thử lại!'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(
+            child: Text('Bạn không có bất kì đơn hàng nào.'),
+          );
+        } else {
+          List<OrderModel> orders = snapshot.data!;
+          List<OrderModel> filteredOrders = orders
+              .where((order) => order.status == widget.orderStatus)
+              .toList();
+          if (filteredOrders.isEmpty) {
             return const Center(
-              child: Text('Bạn không có bất kì đơn hàng nào.'),
+              child: Text('Không có đơn hàng nào.'),
             );
           } else {
-            List<OrderModel> orders = snapshot.data!;
-            List<OrderModel> filteredOrders = orders
-                .where((order) => order.status == widget.orderStatus)
-                .toList();
-            if (filteredOrders.isEmpty) {
-              return const Center(
-                child: Text('Không có đơn hàng nào.'),
-              );
-            } else {
-              return ListView.builder(
-                itemCount: filteredOrders.length,
-                itemBuilder: (context, index) {
-                  return OrderCardComponent(
-                    order: filteredOrders[index],
-                    onOrderCancelled: () {
-                      // Refresh logic for parent class page
-                      setState(() {});
-                    },
-                  );
-                },
-              );
-            }
+            return ListView.builder(
+              itemCount: filteredOrders.length,
+              itemBuilder: (context, index) {
+                return OrderCardComponent(
+                  order: filteredOrders[index],
+                  onOrderCancelled: () {
+                    // Refresh logic for parent class page
+                    setState(() {});
+                  },
+                );
+              },
+            );
           }
-        });
+        }
+      },
+    );
   }
 }
