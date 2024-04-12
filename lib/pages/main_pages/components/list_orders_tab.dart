@@ -2,10 +2,10 @@ import 'package:capstone_ptp/pages/main_pages/components/order_card_component.da
 import 'package:capstone_ptp/services/api_services/order_api.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:signalr_netcore/signalr_client.dart' as signalr;
 
 import '../../../models/order_model.dart';
 
-// ignore: must_be_immutable
 class OrderListTab extends StatefulWidget {
   final String orderStatus;
 
@@ -16,8 +16,42 @@ class OrderListTab extends StatefulWidget {
 }
 
 class _OrderListTabState extends State<OrderListTab> {
-  //CHECK LOG
+  late signalr.HubConnection _hubConnection;
   var checkLog = Logger(printer: PrettyPrinter());
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeSignalR();
+  }
+
+  void _initializeSignalR() async {
+    try {
+      const url = "http://ptp-srv.ddns.net:5000/hub";
+      _hubConnection = signalr.HubConnectionBuilder().withUrl(url).build();
+      await _hubConnection.start();
+
+      // Subscribe to real-time events
+      _hubConnection.on("messageReceived", _handleOrderUpdate);
+    } catch (error) {
+      checkLog.e('Error connecting to SignalR server: $error');
+    }
+  }
+
+  void _handleOrderUpdate(List<Object?>? arguments) {
+    // Handle real-time order update
+    checkLog.d('Hub Update Orders');
+    setState(() {
+      // update order list here based on the received update
+      _fetchOrders();
+    });
+  }
+
+  @override
+  void dispose() {
+    _hubConnection.stop();
+    super.dispose();
+  }
 
   Future<List<OrderModel>> _fetchOrders() async {
     try {
