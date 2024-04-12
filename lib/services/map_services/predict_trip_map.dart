@@ -54,17 +54,15 @@ class _PredictTripMapComponentState extends State<PredictTripMapComponent> {
       }
 
       // Check again if current location is available after _getCurrentLocation call
-      // if (_currentLocation != null) {
-      //   Trip tripFromApi = await UserApi.predictTripOnLocation(
-      //       _currentLocation!.latitude ?? 0,
-      //       _currentLocation!.longitude ?? 0,
-      //       widget.routeVarId);
-      // HARD FIX DATA
       if (_currentLocation != null) {
         Trip tripFromApi = await UserApi.predictTripOnLocation(
-            10.869472, 106.805093, widget.routeVarId);
-        // Trip tripFromApi = await UserApi.predictTripOnLocation(
-        //     10.770986, 106.704073, widget.routeVarId);
+            _currentLocation!.latitude ?? 0,
+            _currentLocation!.longitude ?? 0,
+            widget.routeVarId);
+        // HARD FIX DATA
+        // if (_currentLocation != null) {
+        //   Trip tripFromApi = await UserApi.predictTripOnLocation(
+        //       10.869472, 106.805093, widget.routeVarId);
         List<Schedule> stationsFromApi = tripFromApi.schedules
             .map((schedule) => Schedule(
                   index: schedule.index,
@@ -86,8 +84,6 @@ class _PredictTripMapComponentState extends State<PredictTripMapComponent> {
         _nextStation = singleScheduleFromApi;
         _stations = stationsFromApi;
       } else {
-        // Handle case where current location is still null after _getCurrentLocation
-        // Maybe show an error message or log
         checkLog.e('Current location is null');
       }
     } catch (e) {
@@ -192,11 +188,45 @@ class _PredictTripMapComponentState extends State<PredictTripMapComponent> {
           )
         : null;
 
+    var backStationMarkers = _stations
+        ?.where((station) =>
+            station.index >= 0 && station.index < _nextStation!.index)
+        .map((station) => Marker(
+              height: 24,
+              width: 24,
+              point: LatLng(station.latitude, station.longitude),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.grey, width: 2),
+                ),
+                child: station.index != -1
+                    ? Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          '${station.index}',
+                          style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      )
+                    : const Icon(
+                        IconData(0xe1d5, fontFamily: 'MaterialIcons'),
+                        color: Colors.grey,
+                        size: 16,
+                      ),
+              ),
+            ))
+        .toList();
+
     List<Marker> markerList = [];
     markerList.addAll(stationMarkers ??= []);
     markerList.addAll(storeMarker ??= []);
-    if (nextStationMarkers != null) {
+    if (nextStationMarkers != null && backStationMarkers != null) {
       markerList.add(nextStationMarkers);
+      markerList.addAll(backStationMarkers);
     }
 
     var stationMarkerList = _stations
@@ -462,6 +492,90 @@ class _PredictTripMapComponentState extends State<PredictTripMapComponent> {
               child: Icon(
                 _showPolyline ? Icons.visibility_off : Icons.visibility,
                 color: Colors.grey,
+              ),
+            ),
+          ),
+          // note
+          Positioned(
+            top: 100,
+            left: 16,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(25),
+              ),
+              padding: const EdgeInsets.all(6),
+              child: Row(
+                children: [
+                  Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      border: Border.all(color: Colors.green, width: 2),
+                    ),
+                    child: Center(
+                      child: Container(
+                        width: 10,
+                        height: 10,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.green,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  const Text(
+                    "Trạm sắp đến",
+                    style: TextStyle(
+                        // Add style as needed
+                        ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          Positioned(
+            top: 100,
+            left: 150,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(25),
+              ),
+              padding: const EdgeInsets.all(6),
+              child: Row(
+                children: [
+                  Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      border: Border.all(color: Colors.grey, width: 2),
+                    ),
+                    child: Center(
+                      child: Container(
+                        width: 10,
+                        height: 10,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  const Text(
+                    "Trạm đã đi qua",
+                    style: TextStyle(
+                        // Add style as needed
+                        ),
+                  ),
+                ],
               ),
             ),
           ),
