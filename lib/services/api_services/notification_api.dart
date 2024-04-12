@@ -75,6 +75,7 @@ class NotificationApi extends ApiService {
           createdDate: item['createDate'],
         );
       }).toList();
+      // ApiService.checkLog.t(jsonResponse);
       return notifications;
     } else {
       print('Failed to fetch notifications: ${response.statusCode}');

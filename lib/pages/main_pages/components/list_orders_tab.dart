@@ -59,7 +59,6 @@ class _OrderListTabState extends State<OrderListTab> {
                     order: filteredOrders[index],
                     onOrderCancelled: () {
                       // Refresh logic for parent class page
-                      // For example, you can call setState() to rebuild the widget
                       setState(() {});
                     },
                   );
