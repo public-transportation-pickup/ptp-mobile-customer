@@ -740,26 +740,26 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 32),
 
-            // Infomation Notifycation Topic
-            Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Khám phá tin tức',
-                        style: TextStyle(
-                          color: Color(0xFF353434),
-                          fontSize: 20,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.w700,
-                          height: 0,
-                        ),
-                      ),
-                      NotifyTopicComponent(),
-                    ])),
+            // Information Notification Topic
+            // Container(
+            //     alignment: Alignment.centerLeft,
+            //     padding: const EdgeInsets.symmetric(horizontal: 16),
+            //     child: Column(
+            //         mainAxisAlignment: MainAxisAlignment.start,
+            //         crossAxisAlignment: CrossAxisAlignment.start,
+            //         children: [
+            //           const Text(
+            //             'Khám phá tin tức',
+            //             style: TextStyle(
+            //               color: Color(0xFF353434),
+            //               fontSize: 20,
+            //               fontFamily: 'Montserrat',
+            //               fontWeight: FontWeight.w700,
+            //               height: 0,
+            //             ),
+            //           ),
+            //           NotifyTopicComponent(),
+            //         ])),
           ],
         ),
       ),
