@@ -54,12 +54,20 @@ class _OrderListTabState extends State<OrderListTab> {
             order.status == 'Preparing' ||
             order.status == 'Prepared');
 
-        // If no such orders exist, decrement the order count
-        if (!hasAnyOrders) {
-          print("Remove quantity order notifier");
-          context
-              .read<OrderCountNotifier>()
-              .setOrderCount(context.read<OrderCountNotifier>().orderCount - 1);
+        // If any such orders exist, update the order count
+        if (hasAnyOrders) {
+          int count = orders
+              .where((order) =>
+                  order.status == 'Waiting' ||
+                  order.status == 'Preparing' ||
+                  order.status == 'Prepared')
+              .length;
+          print("Set order count to: $count");
+          context.read<OrderCountNotifier>().setOrderCount(count);
+        } else {
+          print("No orders found");
+          context.read<OrderCountNotifier>().setOrderCount(
+              0); // No orders matching the status, set count to 0
         }
       }).catchError((error) {
         // Handle error fetching orders
