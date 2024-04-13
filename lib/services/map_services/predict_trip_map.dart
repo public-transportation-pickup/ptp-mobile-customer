@@ -54,15 +54,15 @@ class _PredictTripMapComponentState extends State<PredictTripMapComponent> {
       }
 
       // Check again if current location is available after _getCurrentLocation call
+      // if (_currentLocation != null) {
+      //   Trip tripFromApi = await UserApi.predictTripOnLocation(
+      //       _currentLocation!.latitude ?? 0,
+      //       _currentLocation!.longitude ?? 0,
+      //       widget.routeVarId);
+      // HARD FIX DATA
       if (_currentLocation != null) {
         Trip tripFromApi = await UserApi.predictTripOnLocation(
-            _currentLocation!.latitude ?? 0,
-            _currentLocation!.longitude ?? 0,
-            widget.routeVarId);
-        // HARD FIX DATA
-        // if (_currentLocation != null) {
-        //   Trip tripFromApi = await UserApi.predictTripOnLocation(
-        //       10.869472, 106.805093, widget.routeVarId);
+            10.869472, 106.805093, widget.routeVarId);
         List<Schedule> stationsFromApi = tripFromApi.schedules
             .map((schedule) => Schedule(
                   index: schedule.index,

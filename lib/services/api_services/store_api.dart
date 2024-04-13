@@ -34,10 +34,11 @@ class StoreApi extends ApiService {
         storeUrl,
         headers: {'Content-Type': 'application/json'},
       );
+      // print("Store ID: ${storeId}");
 
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonResponse = json.decode(response.body);
-        //checkLog.t(jsonResponse);
+        // ApiService.checkLog.t(jsonResponse);
         return StoreModel.fromJson(jsonResponse);
       } else {
         ApiService.checkLog.e('Failed to load store: ${response.statusCode}');
