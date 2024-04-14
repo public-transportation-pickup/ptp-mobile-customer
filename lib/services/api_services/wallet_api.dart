@@ -67,4 +67,30 @@ class WalletApi extends ApiService {
       throw Exception('Error while depositing money: $e');
     }
   }
+
+  // DEPOSIT MONEY WITH VNPAY
+  static Future<String> callVNPay(int amount) async {
+    final Uri userUrl = Uri.parse('${ApiService.baseUrl}/wallets/vn-pay');
+    try {
+      final response = await http.post(
+        userUrl,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${LocalVariables.jwtToken}',
+        },
+        body: amount.toString(),
+      );
+
+      if (response.statusCode == 200) {
+        ApiService.checkLog.t(response.body);
+        return response.body;
+      } else {
+        ApiService.checkLog.e('Bad request: ${response.statusCode}');
+        throw Exception('Bad request: ${response.statusCode}');
+      }
+    } catch (e) {
+      ApiService.checkLog.e('Error while call api: $e');
+      throw Exception('Error while call api: $e');
+    }
+  }
 }

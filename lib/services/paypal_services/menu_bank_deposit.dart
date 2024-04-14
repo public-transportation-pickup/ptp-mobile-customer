@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:capstone_ptp/services/paypal_services/vnpay_webview.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -79,6 +80,23 @@ class _MenuBankDepositState extends State<MenuBankDeposit> {
     }
   }
 
+  Future<void> processVNPAYPayment(int amount) async {
+    try {
+      String urlVNPAY = await WalletApi.callVNPay(amount);
+      print(urlVNPAY);
+      // Navigate to the new page with the web view
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => VnpayWebViewPage(url: urlVNPAY),
+        ),
+      );
+    } catch (e) {
+      // Handle errors
+      print("Error: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,6 +141,30 @@ class _MenuBankDepositState extends State<MenuBankDeposit> {
                 });
               },
               selected: selectedOption == 'PayPal',
+            ),
+            RadioListTile(
+              title: Row(
+                children: [
+                  Image.asset(
+                    'lib/assets/images/vnpay_logo.png',
+                    width: 36,
+                    height: 36,
+                  ),
+                  const SizedBox(width: 16),
+                  const Text(
+                    'VNPAY',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ],
+              ),
+              value: 'VNPAY',
+              groupValue: selectedOption,
+              onChanged: (value) {
+                setState(() {
+                  selectedOption = value.toString();
+                });
+              },
+              selected: selectedOption == 'VNPAY',
             ),
             RadioListTile(
               title: Row(
@@ -210,6 +252,9 @@ class _MenuBankDepositState extends State<MenuBankDeposit> {
                             amount,
                             formatVNDtoUSD(amount),
                             context);
+                      } else if (selectedOption == 'VNPAY') {
+                        HapticFeedback.mediumImpact();
+                        await processVNPAYPayment(amount);
                       } else {
                         GlobalMessage(context).showWarnMessage(
                             "Phương thức thanh toán chưa được hỗ trợ.");
