@@ -90,86 +90,67 @@ class _RouteTripsTabState extends State<RouteTripsTab> {
             child: ListView.builder(
               itemCount: stationNames.length,
               itemBuilder: (context, index) {
-                if (stores[index] == null || stores[index]!.isEmpty) {
-                  return Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 16),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 30,
-                          height: 30,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.blue, width: 2),
-                          ),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              '$index',
-                              style: const TextStyle(
-                                color: Colors.blue,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w700,
-                              ),
+                return ExpansionTile(
+                  leading: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: (stores[index] == null || stores[index]!.isEmpty)
+                          ? Colors.white
+                          : Colors.white,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: (stores[index] == null || stores[index]!.isEmpty)
+                            ? Colors.grey
+                            : Colors.blue,
+                        width: 2,
+                      ),
+                    ),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        '$index',
+                        style: TextStyle(
+                          color:
+                              (stores[index] == null || stores[index]!.isEmpty)
+                                  ? Colors.grey
+                                  : Colors.blue,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ),
+                  title: Text(
+                    stationNames[index],
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  children: [
+                    ListTile(
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Thời gian đến: ${_formatTime(arrivalTime[index])}",
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 16),
-                        Text(
-                          stationNames[index],
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
-                  return ExpansionTile(
-                    leading: Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.blue, width: 2),
-                      ),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          '$index',
-                          style: const TextStyle(
-                            color: Colors.blue,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                    ),
-                    title: Text(
-                      stationNames[index],
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    children: [
-                      ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Thời gian đến: ${_formatTime(arrivalTime[index])}",
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
+                          if (stores[index] == null || stores[index]!.isEmpty)
+                            const Text(
+                              "*Chưa có cửa hàng",
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
+                          if (stores[index] != null &&
+                              stores[index]!.isNotEmpty)
                             ElevatedButton(
                               style: ButtonStyle(
                                 backgroundColor:
@@ -198,12 +179,11 @@ class _RouteTripsTabState extends State<RouteTripsTab> {
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                        ],
                       ),
-                    ],
-                  );
-                }
+                    ),
+                  ],
+                );
               },
             ),
           );

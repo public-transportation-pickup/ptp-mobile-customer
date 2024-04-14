@@ -193,7 +193,7 @@ class _UpdateProfilePageState extends State<UpdateProfilePage> {
                           context: context,
                           initialDate: dateOfBirth,
                           firstDate: DateTime(1970),
-                          lastDate: DateTime(2008),
+                          lastDate: DateTime.now(),
                         );
                         if (selectedDate != null) {
                           setState(() {
