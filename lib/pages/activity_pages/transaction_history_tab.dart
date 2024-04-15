@@ -115,13 +115,24 @@ class TransactionCard extends StatelessWidget {
                   color: Colors.green,
                 ),
               ),
-            if (transaction.transactionType == "")
-              const Align(
+            if (transaction.transactionType == "" &&
+                transaction.source == "Paypal")
+              Align(
                 alignment: Alignment.center,
-                child: Icon(
-                  Icons.paypal,
-                  size: 36,
-                  color: Colors.blue,
+                child: Image.asset(
+                  'lib/assets/images/paypal_logo.png',
+                  width: 36,
+                  height: 36,
+                ),
+              ),
+            if (transaction.transactionType == "" &&
+                transaction.source == "VNPay")
+              Align(
+                alignment: Alignment.center,
+                child: Image.asset(
+                  'lib/assets/images/vnpay_logo.png',
+                  width: 36,
+                  height: 36,
                 ),
               ),
             const SizedBox(width: 16),

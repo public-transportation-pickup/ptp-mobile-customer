@@ -139,15 +139,17 @@ class _RouteScheduleTabState extends State<RouteScheduleTab> {
                                 Container(
                                   margin: const EdgeInsets.all(8.0),
                                   child: GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        tappedTripIndex = tripIndex;
-                                        RouteTripsTab.currentTripId =
-                                            trips[tripIndex].id;
-                                        print("Tapped trip id: " +
-                                            RouteTripsTab.currentTripId);
-                                      });
-                                    },
+                                    onTap: textColor != Colors.grey
+                                        ? () {
+                                            setState(() {
+                                              tappedTripIndex = tripIndex;
+                                              RouteTripsTab.currentTripId =
+                                                  trips[tripIndex].id;
+                                              print("Tapped trip id: " +
+                                                  RouteTripsTab.currentTripId);
+                                            });
+                                          }
+                                        : null,
                                     child: Text(
                                       trip.startTime,
                                       style: TextStyle(

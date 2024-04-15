@@ -1,9 +1,12 @@
 import 'dart:io';
-import 'package:capstone_ptp/services/paypal_services/vnpay_webview.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import '../../pages/main_pages/page_navigation.dart';
+import '../../utils/custom_page_route.dart';
 import '../../utils/global_message.dart';
 import '../api_services/wallet_api.dart';
 import 'paypal_checkout_service.dart';
@@ -84,13 +87,11 @@ class _MenuBankDepositState extends State<MenuBankDeposit> {
     try {
       String urlVNPAY = await WalletApi.callVNPay(amount);
       print(urlVNPAY);
-      // Navigate to the new page with the web view
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => VnpayWebViewPage(url: urlVNPAY),
-        ),
-      );
+      Uri _url = Uri.parse(urlVNPAY);
+
+      if (!await launchUrl(_url)) {
+        throw Exception('Could not launch $_url');
+      }
     } catch (e) {
       // Handle errors
       print("Error: $e");
@@ -109,7 +110,13 @@ class _MenuBankDepositState extends State<MenuBankDeposit> {
             color: Colors.black,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushAndRemoveUntil(
+              context,
+              SlideRightPageRoute(
+                builder: (context) => PageNavigation(initialPageIndex: 2),
+              ),
+              (route) => false,
+            );
           },
         ),
       ),
