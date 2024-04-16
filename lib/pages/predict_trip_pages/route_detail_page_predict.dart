@@ -19,10 +19,11 @@ class RouteDetailPredictPage extends StatefulWidget {
 class _RouteDetailPredictPageState extends State<RouteDetailPredictPage> {
   late Future<RouteModel> _routeDetail;
   late Future<List<RouteVarModel>> _routeVars;
-  late String currentRouteVar;
+  String? currentRouteVar;
 
   Key _routeDetailTabKey = UniqueKey();
 
+  // ignore: unused_field
   List<RouteVarModel> _allRouteVars = [];
   String routeVarTurnGo = '';
   String routeVarTurnBack = '';
@@ -54,139 +55,159 @@ class _RouteDetailPredictPageState extends State<RouteDetailPredictPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Định vị chuyến'),
-          centerTitle: true,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios_new_outlined,
-              color: Colors.black,
+    return FutureBuilder(
+      future: _routeDetail,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Định vị tuyến'),
+              centerTitle: true,
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios_new_outlined,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
             ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            body: const Center(child: CircularProgressIndicator()),
+          );
+        } else {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Chi tiết chuyến'),
+              centerTitle: true,
+              leading: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios_new_outlined,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            body: _buildBody(snapshot),
+          );
+        }
+      },
+    );
+  }
+
+  Widget _buildBody(AsyncSnapshot<RouteModel> snapshot) {
+    if (currentRouteVar == null) {
+      // Handle case where currentRouteVar is null
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (snapshot.hasData) {
+      return Stack(
+        children: [
+          Positioned(
+            bottom: 0,
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              color: Colors.grey,
+              child: PredictTripMapComponent(
+                routeVarId: currentRouteVar!,
+                key: UniqueKey(),
+              ),
+            ),
           ),
-        ),
-        body: FutureBuilder(
-            future: _routeDetail,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                return Stack(
-                  children: [
-                    Positioned(
-                      bottom: 0,
-                      child: Container(
-                        height: MediaQuery.of(context).size.height,
-                        width: MediaQuery.of(context).size.width,
-                        color: Colors.grey,
-                        child: PredictTripMapComponent(
-                          routeVarId: currentRouteVar,
-                          key: UniqueKey(),
-                        ),
-                      ),
-                    ),
-                    DraggableScrollableSheet(
-                      minChildSize: 0.15,
-                      maxChildSize: 0.9,
-                      initialChildSize: 0.4,
-                      builder: (BuildContext context,
-                          ScrollController scrollController) {
-                        return Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20.0),
-                              topRight: Radius.circular(20.0),
-                            ),
-                          ),
-                          child: SingleChildScrollView(
-                            controller: scrollController,
-                            child: Column(
-                              children: [
-                                Stack(children: [
-                                  if (snapshot.hasData)
-                                    RouteCardDetailComponent(
-                                        routeDetail: snapshot.data!),
-                                  Positioned(
-                                    right: 20.0,
-                                    bottom: 20.0,
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          // Toggle between routeVarTurnGo and routeVarTurnBack
-                                          currentRouteVar = (currentRouteVar ==
-                                                  routeVarTurnGo)
-                                              ? routeVarTurnBack
-                                              : routeVarTurnGo;
-                                          // Update the key to trigger a rebuild of RouteDetailTab
-                                          _routeDetailTabKey = UniqueKey();
-                                        });
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: (currentRouteVar ==
-                                                  routeVarTurnGo)
-                                              ? Colors.blue[50]
-                                              : Colors.green[50],
-                                          borderRadius:
-                                              BorderRadius.circular(5.0),
-                                        ),
-                                        padding: const EdgeInsets.all(6.0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Icon(
-                                              Icons.swap_vert,
-                                              color: (currentRouteVar ==
-                                                      routeVarTurnGo)
-                                                  ? Colors.blue
-                                                  : Colors.green,
-                                              size: 20.0,
-                                            ),
-                                            const SizedBox(width: 8.0),
-                                            Text(
-                                              (currentRouteVar ==
-                                                      routeVarTurnGo)
-                                                  ? "Lượt đi"
-                                                  : "Lượt về",
-                                              style: TextStyle(
-                                                color: (currentRouteVar ==
-                                                        routeVarTurnGo)
-                                                    ? Colors.blue
-                                                    : Colors.green,
-                                                fontSize: 14.0,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+          DraggableScrollableSheet(
+            minChildSize: 0.15,
+            maxChildSize: 0.9,
+            initialChildSize: 0.4,
+            builder: (BuildContext context, ScrollController scrollController) {
+              return Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0),
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  child: Column(
+                    children: [
+                      Stack(children: [
+                        RouteCardDetailComponent(routeDetail: snapshot.data!),
+                        Positioned(
+                          right: 20.0,
+                          bottom: 20.0,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                // Toggle between routeVarTurnGo and routeVarTurnBack
+                                currentRouteVar =
+                                    (currentRouteVar == routeVarTurnGo)
+                                        ? routeVarTurnBack
+                                        : routeVarTurnGo;
+                                // Update the key to trigger a rebuild of RouteDetailTab
+                                _routeDetailTabKey = UniqueKey();
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: (currentRouteVar == routeVarTurnGo)
+                                    ? Colors.blue[50]
+                                    : Colors.green[50],
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              padding: const EdgeInsets.all(6.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.swap_vert,
+                                    color: (currentRouteVar == routeVarTurnGo)
+                                        ? Colors.blue
+                                        : Colors.green,
+                                    size: 20.0,
+                                  ),
+                                  const SizedBox(width: 8.0),
+                                  Text(
+                                    (currentRouteVar == routeVarTurnGo)
+                                        ? "Lượt đi"
+                                        : "Lượt về",
+                                    style: TextStyle(
+                                      color: (currentRouteVar == routeVarTurnGo)
+                                          ? Colors.blue
+                                          : Colors.green,
+                                      fontSize: 14.0,
                                     ),
                                   ),
-                                ]),
-                                Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.65,
-                                  color: Colors.white,
-                                  child: RouteDetailTab(
-                                    key: _routeDetailTabKey,
-                                    routeDetail: snapshot.data!,
-                                    currentRouteVar: currentRouteVar,
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        );
-                      },
-                    ),
-                  ],
-                );
-              }
-            }));
+                        ),
+                      ]),
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.65,
+                        color: Colors.white,
+                        child: RouteDetailTab(
+                          key: _routeDetailTabKey,
+                          routeDetail: snapshot.data!,
+                          currentRouteVar: currentRouteVar!,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      );
+    } else if (snapshot.hasError) {
+      return Center(child: Text('Error: ${snapshot.error}'));
+    } else {
+      return const Center(child: Text('No data available'));
+    }
   }
 }

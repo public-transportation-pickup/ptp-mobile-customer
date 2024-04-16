@@ -17,7 +17,8 @@ class NotificationApi extends ApiService {
     required int source,
   }) async {
     final Uri apiUrl = Uri.parse('${ApiService.baseUrl}/notifications');
-    var now = DateTime.now().add(const Duration(hours: 7));
+    // var now = DateTime.now().add(const Duration(hours: 7));
+    var now = DateTime.now();
     final formattedNow = DateFormat("yyyy-MM-ddTHH:mm:ss.SSSZ").format(now);
     final List<Map<String, dynamic>> body = [
       {

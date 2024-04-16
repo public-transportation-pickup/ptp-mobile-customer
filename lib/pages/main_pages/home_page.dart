@@ -1,3 +1,4 @@
+import 'package:capstone_ptp/pages/main_pages/components/carousel_slider.dart';
 import 'package:capstone_ptp/pages/map_pages/map_page.dart';
 import 'package:capstone_ptp/pages/route_pages/final_station_page.dart';
 import 'package:capstone_ptp/services/map_services/mini_map_box.dart';
@@ -740,26 +741,58 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 32),
 
-            // Information Notification Topic
-            // Container(
-            //     alignment: Alignment.centerLeft,
-            //     padding: const EdgeInsets.symmetric(horizontal: 16),
-            //     child: Column(
-            //         mainAxisAlignment: MainAxisAlignment.start,
-            //         crossAxisAlignment: CrossAxisAlignment.start,
-            //         children: [
-            //           const Text(
-            //             'Khám phá tin tức',
-            //             style: TextStyle(
-            //               color: Color(0xFF353434),
-            //               fontSize: 20,
-            //               fontFamily: 'Montserrat',
-            //               fontWeight: FontWeight.w700,
-            //               height: 0,
-            //             ),
-            //           ),
-            //           NotifyTopicComponent(),
-            //         ])),
+            // SLIDER "Gợi ý cho bạn"
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Đặt lại món',
+                    style: TextStyle(
+                      color: Color(0xFF353434),
+                      fontSize: 20,
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w700,
+                      height: 0,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: CustomCarouselSlider(),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            // Đặt lại đơn
+            Container(
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Đặt lại đơn',
+                        style: TextStyle(
+                          color: Color(0xFF353434),
+                          fontSize: 20,
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.w700,
+                          height: 0,
+                        ),
+                      ),
+                      NotifyTopicComponent(),
+                    ])),
           ],
         ),
       ),

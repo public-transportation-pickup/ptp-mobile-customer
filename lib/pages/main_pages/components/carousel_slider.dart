@@ -6,9 +6,13 @@ import '../../../services/local_variables.dart';
 class CustomCarouselSlider extends StatefulWidget {
   final List<String> bannerImages;
   final List<String> imageTitles;
+  final List<String> imageSubtitles;
 
-  CustomCarouselSlider({List<String>? bannerImages, List<String>? imageTitles})
-      : bannerImages = bannerImages ??
+  CustomCarouselSlider({
+    List<String>? bannerImages,
+    List<String>? imageTitles,
+    List<String>? imageSubtitles,
+  })  : bannerImages = bannerImages ??
             [
               LocalVariables.photoURL ?? '',
               LocalVariables.photoURL ?? '',
@@ -23,6 +27,14 @@ class CustomCarouselSlider extends StatefulWidget {
               'Title 3',
               'Title 4',
               'Title 5',
+            ],
+        imageSubtitles = imageSubtitles ??
+            [
+              'Subtitle 1',
+              'Subtitle 2',
+              'Subtitle 3',
+              'Subtitle 4',
+              'Subtitle 5',
             ];
 
   @override
@@ -30,17 +42,18 @@ class CustomCarouselSlider extends StatefulWidget {
 }
 
 class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
+  // ignore: unused_field
   int _currentImageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 180, // Adjusted height to accommodate image and title
+      height: 200, // Adjusted height to accommodate image and title
       width: MediaQuery.of(context).size.width,
       child: CarouselSlider(
         options: CarouselOptions(
           autoPlay: true,
-          autoPlayInterval: const Duration(seconds: 10),
+          autoPlayInterval: const Duration(seconds: 5),
           onPageChanged: (index, reason) {
             setState(() {
               _currentImageIndex = index;
@@ -52,6 +65,7 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
           int index = entry.key;
           String imagePath = entry.value;
           String title = widget.imageTitles[index];
+          String? subtitle = widget.imageSubtitles[index];
 
           return Container(
             margin: const EdgeInsets.symmetric(horizontal: 6.0),
@@ -74,7 +88,15 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
                     fontSize: 14,
                     fontFamily: 'Montserrat',
                     fontWeight: FontWeight.w500,
-                    height: 0,
+                  ),
+                ),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    color: Color(0xFF353434),
+                    fontSize: 12,
+                    fontFamily: 'Montserrat',
+                    fontWeight: FontWeight.normal,
                   ),
                 ),
               ],
