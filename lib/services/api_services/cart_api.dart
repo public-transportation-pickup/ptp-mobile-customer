@@ -42,6 +42,7 @@ class CartApi extends ApiService {
       },
       body: jsonEncode(CreateCartRequest(model: cartModel).toJson()),
     );
+    print("Create cart api called");
     ApiService.checkLog
         .t(jsonEncode(CreateCartRequest(model: cartModel).toJson()));
     if (response.statusCode == 200) {
@@ -84,6 +85,7 @@ class CartApi extends ApiService {
     );
 
     if (response.statusCode == 200) {
+      print("Delete cart api called");
       return true;
     } else {
       throw Exception('Failed to delete cart');

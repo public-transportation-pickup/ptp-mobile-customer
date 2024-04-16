@@ -1,13 +1,18 @@
+import 'package:capstone_ptp/pages/product_pages/cart_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../../../models/order_model.dart';
+import '../../models/product_in_cart_model.dart';
+import '../../services/api_services/cart_api.dart';
 import '../../services/api_services/order_api.dart';
 import '../../utils/global_message.dart';
 import '../main_pages/components/confirm_cancel_order_card.dart';
+import '../main_pages/components/confirm_order_again_card.dart';
 
 class OrderDetailPage extends StatefulWidget {
   final String orderUuid;
@@ -57,6 +62,42 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     super.initState();
     // Call the API to get order details using the orderUuid
     _orderDetails = OrderApi.getOrderDetails(widget.orderUuid);
+  }
+
+  Future<bool> orderAgain(OrderModel order) async {
+    try {
+      // clear cart
+      Provider.of<CartProvider>(context, listen: false).clearCart();
+      await CartApi.deleteCart();
+
+      // create new cart
+      CartProvider.stationId = order.stationId;
+      DateTime adjustedPickupTime =
+          order.pickUpTime.subtract(const Duration(hours: 1));
+      String formattedAdjustedPickupTime =
+          DateFormat('HH:mm').format(adjustedPickupTime);
+      CartProvider.arrivalTime = formattedAdjustedPickupTime;
+
+      CartProvider.storeId = order.storeId;
+      CartProvider.stationAddr = order.stationAddress;
+      // Create a ProductInCartModel instance
+      for (var item in order.orderDetails) {
+        ProductInCartModel productInCart = ProductInCartModel(
+          productName: item.productName,
+          actualPrice: item.actualPrice.toDouble(),
+          quantity: item.quantity,
+          maxQuantity: 100,
+          note: "",
+          productMenuId: item.productMenuId,
+          imageURL: item.imageURL,
+        );
+        Provider.of<CartProvider>(context, listen: false)
+            .addToCart(productInCart);
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
   @override
@@ -156,6 +197,88 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                               fontWeight: FontWeight.w700,
                               fontFamily: 'Montserrat',
                               color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  if (snapshot.data?.status.toLowerCase() == 'completed')
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          HapticFeedback.mediumImpact();
+                          // Handle order again button tap
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: AlertDialog(
+                                  backgroundColor: Colors.white,
+                                  contentPadding: EdgeInsets.zero,
+                                  content: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.bottomCenter,
+                                          end: Alignment.topCenter,
+                                          colors: [
+                                            Color(0xFFFCCF59),
+                                            Color.fromRGBO(255, 255, 255, 0),
+                                          ],
+                                          stops: [0.0126, 0.6296],
+                                          transform: GradientRotation(178.52 *
+                                              (3.141592653589793 / 180)),
+                                        ),
+                                      ),
+                                      child: ConfirmOrderAgainCard(
+                                        onConfirm: () async {
+                                          HapticFeedback.mediumImpact();
+                                          Future<bool> result =
+                                              orderAgain(snapshot.data!);
+                                          if (await result) {
+                                            // return page before
+                                            Navigator.pop(context);
+                                            globalMessage.showSuccessMessage(
+                                              "Đặt lại thành công!",
+                                            );
+                                          } else {
+                                            globalMessage.showErrorMessage(
+                                              "Đặt lại thất bại!",
+                                            );
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.green),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.add_shopping_cart_outlined,
+                              color: Colors.white,
+                            ),
+                            SizedBox(width: 5),
+                            Text(
+                              'Đặt lại',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Montserrat',
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),

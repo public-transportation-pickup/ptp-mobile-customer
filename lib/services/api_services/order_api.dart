@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
+import '../../models/order_again_model.dart';
 import '../../models/order_model.dart';
 import '../../models/order_create_model.dart';
 import '../local_variables.dart';
@@ -100,6 +101,27 @@ class OrderApi extends ApiService {
     } else {
       ApiService.checkLog.e('Failed to cancel order: ${response.statusCode}');
       return false;
+    }
+  }
+
+  // GET ORDERS AGAIN
+  static Future<OrderAgainModel> getOrdersAgain() async {
+    final Uri ordersUrl = Uri.parse('${ApiService.baseUrl}/users/top-products');
+
+    final response = await http.get(
+      ordersUrl,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${LocalVariables.jwtToken}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // ApiService.checkLog.d(jsonDecode(response.body));
+      return OrderAgainModel.fromJson(jsonDecode(response.body));
+    } else {
+      ApiService.checkLog.e('Failed to load orders: ${response.statusCode}');
+      throw Exception('Failed to load orders: ${response.statusCode}');
     }
   }
 }

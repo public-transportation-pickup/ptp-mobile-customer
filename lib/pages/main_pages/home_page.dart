@@ -7,7 +7,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:animations/animations.dart';
+import 'package:intl/intl.dart';
 
+import '../../models/order_again_model.dart';
+import '../../services/api_services/order_api.dart';
 import '../chart_pages/statistic_page.dart';
 import '../predict_trip_pages/list_route_page_predict.dart';
 import '../route_pages/list_routes_page.dart';
@@ -22,6 +25,53 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final TextEditingController _searchController = TextEditingController();
+  final Future<List<OrderAgainItem>> orderAgainListFuture;
+  final Future<List<ProductAgainItem>> productAgainListFuture;
+
+  _HomePageState()
+      : orderAgainListFuture =
+            _fetchLists().then((lists) => lists[0] as List<OrderAgainItem>),
+        productAgainListFuture =
+            _fetchLists().then((lists) => lists[1] as List<ProductAgainItem>);
+
+  static Future<List<List<dynamic>>> _fetchLists() async {
+    try {
+      final OrderAgainModel orderAgainModel = await OrderApi.getOrdersAgain();
+      final List<OrderAgainItem> orderAgainList =
+          orderAgainModel.orders!.map((order) {
+        // Parse the pickup time string to DateTime
+        DateTime pickupDateTime = DateTime.parse(order.pickUpTime!);
+        // Format the DateTime to your desired format
+        String formattedPickupTime =
+            DateFormat('HH:mm - dd/MM/yyyy').format(pickupDateTime);
+
+        return OrderAgainItem(
+          orderId: order.id!,
+          storeName: order.storeName!,
+          pickUpTime: formattedPickupTime,
+        );
+      }).toList();
+
+      final List<ProductAgainItem> productAgainList =
+          orderAgainModel.products!.map((product) {
+        return ProductAgainItem(
+          productName: product.name!,
+          imageUrl: product.imageURL!,
+          price: product.actualPrice!,
+        );
+      }).toList();
+
+      return [orderAgainList, productAgainList];
+    } catch (e) {
+      print('Error fetching lists: $e');
+      rethrow;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -741,58 +791,93 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 32),
 
-            // SLIDER "Gợi ý cho bạn"
-            Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Đặt lại món',
-                    style: TextStyle(
-                      color: Color(0xFF353434),
-                      fontSize: 20,
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.w700,
-                      height: 0,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: CustomCarouselSlider(),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+            FutureBuilder(
+              future:
+                  Future.wait([orderAgainListFuture, productAgainListFuture]),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text(
+                      'Có lỗi xảy ra, vui lòng thử lại:\n${snapshot.error}');
+                } else {
+                  // Check if both futures are null
+                  bool isDataAvailable = snapshot.data![0].isEmpty;
 
-            // Đặt lại đơn
-            Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Đặt lại đơn',
-                        style: TextStyle(
-                          color: Color(0xFF353434),
-                          fontSize: 20,
-                          fontFamily: 'Montserrat',
-                          fontWeight: FontWeight.w700,
-                          height: 0,
-                        ),
+                  if (isDataAvailable) {
+                    return const Center(
+                      child: SizedBox(),
+                    );
+                  } else {
+                    // SLIDER "Đặt lại món"
+                    Widget suggestionSlider = Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Các món mua thường xuyên',
+                            style: TextStyle(
+                              color: Color(0xFF353434),
+                              fontSize: 20,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.w700,
+                              height: 0,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: CustomCarouselSlider(
+                                  productAgainListFuture:
+                                      productAgainListFuture,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      NotifyTopicComponent(),
-                    ])),
+                    );
+
+                    // Đặt lại đơn
+                    Widget orderAgainComponent = Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Đặt lại đơn',
+                            style: TextStyle(
+                              color: Color(0xFF353434),
+                              fontSize: 20,
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.w700,
+                              height: 0,
+                            ),
+                          ),
+                          NotifyTopicComponent(
+                              orderAgainListFuture: orderAgainListFuture),
+                        ],
+                      ),
+                    );
+
+                    return Column(
+                      children: [
+                        suggestionSlider,
+                        orderAgainComponent,
+                      ],
+                    );
+                  }
+                }
+              },
+            ),
           ],
         ),
       ),
