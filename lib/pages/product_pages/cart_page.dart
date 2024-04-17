@@ -457,8 +457,7 @@ class _CartPageState extends State<CartPage> {
                                                     CrossAxisAlignment.end,
                                                 children: [
                                                   Text(
-                                                    formatPrice(items[index]
-                                                        .actualPrice),
+                                                    "${formatPrice(items[index].actualPrice)} đ",
                                                     style: const TextStyle(
                                                         fontSize: 16,
                                                         fontWeight:
@@ -582,7 +581,7 @@ class _CartPageState extends State<CartPage> {
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            '${formatPrice(totalPrice)} VND',
+                            '${formatPrice(totalPrice)} đ',
                             style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),

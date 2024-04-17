@@ -242,7 +242,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                                             // return page before
                                             Navigator.pop(context);
                                             globalMessage.showSuccessMessage(
-                                              "Đặt lại thành công!",
+                                              "Tất cả sản phẩm đã được đặt lại.\nVui lòng kiểm tra giỏ hàng của bạn.",
                                             );
                                           } else {
                                             globalMessage.showErrorMessage(
