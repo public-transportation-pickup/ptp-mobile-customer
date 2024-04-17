@@ -341,6 +341,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               // Set Value cart
                               print(success);
                               if (success) {
+                                Provider.of<CartProvider>(context,
+                                        listen: false)
+                                    .saveCart();
                                 Navigator.pop(context);
                                 globalMessage.showSuccessMessage(
                                     "Đã thêm vào giỏ hàng!");

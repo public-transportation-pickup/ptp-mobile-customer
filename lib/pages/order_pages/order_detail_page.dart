@@ -94,6 +94,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         Provider.of<CartProvider>(context, listen: false)
             .addToCart(productInCart);
       }
+      Provider.of<CartProvider>(context, listen: false).saveCart();
       return true;
     } catch (error) {
       return false;

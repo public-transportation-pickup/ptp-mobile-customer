@@ -57,7 +57,7 @@ class CartProvider extends ChangeNotifier {
     }
     // If the item doesn't exist, add it to the cart
     _items.add(newItem);
-    saveCart();
+    // saveCart();
     notifyListeners();
     return true;
   }

@@ -4,10 +4,14 @@ import 'package:carousel_slider/carousel_slider.dart';
 class ProductAgainItem {
   final String productName;
   final String imageUrl;
+  final num orderCount;
   final num price;
 
   ProductAgainItem(
-      {required this.productName, required this.imageUrl, required this.price});
+      {required this.productName,
+      required this.imageUrl,
+      required this.orderCount,
+      required this.price});
 }
 
 class CustomCarouselSlider extends StatefulWidget {
@@ -73,16 +77,16 @@ class _CustomCarouselSliderState extends State<CustomCarouselSlider> {
           Text(
             product.productName,
             style: const TextStyle(
-              color: Color(0xFF353434),
+              color: Colors.black,
               fontSize: 14,
               fontFamily: 'Montserrat',
               fontWeight: FontWeight.w500,
             ),
           ),
           Text(
-            '${product.price.toInt()}',
+            'Đã mua: ${product.orderCount}',
             style: const TextStyle(
-              color: Color(0xFF353434),
+              color: Colors.grey,
               fontSize: 12,
               fontFamily: 'Montserrat',
               fontWeight: FontWeight.normal,

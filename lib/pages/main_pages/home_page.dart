@@ -57,6 +57,7 @@ class _HomePageState extends State<HomePage> {
         return ProductAgainItem(
           productName: product.name!,
           imageUrl: product.imageURL!,
+          orderCount: product.orderCount!,
           price: product.actualPrice!,
         );
       }).toList();
