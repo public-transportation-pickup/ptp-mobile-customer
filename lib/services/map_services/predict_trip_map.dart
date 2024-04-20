@@ -30,6 +30,8 @@ class _PredictTripMapComponentState extends State<PredictTripMapComponent> {
   bool _isLoading = true;
   bool _showMarkers = true;
   bool _showPolyline = false;
+  bool _useDeviceLocation = true;
+
   // CHECK LOG
   var checkLog = Logger(printer: PrettyPrinter());
   // MARKERS VALUE
@@ -54,15 +56,15 @@ class _PredictTripMapComponentState extends State<PredictTripMapComponent> {
       }
 
       // Check again if current location is available after _getCurrentLocation call
-      // if (_currentLocation != null) {
-      //   Trip tripFromApi = await UserApi.predictTripOnLocation(
-      //       _currentLocation!.latitude ?? 0,
-      //       _currentLocation!.longitude ?? 0,
-      //       widget.routeVarId);
-      // HARD FIX DATA
       if (_currentLocation != null) {
         Trip tripFromApi = await UserApi.predictTripOnLocation(
-            10.869472, 106.805093, widget.routeVarId);
+            _currentLocation!.latitude ?? 0,
+            _currentLocation!.longitude ?? 0,
+            widget.routeVarId);
+        // HARD FIX DATA
+        // if (_currentLocation != null) {
+        //   Trip tripFromApi = await UserApi.predictTripOnLocation(
+        //       10.869472, 106.805093, widget.routeVarId);
         List<Schedule> stationsFromApi = tripFromApi.schedules
             .map((schedule) => Schedule(
                   index: schedule.index,
@@ -233,6 +235,17 @@ class _PredictTripMapComponentState extends State<PredictTripMapComponent> {
         ?.map((station) => LatLng(station.latitude, station.longitude))
         .toList();
 
+    // If not using device location, add a red marker
+    if (!_useDeviceLocation) {
+      Marker redMarker = const Marker(
+        height: 36,
+        width: 36,
+        point: LatLng(10.832896, 106.806478),
+        child: Icon(Icons.place, color: Colors.red),
+      );
+      markerList.add(redMarker);
+    }
+
     setState(() {
       _isLoading = false;
       _markers = markerList;
@@ -245,10 +258,21 @@ class _PredictTripMapComponentState extends State<PredictTripMapComponent> {
     Location location = Location();
 
     try {
-      LocationData currentLocation = await location.getLocation();
+      LocationData currentLocation;
+      if (_useDeviceLocation) {
+        currentLocation = await location.getLocation();
+      } else {
+        // Use hardcoded location
+        currentLocation = LocationData.fromMap({
+          "latitude": 10.832896,
+          "longitude": 106.806478,
+        });
+      }
+
       setState(() {
         _currentLocation = currentLocation;
         _isLoading = false;
+        _getListMarkers(); // Reload markers when location is fetched
       });
     } catch (e) {
       setState(() {
@@ -576,6 +600,44 @@ class _PredictTripMapComponentState extends State<PredictTripMapComponent> {
                         ),
                   ),
                 ],
+              ),
+            ),
+          ),
+
+          // Giả lập vị trí
+          Positioned(
+            top: 150,
+            left: 16,
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _useDeviceLocation = !_useDeviceLocation;
+                  _getCurrentLocation(); // Update location when toggling
+                });
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                padding: const EdgeInsets.all(6),
+                child: Row(
+                  children: [
+                    Icon(
+                      _useDeviceLocation
+                          ? Icons.location_on
+                          : Icons.location_on,
+                      color: _useDeviceLocation ? Colors.blue : Colors.red,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      _useDeviceLocation ? "Vị trí mặc định" : "Giả lập vị trí",
+                      style: const TextStyle(
+                          // Add style as needed
+                          ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
