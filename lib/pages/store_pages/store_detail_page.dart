@@ -294,7 +294,7 @@ class _StoreDetailPageState extends State<StoreDetailPage> {
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(32, 8, 8, 0),
                     child: Text(
-                      "Menu dành cho bạn: ",
+                      "Thực đơn dành cho bạn: ",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,

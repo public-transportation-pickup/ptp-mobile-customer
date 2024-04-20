@@ -4,10 +4,10 @@ class AppInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Replace these placeholders with actual values
-    String version = '1.0.0';
+    String version = '1.0.1';
     String teamCode = 'GSP24SE47';
     String topicCode = 'SP24SE075';
-    String releaseDate = 'April 3, 2024';
+    String releaseDate = '20 Tháng 4, 2024';
     String companyName = 'FPT University HCM';
 
     return Scaffold(
@@ -30,7 +30,7 @@ class AppInfoPage extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.all(20.0),
-              color: Colors.blue,
+              color: Colors.orange,
               child: const Text(
                 'Public Transportation Pickup',
                 style: TextStyle(
