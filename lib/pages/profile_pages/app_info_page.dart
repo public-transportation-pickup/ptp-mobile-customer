@@ -4,7 +4,7 @@ class AppInfoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Replace these placeholders with actual values
-    String version = '1.0.1';
+    String version = '1.0.2';
     String teamCode = 'GSP24SE47';
     String topicCode = 'SP24SE075';
     String releaseDate = '20 Tháng 4, 2024';

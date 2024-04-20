@@ -310,6 +310,7 @@ class ProfilePage extends StatelessWidget {
                   LocalVariables.jwtToken = '';
                   LocalVariables.phoneNumber = '';
                   LocalVariables.userGUID = '';
+                  LocalVariables.errorResponse = '';
 
                   // clear cart
                   Provider.of<CartProvider>(context, listen: false).clearCart();
