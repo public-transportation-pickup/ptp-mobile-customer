@@ -687,7 +687,7 @@ class _CartPageState extends State<CartPage> {
                                                     "Tạo đơn hàng thành công!");
                                               } else {
                                                 globalMessage.showErrorMessage(
-                                                    "Tạo đơn hàng thất bại!");
+                                                    "Tạo đơn hàng thất bại!\n${LocalVariables.errorResponse}");
                                               }
                                             } else {
                                               Navigator.pop(context);

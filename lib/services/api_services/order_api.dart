@@ -32,6 +32,7 @@ class OrderApi extends ApiService {
     }
   }
 
+  // GET ORDER DETAILS
   static Future<OrderModel> getOrderDetails(String orderUuid) async {
     final Uri orderDetailsUrl =
         Uri.parse('${ApiService.baseUrl}/order/$orderUuid');
@@ -54,6 +55,7 @@ class OrderApi extends ApiService {
     }
   }
 
+  // CREATE ORDER
   static Future<bool> createOrder(OrderCreateModel order) async {
     final Uri orderUrl = Uri.parse('${ApiService.baseUrl}/order');
 
@@ -71,6 +73,8 @@ class OrderApi extends ApiService {
     if (response.statusCode == 201) {
       return true; // Success
     } else {
+      final Map<String, dynamic> errorBody = jsonDecode(response.body);
+      LocalVariables.errorResponse = errorBody['error'];
       ApiService.checkLog.e('Failed to create order: ${response.statusCode}');
       return false; // Failure
     }

@@ -12,4 +12,6 @@ class LocalVariables {
   static String? fullName = '';
   static String? dateOfBirth = '';
   static String? userGUID = '';
+  // Handle error
+  static String? errorResponse = '';
 }
